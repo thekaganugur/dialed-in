@@ -9,14 +9,17 @@ Each section maps directly to the official Next.js tutorial chapters.
 ---
 
 ## 🏗️ Phase 1: Foundation
+
 **Tutorial Chapters 1-5: Getting Started → Navigation**
 
 ### Story 1: Set Up Coffee Dashboard
+
 **As a** coffee enthusiast  
 **I want** a dashboard homepage  
-**So that** I can see my recent brews and stats  
+**So that** I can see my recent brews and stats
 
 **You'll Learn:**
+
 - Setting up Next.js with TypeScript
 - Creating folder structure (`/app`, `/app/lib`, `/app/ui`, `/public`)
 - Making placeholder data for coffee logs
@@ -24,12 +27,14 @@ Each section maps directly to the official Next.js tutorial chapters.
 - Running the development server
 
 **Dashboard Shows:**
+
 - Today's brews
 - This week's average rating
 - Favorite brewing method
 - Current bean inventory
 
 **Acceptance Criteria:**
+
 - [ ] Project runs on `localhost:3000`
 - [ ] TypeScript types defined for coffee data
 - [ ] Placeholder brew data created
@@ -38,11 +43,13 @@ Each section maps directly to the official Next.js tutorial chapters.
 ---
 
 ### Story 2: Style the Coffee Journal
+
 **As a** user  
 **I want** a beautiful, coffee-themed design  
-**So that** logging feels enjoyable  
+**So that** logging feels enjoyable
 
 **You'll Learn:**
+
 - Global styles in `app/ui/global.css`
 - Tailwind CSS utility classes
 - CSS Modules for component styles
@@ -50,12 +57,14 @@ Each section maps directly to the official Next.js tutorial chapters.
 - Coffee-themed color palette
 
 **Visual Design:**
+
 - Brown/cream color scheme
 - Brew method badges (Espresso: dark brown, V60: orange, French Press: blue)
 - Rating stars (1-5 scale)
 - Coffee bean icons
 
 **Acceptance Criteria:**
+
 - [ ] Coffee-themed colors applied
 - [ ] Brew method badges styled
 - [ ] Rating display styled
@@ -64,11 +73,13 @@ Each section maps directly to the official Next.js tutorial chapters.
 ---
 
 ### Story 3: Optimize Fonts and Coffee Images
+
 **As a** coffee lover  
 **I want** beautiful typography and fast-loading photos  
-**So that** my coffee journal looks professional  
+**So that** my coffee journal looks professional
 
 **You'll Learn:**
+
 - Custom fonts with `next/font/google`
 - Primary font for UI, secondary for headings
 - Image optimization with `next/image`
@@ -76,6 +87,7 @@ Each section maps directly to the official Next.js tutorial chapters.
 - Preventing layout shift
 
 **Acceptance Criteria:**
+
 - [ ] Custom fonts loaded
 - [ ] Coffee photos optimized
 - [ ] Bean package images work
@@ -84,17 +96,20 @@ Each section maps directly to the official Next.js tutorial chapters.
 ---
 
 ### Story 4: Create Layout Structure
+
 **As a** daily coffee drinker  
 **I want** consistent navigation  
-**So that** I can quickly log my brews  
+**So that** I can quickly log my brews
 
 **You'll Learn:**
+
 - Root layout vs nested layouts
 - Dashboard layout with sidebar
 - Quick-add brew button
 - Route organization
 
 **Navigation Structure:**
+
 ```
 /app
   /layout.tsx (root)
@@ -114,6 +129,7 @@ Each section maps directly to the official Next.js tutorial chapters.
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Sidebar stays visible
 - [ ] Quick-add button always accessible
 - [ ] Layout doesn't re-render
@@ -122,11 +138,13 @@ Each section maps directly to the official Next.js tutorial chapters.
 ---
 
 ### Story 5: Add Smooth Navigation
+
 **As a** user  
 **I want** instant page transitions  
-**So that** logging feels fast  
+**So that** logging feels fast
 
 **You'll Learn:**
+
 - `Link` component benefits
 - Active link highlighting
 - Client vs Server Components
@@ -134,6 +152,7 @@ Each section maps directly to the official Next.js tutorial chapters.
 - Navigation patterns
 
 **Navigation Elements:**
+
 - Dashboard home
 - Brew logs
 - Bean inventory
@@ -141,6 +160,7 @@ Each section maps directly to the official Next.js tutorial chapters.
 - Analytics/trends
 
 **Acceptance Criteria:**
+
 - [ ] All links use Link component
 - [ ] Active page highlighted
 - [ ] Breadcrumbs for context
@@ -149,14 +169,17 @@ Each section maps directly to the official Next.js tutorial chapters.
 ---
 
 ## 💾 Phase 2: Database and Data Fetching
+
 **Tutorial Chapters 6-8: Database → Rendering**
 
 ### Story 6: Set Up Coffee Database
+
 **As a** serious coffee tracker  
 **I need** permanent storage  
-**So that** my logs aren't lost  
+**So that** my logs aren't lost
 
 **You'll Learn:**
+
 - Vercel Postgres setup
 - Database schema design
 - Seeding sample data
@@ -164,6 +187,7 @@ Each section maps directly to the official Next.js tutorial chapters.
 - SQL with `postgres` library
 
 **Database Schema:**
+
 ```sql
 -- Coffee Beans table
 id UUID PRIMARY KEY
@@ -208,6 +232,7 @@ notes TEXT
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Database connected
 - [ ] Tables created with relationships
 - [ ] Sample data seeded
@@ -216,11 +241,13 @@ notes TEXT
 ---
 
 ### Story 7: Fetch Coffee Statistics
+
 **As a** coffee nerd  
 **I want** to see my brewing patterns  
-**So that** I can improve my technique  
+**So that** I can improve my technique
 
 **You'll Learn:**
+
 - Server Components for data
 - Direct SQL queries
 - Async/await in components
@@ -228,6 +255,7 @@ notes TEXT
 - Parallel data fetching
 
 **Dashboard Metrics:**
+
 - Total brews this month
 - Average rating by method
 - Most used beans
@@ -236,6 +264,7 @@ notes TEXT
 - Cost per cup
 
 **Acceptance Criteria:**
+
 - [ ] All metrics from database
 - [ ] Parallel fetching with Promise.all()
 - [ ] Type-safe queries
@@ -244,11 +273,13 @@ notes TEXT
 ---
 
 ### Story 8: Optimize Page Rendering
+
 **As a** user  
 **I want** instant dashboard loads  
-**But** fresh data in brew logs  
+**But** fresh data in brew logs
 
 **You'll Learn:**
+
 - Static vs dynamic rendering
 - When to use each
 - Route segment config
@@ -256,12 +287,14 @@ notes TEXT
 - Build output analysis
 
 **Rendering Strategy:**
+
 - Dashboard: Static (daily revalidation)
 - Individual brew logs: Dynamic
 - Bean inventory: Static with on-demand revalidation
 - Analytics: Dynamic (always fresh)
 
 **Acceptance Criteria:**
+
 - [ ] Dashboard loads instantly
 - [ ] New brews appear immediately
 - [ ] Build shows static pages
@@ -270,14 +303,17 @@ notes TEXT
 ---
 
 ## ⚡ Phase 3: Advanced Performance
+
 **Tutorial Chapters 9-10: Streaming → PPR**
 
 ### Story 9: Stream Brewing Recommendations
+
 **As a** coffee explorer  
 **I want** instant page loads  
-**While** recommendations calculate  
+**While** recommendations calculate
 
 **You'll Learn:**
+
 - React Suspense
 - Loading.tsx files
 - Streaming SSR
@@ -285,6 +321,7 @@ notes TEXT
 - Progressive enhancement
 
 **Streaming Strategy:**
+
 ```tsx
 // Instant display
 <BrewDetails />
@@ -300,6 +337,7 @@ notes TEXT
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Core content loads first
 - [ ] Recommendations stream in
 - [ ] Smooth skeleton transitions
@@ -308,23 +346,27 @@ notes TEXT
 ---
 
 ### Story 10: Partial Prerendering for Speed
+
 **As a** daily user  
 **I want** instant navigation  
-**With** real-time statistics  
+**With** real-time statistics
 
 **You'll Learn:**
+
 - Partial Prerendering (PPR)
 - Static shells
 - Dynamic holes
 - Performance benefits
 
 **PPR Implementation:**
+
 - Bean list shell: Static
 - Brew counts: Dynamic
 - Page chrome: Static
 - Personal stats: Dynamic
 
 **Acceptance Criteria:**
+
 - [ ] Instant page shells
 - [ ] Dynamic data updates
 - [ ] Single HTTP request
@@ -333,14 +375,17 @@ notes TEXT
 ---
 
 ## 🔧 Phase 4: Interactivity
+
 **Tutorial Chapters 11-12: Search/Pagination → Mutations**
 
 ### Story 11: Search and Filter Brews
+
 **As a** coffee historian  
 **I want** to find specific brews  
-**And** analyze patterns  
+**And** analyze patterns
 
 **You'll Learn:**
+
 - URL Search Params
 - useSearchParams hook
 - Debouncing
@@ -348,6 +393,7 @@ notes TEXT
 - Filter combinations
 
 **Search Features:**
+
 - Search by bean name
 - Filter by brew method
 - Filter by rating (1-5)
@@ -355,12 +401,14 @@ notes TEXT
 - Pagination (10 per page)
 
 **Filter Examples:**
+
 ```
 /brews?search=ethiopia&method=v60&rating=5
 /brews?date_from=2024-01&date_to=2024-12
 ```
 
 **Acceptance Criteria:**
+
 - [ ] URL updates with filters
 - [ ] Debounced search (300ms)
 - [ ] Multiple filters work together
@@ -370,11 +418,13 @@ notes TEXT
 ---
 
 ### Story 12: Log New Brew
+
 **As a** coffee drinker  
 **I want** to quickly log my brew  
-**With** all parameters tracked  
+**With** all parameters tracked
 
 **You'll Learn:**
+
 - Server Actions
 - Form handling
 - FormData API
@@ -382,6 +432,7 @@ notes TEXT
 - Progressive enhancement
 
 **Brew Log Form:**
+
 ```typescript
 {
   bean_id: string (required)
@@ -398,12 +449,14 @@ notes TEXT
 ```
 
 **Quick Log Options:**
+
 - Repeat last brew
 - Templates for methods
 - Timer integration
 - Photo upload
 
 **Acceptance Criteria:**
+
 - [ ] Form works without JS
 - [ ] Validation feedback
 - [ ] Redirects after save
@@ -413,11 +466,13 @@ notes TEXT
 ---
 
 ### Story 13: Edit Brew Details
+
 **As a** perfectionist  
 **I want** to update my notes  
-**After** tasting the coffee  
+**After** tasting the coffee
 
 **You'll Learn:**
+
 - Dynamic routes `[id]`
 - Server Actions with bind()
 - Form pre-population
@@ -425,6 +480,7 @@ notes TEXT
 - Update patterns
 
 **Editable Fields:**
+
 - Rating (often updated later)
 - Tasting notes
 - Flavor profile
@@ -432,6 +488,7 @@ notes TEXT
 - Photos
 
 **Acceptance Criteria:**
+
 - [ ] Form pre-filled with data
 - [ ] URL has brew ID
 - [ ] Instant updates
@@ -441,11 +498,13 @@ notes TEXT
 ---
 
 ### Story 14: Delete Old Logs
+
 **As a** user  
 **I want** to remove test brews  
-**Without** losing real data  
+**Without** losing real data
 
 **You'll Learn:**
+
 - Delete Server Actions
 - Confirmation UX
 - Soft vs hard delete
@@ -453,6 +512,7 @@ notes TEXT
 - Undo patterns
 
 **Acceptance Criteria:**
+
 - [ ] Delete with confirmation
 - [ ] No page navigation
 - [ ] List updates immediately
@@ -461,14 +521,17 @@ notes TEXT
 ---
 
 ## 🛡️ Phase 5: Production Ready
+
 **Tutorial Chapters 13-14: Errors → Accessibility**
 
 ### Story 15: Handle Errors Gracefully
+
 **As a** user  
 **I want** helpful error messages  
-**When** something goes wrong  
+**When** something goes wrong
 
 **You'll Learn:**
+
 - error.tsx boundaries
 - not-found.tsx pages
 - Form error handling
@@ -476,6 +539,7 @@ notes TEXT
 - User-friendly messages
 
 **Error Scenarios:**
+
 - Bean not found
 - Invalid brew parameters
 - Database offline
@@ -483,6 +547,7 @@ notes TEXT
 - Duplicate log detection
 
 **Acceptance Criteria:**
+
 - [ ] Custom error pages
 - [ ] Helpful error messages
 - [ ] 404 for missing brews
@@ -492,11 +557,13 @@ notes TEXT
 ---
 
 ### Story 16: Make It Accessible
+
 **As a** user with disabilities  
 **I want** full keyboard control  
-**And** screen reader support  
+**And** screen reader support
 
 **You'll Learn:**
+
 - Semantic HTML
 - ARIA labels
 - Keyboard navigation
@@ -505,6 +572,7 @@ notes TEXT
 - Screen reader testing
 
 **Accessibility Features:**
+
 - Tab through all controls
 - Announce form errors
 - Describe charts/graphs
@@ -512,6 +580,7 @@ notes TEXT
 - High contrast mode
 
 **Acceptance Criteria:**
+
 - [ ] All forms keyboard accessible
 - [ ] ARIA labels on buttons
 - [ ] Rating stars keyboard selectable
@@ -521,14 +590,17 @@ notes TEXT
 ---
 
 ## 🔐 Phase 6: Authentication
+
 **Tutorial Chapter 15: Authentication**
 
 ### Story 17: Personal Coffee Journal
+
 **As a** coffee lover  
 **I want** my private coffee log  
-**Protected** with login  
+**Protected** with login
 
 **You'll Learn:**
+
 - NextAuth.js setup
 - Credentials provider
 - Session management
@@ -536,6 +608,7 @@ notes TEXT
 - Social login options
 
 **Auth Features:**
+
 - Email/password login
 - Google OAuth option
 - Remember me
@@ -543,6 +616,7 @@ notes TEXT
 - Session timeout
 
 **Acceptance Criteria:**
+
 - [ ] Login page works
 - [ ] Dashboard requires auth
 - [ ] Sessions persist
@@ -552,11 +626,13 @@ notes TEXT
 ---
 
 ### Story 18: Share Coffee Journey
+
 **As a** social coffee drinker  
 **I want** to share some brews  
-**While** keeping others private  
+**While** keeping others private
 
 **You'll Learn:**
+
 - User-scoped data
 - Public vs private logs
 - Sharing mechanisms
@@ -564,6 +640,7 @@ notes TEXT
 - Following system
 
 **Sharing Features:**
+
 - Public profile page
 - Share individual brews
 - Coffee statistics
@@ -571,6 +648,7 @@ notes TEXT
 - Follow other coffee lovers
 
 **Acceptance Criteria:**
+
 - [ ] Only see own logs
 - [ ] Can mark brews public
 - [ ] Public profile works
@@ -580,14 +658,17 @@ notes TEXT
 ---
 
 ## 🎯 Phase 7: SEO and Polish
+
 **Tutorial Chapter 16: Metadata**
 
 ### Story 19: Beautiful Brew Shares
+
 **As a** coffee influencer  
 **I want** nice preview cards  
-**When** sharing my best brews  
+**When** sharing my best brews
 
 **You'll Learn:**
+
 - Dynamic metadata
 - Open Graph images
 - Twitter cards
@@ -595,21 +676,23 @@ notes TEXT
 - generateMetadata function
 
 **Metadata Features:**
+
 ```typescript
 // Dynamic brew metadata
 export async function generateMetadata({ params }) {
-  const brew = await fetchBrew(params.id)
+  const brew = await fetchBrew(params.id);
   return {
     title: `${brew.bean_name} - ${brew.method}`,
     description: `Rating: ${brew.rating}/5 - ${brew.notes}`,
     openGraph: {
-      images: [brew.photo_url]
-    }
-  }
+      images: [brew.photo_url],
+    },
+  };
 }
 ```
 
 **Share Preview Shows:**
+
 - Coffee photo
 - Bean name
 - Brew method
@@ -617,6 +700,7 @@ export async function generateMetadata({ params }) {
 - Date
 
 **Acceptance Criteria:**
+
 - [ ] Each brew has metadata
 - [ ] Social previews work
 - [ ] Bean pages have SEO
@@ -630,70 +714,76 @@ export async function generateMetadata({ params }) {
 ```typescript
 // Core Types
 type CoffeeBean = {
-  id: string
-  name: string
-  roaster: string
-  origin: string
-  roast_level: 'light' | 'medium' | 'medium-dark' | 'dark'
-  process: 'washed' | 'natural' | 'honey' | 'anaerobic'
-  purchase_date: string
-  price: number
-  weight_grams: number
-  rating: number
-  notes: string
-  created_at: string
-}
+  id: string;
+  name: string;
+  roaster: string;
+  origin: string;
+  roast_level: "light" | "medium" | "medium-dark" | "dark";
+  process: "washed" | "natural" | "honey" | "anaerobic";
+  purchase_date: string;
+  price: number;
+  weight_grams: number;
+  rating: number;
+  notes: string;
+  created_at: string;
+};
 
 type BrewMethod = {
-  id: string
-  name: 'espresso' | 'v60' | 'chemex' | 'aeropress' | 'french-press' | 'moka-pot'
-  default_temp: number
-  default_time: number
-  default_ratio: string // "1:2" for espresso, "1:15" for filter
-  grind_size: string
-  notes: string
-}
+  id: string;
+  name:
+    | "espresso"
+    | "v60"
+    | "chemex"
+    | "aeropress"
+    | "french-press"
+    | "moka-pot";
+  default_temp: number;
+  default_time: number;
+  default_ratio: string; // "1:2" for espresso, "1:15" for filter
+  grind_size: string;
+  notes: string;
+};
 
 type CoffeeLog = {
-  id: string
-  user_id: string
-  bean_id: string
-  method_id: string
-  brew_date: string
-  dose_grams: number
-  yield_grams: number
-  brew_time_seconds: number
-  water_temp_celsius: number
-  grind_setting: string
-  rating: 1 | 2 | 3 | 4 | 5
-  notes: string
-  flavor_notes: string[] // ['chocolate', 'berry', 'citrus']
-  photo_url?: string
-  is_public: boolean
-  created_at: string
-  updated_at: string
-}
+  id: string;
+  user_id: string;
+  bean_id: string;
+  method_id: string;
+  brew_date: string;
+  dose_grams: number;
+  yield_grams: number;
+  brew_time_seconds: number;
+  water_temp_celsius: number;
+  grind_setting: string;
+  rating: 1 | 2 | 3 | 4 | 5;
+  notes: string;
+  flavor_notes: string[]; // ['chocolate', 'berry', 'citrus']
+  photo_url?: string;
+  is_public: boolean;
+  created_at: string;
+  updated_at: string;
+};
 
 type Equipment = {
-  id: string
-  user_id: string
-  name: string
-  type: 'grinder' | 'brewer' | 'scale' | 'kettle'
-  brand: string
-  model: string
-  purchase_date: string
-  notes: string
-}
+  id: string;
+  user_id: string;
+  name: string;
+  type: "grinder" | "brewer" | "scale" | "kettle";
+  brand: string;
+  model: string;
+  purchase_date: string;
+  notes: string;
+};
 
 type FlavorProfile = {
-  id: string
-  log_id: string
-  acidity: number // 1-10
-  body: number // 1-10
-  sweetness: number // 1-10
-  bitterness: number // 1-10
-  aftertaste: number // 1-10
-}
+  id: string;
+  log_id: string;
+  acidity: number; // 1-10
+  body: number; // 1-10
+  sweetness: number; // 1-10
+  bitterness: number; // 1-10
+  aftertaste: number; // 1-10
+};
 ```
 
 ---
@@ -701,6 +791,7 @@ type FlavorProfile = {
 ## ✅ Complete Learning Checklist
 
 ### Phase 1: Foundation
+
 - [ ] Next.js project with TypeScript
 - [ ] Coffee-themed styling
 - [ ] Custom fonts working
@@ -709,6 +800,7 @@ type FlavorProfile = {
 - [ ] Navigation smooth
 
 ### Phase 2: Database
+
 - [ ] Postgres connected
 - [ ] Schema created
 - [ ] Data seeding works
@@ -716,11 +808,13 @@ type FlavorProfile = {
 - [ ] Rendering optimized
 
 ### Phase 3: Performance
+
 - [ ] Streaming implemented
 - [ ] Loading states smooth
 - [ ] PPR configured
 
 ### Phase 4: Interactivity
+
 - [ ] Search and filters work
 - [ ] Pagination implemented
 - [ ] Create brew form works
@@ -728,18 +822,21 @@ type FlavorProfile = {
 - [ ] Server Actions used
 
 ### Phase 5: Production
+
 - [ ] Errors handled gracefully
 - [ ] 404 pages work
 - [ ] Fully accessible
 - [ ] Keyboard navigable
 
 ### Phase 6: Security
+
 - [ ] Auth implemented
 - [ ] Routes protected
 - [ ] Sessions work
 - [ ] Data scoped to user
 
 ### Phase 7: Polish
+
 - [ ] SEO metadata added
 - [ ] Social previews work
 - [ ] Shareable brew links
@@ -808,4 +905,4 @@ Once you complete the tutorial concepts, enhance with:
 
 ---
 
-*Track every brew, improve your coffee, and master Next.js - one cup at a time.*
+_Track every brew, improve your coffee, and master Next.js - one cup at a time._

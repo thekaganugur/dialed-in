@@ -14,7 +14,10 @@ const eslintConfig = [
   {
     rules: {
       // Additional rules that complement Next.js defaults
-      "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_" },
+      ],
       "prefer-const": "error",
       "no-var": "error",
     },
