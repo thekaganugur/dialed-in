@@ -843,30 +843,6 @@ type FlavorProfile = {
 
 ---
 
-## 🚀 Getting Started Commands
-
-```bash
-# Create the project
-npx create-next-app@latest brewlog --typescript --tailwind --app
-
-# Install dependencies
-npm install @vercel/postgres zod bcrypt
-npm install @types/bcrypt --save-dev
-
-# Additional packages for coffee app
-npm install react-select  # For flavor selection
-npm install recharts      # For brewing charts
-npm install date-fns      # For date handling
-
-# Database setup
-vercel env pull .env.development.local
-
-# Run development
-npm run dev
-```
-
----
-
 ## ☕ Coffee-Specific Features to Add Later
 
 Once you complete the tutorial concepts, enhance with:
@@ -882,27 +858,3 @@ Once you complete the tutorial concepts, enhance with:
 9. **Photo Gallery** - Visual brew diary
 10. **Weather Integration** - Track brewing conditions
 
----
-
-## 📝 Why This Project Is Perfect
-
-1. **Personal & Useful** - You'll actually use it daily
-2. **Real Problem** - Solves actual coffee tracking needs
-3. **Unique Portfolio** - Not another todo or invoice app
-4. **Same Learning** - Covers all Next.js concepts
-5. **Expandable** - Can grow with your coffee journey
-6. **Shareable** - Other coffee lovers would use it
-
----
-
-## 🔗 Resources
-
-- [Next.js Official Tutorial](https://nextjs.org/learn)
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Vercel Postgres Docs](https://vercel.com/docs/storage/vercel-postgres)
-- [NextAuth.js Documentation](https://next-auth.js.org/)
-- [Coffee Flavor Wheel](https://sca.coffee/research/coffee-tasters-flavor-wheel)
-
----
-
-_Track every brew, improve your coffee, and master Next.js - one cup at a time._
