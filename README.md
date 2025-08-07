@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ☕ BrewLog - Next.js Coffee Logger
 
-## Getting Started
+A personal coffee logging app built while learning Next.js fundamentals.  
+Track your daily brews, improve your technique, and master Next.js.
 
-First, run the development server:
+## 📚 Project Structure
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This project follows the official Next.js tutorial structure, divided into digestible phases:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Phase                | Tutorial Chapters | What You'll Build                        | File                                               |
+| -------------------- | ----------------- | ---------------------------------------- | -------------------------------------------------- |
+| **1. Foundation**    | Ch 1-5            | Basic app structure, styling, navigation | [→ Phase 1](./documentation/phase-1-foundation.md) |
+| **2. Database**      | Ch 6-8            | Database setup, data fetching, rendering | [→ Phase 2](./documentation/phase-2-database.md)   |
+| **3. Performance**   | Ch 9-10           | Streaming, Partial Prerendering          | [→ Phase 3](./documentation/phases-3-4-5.md)       |
+| **4. Interactivity** | Ch 11-12          | Search, CRUD operations                  | [→ Phase 4](./documentation/phases-3-4-5.md)       |
+| **5. Production**    | Ch 13-16          | Errors, a11y, auth, SEO                  | [→ Phase 5](./documentation/phases-3-4-5.md)       |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📊 Data Model Overview
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The app tracks four main entities:
 
-## Learn More
+- **Coffee Beans** - Your bean inventory
+- **Brew Methods** - Espresso, V60, Chemex, etc.
+- **Coffee Logs** - Individual brew records
+- **Equipment** - Your coffee gear
 
-To learn more about Next.js, take a look at the following resources:
+See [data-model.md](./documentation/data-model.md) for complete schema.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ✅ Learning Checklist
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Track your progress through each phase:
 
-## Deploy on Vercel
+- [ ] **Phase 1**: App structure, styling, navigation
+- [ ] **Phase 2**: Database, data fetching
+- [ ] **Phase 3**: Streaming, PPR
+- [ ] **Phase 4**: Search, CRUD with Server Actions
+- [ ] **Phase 5**: Production features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🚀 How to Use This Guide
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Start with Phase 1** - Build the foundation
+2. **Complete each story in order** - They build on each other
+3. **Check off acceptance criteria** - Know when you're done
+4. **Compare with the tutorial** - Ensure you're learning the concepts
+5. **Test after each story** - Make sure everything works
+
+## 💡 Key Learning Goals
+
+By the end of this project, you'll understand:
+
+- **Server vs Client Components** - When to use each
+- **Data Fetching Patterns** - Direct SQL in components
+- **Server Actions** - Forms without API routes
+- **Rendering Strategies** - Static, dynamic, streaming, PPR
+- **Production Features** - Auth, SEO, accessibility
+
+## 🎨 What Makes This Special
+
+Unlike generic tutorial projects, BrewLog is:
+
+- **Personal** - You'll actually use it daily
+- **Unique** - Stand out in your portfolio
+- **Practical** - Solves a real problem
+- **Expandable** - Grow it with your coffee journey
+
+## 📝 Project Conventions
+
+- **TypeScript** - Type safety throughout
+- **Server Components by default** - Use `"use client"` sparingly
+- **Server Actions** - No separate API routes
+- **URL state** - Search params for filters
+- **Progressive Enhancement** - Works without JavaScript
+
+Ready to start? [→ Begin with Phase 1](./documentation/phase-1-foundation.md)
