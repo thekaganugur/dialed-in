@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
+import { BrewFilters } from "./brew-filters";
 import { BrewList } from "./brew-list";
 import { BrewListSkeleton } from "./brew-list-skeleton";
 import { SearchBar } from "./search-bar";
@@ -25,6 +26,8 @@ export default async function BrewsPage() {
       </div>
 
       <SearchBar placeholder="Search by bean name, roaster, or notes..." />
+
+      <BrewFilters />
 
       <Suspense fallback={<BrewListSkeleton />}>
         <BrewList />

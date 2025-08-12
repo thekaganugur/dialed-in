@@ -33,9 +33,9 @@ Missing Key Features 🚧
 
 2. Data Management
 
-- Filtering (by method, rating, date range, bean)
+- Filtering (by method, rating, date range, bean) ✅
 - Sorting (by date, rating, method)
-- Search functionality (by bean name, notes, etc.)
+- Search functionality (by bean name, notes, etc.) ✅
 - Pagination (currently shows all, could be performance issue)
 
 3. Advanced Features
