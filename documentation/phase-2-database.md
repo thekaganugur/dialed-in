@@ -316,108 +316,17 @@ export default async function Dashboard() {
 | Bean Details   | Static              | Beans rarely change | Default (static)            |
 | Individual Log | Dynamic             | May be edited       | Dynamic params              |
 
-### Static Page with Drizzle
+### Simulating a Slow Data Fetch
+
+Let's simulate a slow data fetch. In app/lib/data.ts
 
 ```typescript
-// app/dashboard/beans/page.tsx
-import { db } from '@/app/db';
-import { coffeeBeans } from '@/app/db/schema';
-
-// This page will be static at build time
-export default async function BeansPage() {
-  // This query runs at BUILD TIME
-  const beans = await db
-    .select()
-    .from(coffeeBeans)
-    .orderBy(coffeeBeans.name);
-
-  return (
-    <div>
-      <h1>Bean Inventory</h1>
-      {beans.map(bean => (
-        <BeanCard key={bean.id} bean={bean} />
-      ))}
-    </div>
-  );
-}
+await new Promise((resolve) => setTimeout(resolve, 3000));
 ```
 
-### Dynamic Page with Drizzle
+Here, you've added an artificial 3-second delay to simulate a slow data fetch. The result is that now your whole page is blocked from showing UI to the visitor while the data is being fetched. Which brings us to a common challenge developers have to solve:
 
-```typescript
-// app/dashboard/brews/page.tsx
-import { db } from '@/app/db';
-import { coffeeLogs, coffeeBeans, brewMethods } from '@/app/db/schema';
-import { desc, eq } from 'drizzle-orm';
-
-// Force dynamic rendering
-export const dynamic = 'force-dynamic';
-
-export default async function BrewsPage() {
-  // This query runs on EVERY REQUEST
-  const brews = await db
-    .select({
-      log: coffeeLogs,
-      bean: coffeeBeans,
-      method: brewMethods,
-    })
-    .from(coffeeLogs)
-    .leftJoin(coffeeBeans, eq(coffeeLogs.beanId, coffeeBeans.id))
-    .leftJoin(brewMethods, eq(coffeeLogs.methodId, brewMethods.id))
-    .orderBy(desc(coffeeLogs.brewDate));
-
-  return (
-    <div>
-      <h1>All Brews</h1>
-      <BrewTable brews={brews} />
-    </div>
-  );
-}
-```
-
-### Incremental Static Regeneration
-
-```typescript
-// app/dashboard/page.tsx
-// Rebuild this page every hour
-export const revalidate = 3600;
-
-export default async function Dashboard() {
-  const stats = await db
-    .select({
-      totalBrews: sql<number>`count(*)`,
-      avgRating: sql<number>`avg(rating)::float`,
-    })
-    .from(coffeeLogs);
-
-  // This runs at build time, then every hour
-  return <DashboardStats stats={stats[0]} />;
-}
-```
-
-### Build Output Analysis
-
-```bash
-npm run build
-
-Route (app)                              Size     First Load JS
-┌ ○ /                                   5.2 kB        85.3 kB
-├ ○ /dashboard                          3.1 kB        83.2 kB  (ISR: 3600)
-├ λ /dashboard/brews                    4.5 kB        84.6 kB
-├ ○ /dashboard/beans                    2.8 kB        82.9 kB
-└ λ /dashboard/brews/[id]              3.9 kB        84.0 kB
-
-○  (Static)   prerendered with Drizzle queries at build time
-λ  (Dynamic)  Drizzle queries run on each request
-```
-
-### ✅ Acceptance Criteria
-
-- [ ] Dashboard loads instantly (static)
-- [ ] New brews appear immediately
-- [ ] Build shows correct rendering types
-- [ ] Drizzle queries work in both modes
-- [ ] Type safety maintained everywhere
+With dynamic rendering, **your application is only as fast as your slowest data fetch.**
 
 ---
 
@@ -439,27 +348,7 @@ By completing Phase 2 with Drizzle, you've achieved:
 - **Server Components**: Direct database access
 - **Rendering Modes**: Static vs Dynamic with Drizzle
 
-## 💡 Drizzle Pro Tips
-
-```typescript
-// Use select for specific fields (better performance)
-const beans = await db
-  .select({
-    id: coffeeBeans.id,
-    name: coffeeBeans.name,
-  })
-  .from(coffeeBeans);
-
-// Use prepared statements for repeated queries
-const getBrewById = db
-  .select()
-  .from(coffeeLogs)
-  .where(eq(coffeeLogs.id, sql.placeholder("id")))
-  .prepare();
-
-// Then use it multiple times
-const brew = await getBrewById.execute({ id: brewId });
-```
+````
 
 ## 🚀 Drizzle Commands Reference
 
@@ -477,7 +366,7 @@ npm run db:studio
 # Reset and reseed
 npm run db:push
 npm run db:seed
-```
+````
 
 ## → Next Steps
 

@@ -60,9 +60,7 @@ export async function fetchFavoriteBrewingMethod(limit: number = 5) {
 
 // Get total bean count for inventory
 export async function fetchBeanCount(): Promise<number> {
-  const result = await db
-    .select({ count: count() })
-    .from(coffeeBeans);
+  const result = await db.select({ count: count() }).from(coffeeBeans);
 
   return result[0]?.count || 0;
 }
@@ -86,6 +84,7 @@ export async function fetchTopBeans(limit: number = 5) {
 
 // Fetch recent brews
 export async function fetchRecentBrews(limit: number = 10) {
+  await new Promise((resolve) => setTimeout(resolve, 3000));
   return await db
     .select({
       log: coffeeLogs,
