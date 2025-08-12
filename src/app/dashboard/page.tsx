@@ -1,7 +1,14 @@
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { db } from "@/lib/db";
 import { coffeeBeans, coffeeLogs } from "@/lib/placeholder-data";
 import { renderStars } from "@/lib/utils";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+
+// function name(params: type) {
+//   "use server";
+//
+//   db.select().from(coffeeLogs);
+// }
 
 // Calculate today's brews
 const today = new Date().toISOString().split("T")[0];
@@ -41,7 +48,9 @@ export default function DashboardPage() {
         {/* Today's Brew Count */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Today&apos;s Brews</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Today&apos;s Brews
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-bold">{todaysBrews.length}</p>
@@ -51,7 +60,9 @@ export default function DashboardPage() {
         {/* This Week's Average Rating */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Weekly Average</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Weekly Average
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-arabica mb-1 text-2xl font-bold">
@@ -64,7 +75,9 @@ export default function DashboardPage() {
         {/* Favorite Brewing Method */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Favorite Method</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Favorite Method
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="mb-2">
@@ -77,7 +90,9 @@ export default function DashboardPage() {
         {/* Bean Inventory */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Bean Inventory</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Bean Inventory
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-bold">{coffeeBeans.length}</p>
@@ -126,3 +141,4 @@ export default function DashboardPage() {
     </main>
   );
 }
+

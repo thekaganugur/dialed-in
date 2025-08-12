@@ -30,6 +30,14 @@ BrewLog is a Next.js coffee logging application built as a learning project foll
 - `npm run test:run` - Run tests once
 - `npm run test:ui` - Run tests with UI
 
+### Database
+
+- `npm run db:generate` - Generate Drizzle migrations
+- `npm run db:push` - Push schema changes to database
+- `npm run db:migrate` - Apply migrations to database
+- `npm run db:studio` - Open Drizzle Studio GUI
+- `npm run seed` - Seed database with placeholder data
+
 ### Utilities
 
 - `npm run clean` - Clean build artifacts
@@ -41,6 +49,7 @@ BrewLog is a Next.js coffee logging application built as a learning project foll
 
 - **Framework**: Next.js 15 with App Router
 - **Language**: TypeScript with strict type safety
+- **Database**: Neon PostgreSQL with Drizzle ORM
 - **Styling**: Tailwind CSS 4 with shadcn/ui components
 - **Testing**: Vitest + React Testing Library
 - **Code Quality**: ESLint + Prettier + Husky + Commitlint
@@ -53,9 +62,18 @@ src/
 │   ├── layout.tsx         # Root layout with fonts
 │   ├── page.tsx           # Landing page
 │   └── globals.css        # Global styles
+├── components/
+│   ├── ui/                # shadcn/ui components
+│   └── app-sidebar.tsx    # App navigation
 ├── lib/
-│   └── utils.ts           # Utility functions (cn helper)
+│   ├── db/                # Database layer
+│   │   ├── index.ts       # Drizzle client setup
+│   │   ├── schema.ts      # Database schema definitions
+│   │   └── seed.ts        # Database seeding script
+│   ├── utils.ts           # Utility functions (cn helper)
+│   └── definitions.ts     # Type definitions
 components.json             # shadcn/ui configuration
+drizzle.config.ts          # Drizzle ORM configuration
 documentation/              # Phase-based learning documentation
 ```
 
@@ -67,10 +85,26 @@ documentation/              # Phase-based learning documentation
 - **Server Actions**: Prefer Server Actions over separate API routes
 - **Component Composition**: Uses shadcn/ui for consistent design system
 
+### Database Schema
+
+The application uses a PostgreSQL database with the following core entities:
+
+- **Users**: Authentication and user management (text IDs for NextAuth compatibility)
+- **Coffee Beans**: Track coffee bean purchases with roast level, origin, processing method
+- **Coffee Logs**: Main entity tracking individual brews with ratings, parameters, and notes
+- **Brew Methods**: Reference data for brewing equipment and default parameters
+
+Key schema features:
+- Type-safe enums for roast levels, processing methods, and brew methods
+- Comprehensive constraints and indexes for performance
+- Soft delete support on coffee logs with `deletedAt` timestamp
+- Timezone-aware timestamps for international users
+- Relations defined for type-safe joins using Drizzle
+
 ### TypeScript Configuration
 
 - Strict type checking enabled
-- Path aliases configured: `@/components`, `@/lib`, `@/utils`, `@/ui`, `@/hooks`
+- Path aliases configured: `@/*` maps to `./src/*`
 - ESLint enforces unused variable rules with underscore prefix exception
 
 ### Styling System
@@ -85,11 +119,18 @@ documentation/              # Phase-based learning documentation
 
 The project follows a phased learning approach based on the Next.js tutorial:
 
-1. **Phase 1**: Foundation (styling, navigation, layouts)
-2. **Phase 2**: Database integration and data fetching
+1. **Phase 1**: Foundation (styling, navigation, layouts) ✅ Completed
+2. **Phase 2**: Database integration and data fetching 🚧 In Progress
 3. **Phase 3**: Performance optimization and streaming
 4. **Phase 4**: Interactivity and CRUD operations
 5. **Phase 5**: Production features (auth, SEO, accessibility)
+
+**Current Status**: Implementing Phase 2 with Neon PostgreSQL and Drizzle ORM integration. Database schema is defined and seeding functionality is in place.
+
+### Environment Setup
+
+Required environment variables:
+- `DATABASE_URL`: Neon PostgreSQL connection string (required for all database operations)
 
 ### Code Quality Standards
 
