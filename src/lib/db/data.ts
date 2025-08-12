@@ -1,16 +1,15 @@
 import { db } from "@/lib/db";
 import { coffeeBeans, coffeeLogs, brewMethodEnum } from "@/lib/db/schema";
 import { endOfDay, startOfDay, subDays } from "date-fns";
-import { and, avg, count, desc, eq, gte, ilike, isNull, lt, or } from "drizzle-orm";
+import { and, avg, count, desc, eq, gte, ilike, isNull, lt, or, max } from "drizzle-orm";
 
 // Type-safe brew method type
 type BrewMethodValue = typeof brewMethodEnum.enumValues[number];
 
 // Get today's brew count (with type safety!)
-export async function fetchTodayBrewCount(): Promise<number> {
-  const today = new Date();
-  const todayStart = startOfDay(today);
-  const todayEnd = endOfDay(today);
+export async function fetchTodayBrewCount(date = new Date()): Promise<number> {
+  const todayStart = startOfDay(date);
+  const todayEnd = endOfDay(date);
 
   const result = await db
     .select({ count: count() })
