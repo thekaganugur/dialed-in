@@ -1,3 +1,4 @@
+import { StarRating } from "@/components/star-rating";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -7,7 +8,7 @@ import {
   fetchTodayBrewCount,
   fetchWeeklyAverageRating,
 } from "@/lib/db/data";
-import { renderStars } from "@/lib/utils";
+import { formatBrewDateTime, getMethodBadgeColor } from "@/lib/utils";
 
 export default async function DashboardPage() {
   const [
@@ -25,7 +26,7 @@ export default async function DashboardPage() {
   ]);
 
   return (
-    <main className="from-latte/20 via-foam to-latte/30 min-h-screen p-6">
+    <main>
       <h1 className="mb-8 text-3xl font-bold">☕ Coffee Dashboard</h1>
 
       <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -49,10 +50,7 @@ export default async function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-arabica mb-1 text-2xl font-bold">
-              {renderStars(averageRating)}
-            </p>
-            <p className="text-sm">{averageRating.toFixed(1)}/5</p>
+            <StarRating rating={averageRating} />
           </CardContent>
         </Card>
 
@@ -65,7 +63,9 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="mb-2">
-              <Badge variant="secondary">{favoriteMethod[0].method}</Badge>
+              <Badge className={getMethodBadgeColor(favoriteMethod[0].method)}>
+                {favoriteMethod[0].method.toUpperCase()}
+              </Badge>
             </div>
             <p className="text-sm">{favoriteMethod[0].brewCount} brews</p>
           </CardContent>
@@ -101,19 +101,16 @@ export default async function DashboardPage() {
                   <div className="flex-1">
                     <h3 className="font-medium">{bean?.name}</h3>
                     <div className="mt-1 flex items-center gap-2">
-                      <Badge variant="outline">{log.method}</Badge>
+                      <Badge className={getMethodBadgeColor(log.method)}>
+                        {log.method.toUpperCase()}
+                      </Badge>
                       <span className="text-sm">•</span>
                       <span className="text-sm">
-                        {log.brewedAt.toLocaleDateString()}
+                        {formatBrewDateTime(log.brewedAt)}
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-center">
-                    <span className="text-arabica mr-2 text-lg">
-                      {renderStars(log.rating)}
-                    </span>
-                    <span className="text-sm">{log.rating}/5</span>
-                  </div>
+                  <StarRating rating={log.rating} />
                 </div>
               );
             })}

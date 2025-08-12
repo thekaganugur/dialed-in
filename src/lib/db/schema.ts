@@ -155,10 +155,15 @@ export const coffeeLogs = pgTable(
     byMethod: index("coffee_logs_method_idx").on(t.method),
     byTime: index("coffee_logs_brewed_at_idx").on(t.brewedAt),
     // Composite indexes for common query patterns
-    byUserTime: index("coffee_logs_user_brewed_at_idx").on(t.userId, t.brewedAt),
+    byUserTime: index("coffee_logs_user_brewed_at_idx").on(
+      t.userId,
+      t.brewedAt,
+    ),
     byUserMethod: index("coffee_logs_user_method_idx").on(t.userId, t.method),
     // Partial index for active (non-deleted) records
-    activeRecords: index("coffee_logs_active_idx").on(t.userId, t.brewedAt).where(sql`${t.deletedAt} is null`),
+    activeRecords: index("coffee_logs_active_idx")
+      .on(t.userId, t.brewedAt)
+      .where(sql`${t.deletedAt} is null`),
 
     ratingRange: check(
       "coffee_logs_rating_range",

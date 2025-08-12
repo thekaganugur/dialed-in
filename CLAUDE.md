@@ -61,6 +61,8 @@ src/
 ├── app/                    # Next.js App Router
 │   ├── layout.tsx         # Root layout with fonts
 │   ├── page.tsx           # Landing page
+│   ├── dashboard/         # Main dashboard with statistics
+│   ├── brews/             # Brew logs and history
 │   └── globals.css        # Global styles
 ├── components/
 │   ├── ui/                # shadcn/ui components
@@ -69,7 +71,7 @@ src/
 │   ├── db/                # Database layer
 │   │   ├── index.ts       # Drizzle client setup
 │   │   ├── schema.ts      # Database schema definitions
-│   │   └── seed.ts        # Database seeding script
+│   │   └── data.ts        # Database queries and data fetching
 │   ├── utils.ts           # Utility functions (cn helper)
 │   └── definitions.ts     # Type definitions
 components.json             # shadcn/ui configuration
@@ -125,7 +127,7 @@ The project follows a phased learning approach based on the Next.js tutorial:
 4. **Phase 4**: Interactivity and CRUD operations
 5. **Phase 5**: Production features (auth, SEO, accessibility)
 
-**Current Status**: Implementing Phase 2 with Neon PostgreSQL and Drizzle ORM integration. Database schema is defined and seeding functionality is in place.
+**Current Status**: Phase 2 completed - database integration with Neon PostgreSQL and Drizzle ORM. Now implementing streaming and performance optimizations in Phase 3.
 
 ### Environment Setup
 

@@ -1,28 +1,24 @@
 import { db } from "@/lib/db";
-import { coffeeBeans, coffeeLogs } from "@/lib/db/schema";
-import { and, avg, count, desc, eq, gte, isNull, lt } from "drizzle-orm";
+import { coffeeBeans, coffeeLogs, brewMethodEnum } from "@/lib/db/schema";
+import { endOfDay, startOfDay, subDays } from "date-fns";
+import { and, avg, count, desc, eq, gte, ilike, isNull, lt, or } from "drizzle-orm";
+
+// Type-safe brew method type
+type BrewMethodValue = typeof brewMethodEnum.enumValues[number];
 
 // Get today's brew count (with type safety!)
 export async function fetchTodayBrewCount(): Promise<number> {
   const today = new Date();
-  const startOfDay = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate(),
-  );
-  const endOfDay = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate() + 1,
-  );
+  const todayStart = startOfDay(today);
+  const todayEnd = endOfDay(today);
 
   const result = await db
     .select({ count: count() })
     .from(coffeeLogs)
     .where(
       and(
-        gte(coffeeLogs.brewedAt, startOfDay),
-        lt(coffeeLogs.brewedAt, endOfDay),
+        gte(coffeeLogs.brewedAt, todayStart),
+        lt(coffeeLogs.brewedAt, todayEnd),
         isNull(coffeeLogs.deletedAt),
       ),
     );
@@ -32,8 +28,7 @@ export async function fetchTodayBrewCount(): Promise<number> {
 
 // Calculate weekly average rating
 export async function fetchWeeklyAverageRating(): Promise<number> {
-  const weekAgo = new Date();
-  weekAgo.setDate(weekAgo.getDate() - 7);
+  const weekAgo = subDays(new Date(), 7);
 
   const result = await db
     .select({ avgRating: avg(coffeeLogs.rating) })
@@ -83,8 +78,32 @@ export async function fetchTopBeans(limit: number = 5) {
 }
 
 // Fetch recent brews
-export async function fetchRecentBrews(limit: number = 10) {
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+export async function fetchRecentBrews(
+  limit: number = 10,
+  searchQuery?: string,
+  filterMethod?: BrewMethodValue | "all",
+) {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  
+  const conditions = [isNull(coffeeLogs.deletedAt)];
+  
+  // Add search conditions if query provided
+  if (searchQuery && searchQuery.trim()) {
+    const searchTerm = `%${searchQuery.trim()}%`;
+    conditions.push(
+      or(
+        ilike(coffeeBeans.name, searchTerm),
+        ilike(coffeeBeans.roaster, searchTerm),
+        ilike(coffeeLogs.notes, searchTerm),
+      )!,
+    );
+  }
+  
+  // Add method filter if provided
+  if (filterMethod && filterMethod !== "all") {
+    conditions.push(eq(coffeeLogs.method, filterMethod));
+  }
+  
   return await db
     .select({
       log: coffeeLogs,
@@ -92,7 +111,7 @@ export async function fetchRecentBrews(limit: number = 10) {
     })
     .from(coffeeLogs)
     .innerJoin(coffeeBeans, eq(coffeeLogs.beanId, coffeeBeans.id))
-    .where(isNull(coffeeLogs.deletedAt))
+    .where(and(...conditions))
     .orderBy(desc(coffeeLogs.brewedAt))
     .limit(limit);
 }
