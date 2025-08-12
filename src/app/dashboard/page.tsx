@@ -10,11 +10,19 @@ import {
 import { renderStars } from "@/lib/utils";
 
 export default async function DashboardPage() {
-  const todayBrewsCount = await fetchTodayBrewCount();
-  const averageRating = await fetchWeeklyAverageRating();
-  const favoriteMethod = await fetchFavoriteBrewingMethod(1);
-  const beancount = fetchBeanCount();
-  const recentBrews = await fetchRecentBrews();
+  const [
+    todayBrewsCount,
+    averageRating,
+    favoriteMethod,
+    beancount,
+    recentBrews,
+  ] = await Promise.all([
+    fetchTodayBrewCount(),
+    fetchWeeklyAverageRating(),
+    fetchFavoriteBrewingMethod(1),
+    fetchBeanCount(),
+    fetchRecentBrews(),
+  ]);
 
   return (
     <main className="from-latte/20 via-foam to-latte/30 min-h-screen p-6">
