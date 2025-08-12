@@ -283,11 +283,11 @@ export default async function Dashboard() {
 
 ### ✅ Acceptance Criteria
 
-- [ ] All metrics fetch with Drizzle
-- [ ] Parallel fetching with Promise.all()
-- [ ] Type-safe queries (no typos!)
-- [ ] IntelliSense for all fields
-- [ ] No loading waterfalls
+- [x] All metrics fetch with Drizzle
+- [] Parallel fetching with Promise.all()
+- [x] Type-safe queries (no typos!)
+- [x] IntelliSense for all fields
+- [] No loading waterfalls
 
 ---
 

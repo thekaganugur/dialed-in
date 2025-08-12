@@ -1,45 +1,21 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { db } from "@/lib/db";
-import { coffeeBeans, coffeeLogs } from "@/lib/placeholder-data";
+import {
+  fetchBeanCount,
+  fetchFavoriteBrewingMethod,
+  fetchRecentBrews,
+  fetchTodayBrewCount,
+  fetchWeeklyAverageRating,
+} from "@/lib/db/data";
 import { renderStars } from "@/lib/utils";
 
-// function name(params: type) {
-//   "use server";
-//
-//   db.select().from(coffeeLogs);
-// }
+export default async function DashboardPage() {
+  const todayBrewsCount = await fetchTodayBrewCount();
+  const averageRating = await fetchWeeklyAverageRating();
+  const favoriteMethod = await fetchFavoriteBrewingMethod(1);
+  const beancount = fetchBeanCount();
+  const recentBrews = await fetchRecentBrews();
 
-// Calculate today's brews
-const today = new Date().toISOString().split("T")[0];
-const todaysBrews = coffeeLogs.filter((log) => log.brew_date === today);
-
-// Calculate this week's average rating
-const weekAgo = new Date();
-weekAgo.setDate(weekAgo.getDate() - 7);
-const thisWeeksLogs = coffeeLogs.filter(
-  (log) => new Date(log.brew_date) >= weekAgo,
-);
-const averageRating =
-  thisWeeksLogs.length > 0
-    ? thisWeeksLogs.reduce((sum, log) => sum + log.rating, 0) /
-      thisWeeksLogs.length
-    : 0;
-
-// Find favorite brewing method
-const methodCounts = coffeeLogs.reduce(
-  (counts, log) => {
-    counts[log.method] = (counts[log.method] || 0) + 1;
-    return counts;
-  },
-  {} as Record<string, number>,
-);
-
-const favoriteMethod = Object.entries(methodCounts).reduce((a, b) =>
-  methodCounts[a[0]] > methodCounts[b[0]] ? a : b,
-)[0];
-
-export default function DashboardPage() {
   return (
     <main className="from-latte/20 via-foam to-latte/30 min-h-screen p-6">
       <h1 className="mb-8 text-3xl font-bold">☕ Coffee Dashboard</h1>
@@ -53,7 +29,7 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">{todaysBrews.length}</p>
+            <p className="text-3xl font-bold">{todayBrewsCount}</p>
           </CardContent>
         </Card>
 
@@ -81,9 +57,9 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="mb-2">
-              <Badge variant="secondary">{favoriteMethod}</Badge>
+              <Badge variant="secondary">{favoriteMethod[0].method}</Badge>
             </div>
-            <p className="text-sm">{methodCounts[favoriteMethod]} brews</p>
+            <p className="text-sm">{favoriteMethod[0].brewCount} brews</p>
           </CardContent>
         </Card>
 
@@ -95,7 +71,7 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">{coffeeBeans.length}</p>
+            <p className="text-3xl font-bold">{beancount}</p>
             <p className="text-sm">varieties</p>
           </CardContent>
         </Card>
@@ -108,37 +84,34 @@ export default function DashboardPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {coffeeLogs
-              .slice(-5)
-              .reverse()
-              .map((log) => {
-                const bean = coffeeBeans.find((b) => b.id === log.bean_id);
-                return (
-                  <div
-                    key={log.id}
-                    className="flex items-center justify-between rounded-lg border p-4 transition-colors"
-                  >
-                    <div className="flex-1">
-                      <h3 className="font-medium">{bean?.name}</h3>
-                      <div className="mt-1 flex items-center gap-2">
-                        <Badge variant="outline">{log.method}</Badge>
-                        <span className="text-sm">•</span>
-                        <span className="text-sm">{log.brew_date}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="text-arabica mr-2 text-lg">
-                        {renderStars(log.rating)}
+            {recentBrews.map(({ bean, log }) => {
+              return (
+                <div
+                  key={log.id}
+                  className="flex items-center justify-between rounded-lg border p-4 transition-colors"
+                >
+                  <div className="flex-1">
+                    <h3 className="font-medium">{bean?.name}</h3>
+                    <div className="mt-1 flex items-center gap-2">
+                      <Badge variant="outline">{log.method}</Badge>
+                      <span className="text-sm">•</span>
+                      <span className="text-sm">
+                        {log.brewedAt.toLocaleDateString()}
                       </span>
-                      <span className="text-sm">{log.rating}/5</span>
                     </div>
                   </div>
-                );
-              })}
+                  <div className="flex items-center">
+                    <span className="text-arabica mr-2 text-lg">
+                      {renderStars(log.rating)}
+                    </span>
+                    <span className="text-sm">{log.rating}/5</span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </CardContent>
       </Card>
     </main>
   );
 }
-
