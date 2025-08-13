@@ -14,9 +14,12 @@ import { usePathname } from "next/navigation";
 const titles: Record<string, string> = {
   dashboard: "Dashboard",
   brews: "Brews",
-  create: "Create Brew",
+  create: "Create",
   beans: "Beans",
 };
+
+// UUID pattern to detect dynamic IDs
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export function BreadcrumbNav() {
   const pathname = usePathname();
@@ -32,7 +35,7 @@ export function BreadcrumbNav() {
       <BreadcrumbList>
         {segments.map((segment, index) => {
           const href = "/" + segments.slice(0, index + 1).join("/");
-          const title = titles[segment] || segment;
+          const title = titles[segment] || (UUID_PATTERN.test(segment) ? "Detail" : segment);
           const isLast = index === segments.length - 1;
           const isFirst = index === 0;
 
