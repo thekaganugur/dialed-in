@@ -1,8 +1,11 @@
+import { brewMethodEnum } from "@/lib/db/schema";
 import { z } from "zod";
 
 export const createBrewFormSchema = z.object({
-  beanId: z.string().min(1, "Please select a coffee bean"),
-  method: z.string().min(1, "Please select a brew method"),
+  //TODO
+  // beanId: z.uuid("Please select a valid coffee bean"),
+  beanId: z.string(),
+  method: z.enum(brewMethodEnum.enumValues),
   doseGrams: z.string().optional(),
   yieldGrams: z.string().optional(),
   brewTimeSeconds: z.string().optional(),

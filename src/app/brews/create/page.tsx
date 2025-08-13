@@ -1,5 +1,9 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -10,10 +14,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { fetchCoffeeBeans } from "@/lib/db/data";
 import { ChevronDown, Coffee, Settings2 } from "lucide-react";
-import Link from "next/link";
 import { createBrew } from "./actions";
+import { FormActions } from "./form-actions";
 
 const brewMethods = [
   "espresso",
@@ -26,7 +30,9 @@ const brewMethods = [
   "cold_brew",
 ];
 
-export default function CreateBrewPage() {
+export default async function CreateBrewPage() {
+  const coffeeBeans = await fetchCoffeeBeans();
+
   return (
     <div className="mx-auto max-w-2xl">
       <Card>
@@ -52,9 +58,11 @@ export default function CreateBrewPage() {
                       <SelectValue placeholder="Select a coffee bean" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="sample">
-                        Sample Bean - Ethiopian Yirgacheffe
-                      </SelectItem>
+                      {coffeeBeans.map((bean) => (
+                        <SelectItem key={bean.id} value={bean.id}>
+                          {bean.name} - {bean.roaster} ({bean.origin})
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -144,7 +152,7 @@ export default function CreateBrewPage() {
 
             {/* Optional Fields - Collapsible */}
             <Collapsible>
-              <CollapsibleTrigger className="bg-muted/30 hover:bg-muted/50 w-full flex cursor-pointer items-center justify-between rounded-lg border p-4 text-sm font-medium data-[state=open]:rounded-b-none">
+              <CollapsibleTrigger className="bg-muted/30 hover:bg-muted/50 flex w-full cursor-pointer items-center justify-between rounded-lg border p-4 text-sm font-medium data-[state=open]:rounded-b-none">
                 <span className="flex items-center gap-2">
                   <Settings2 className="h-4 w-4" />
                   Add Brewing Details (optional)
@@ -233,21 +241,7 @@ export default function CreateBrewPage() {
               </CollapsibleContent>
             </Collapsible>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col gap-3 pt-2 sm:flex-row">
-              <Button type="submit" className="flex-1">
-                <Coffee className="mr-2 h-4 w-4" />
-                Save Brew Log
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                asChild
-                className="sm:w-auto"
-              >
-                <Link href="/brews">Cancel</Link>
-              </Button>
-            </div>
+            <FormActions />
           </form>
         </CardContent>
       </Card>

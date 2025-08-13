@@ -37,13 +37,13 @@ export default async function DashboardPage() {
         <h1 className="text-3xl font-bold">☕ Coffee Dashboard</h1>
         <div className="flex gap-2">
           <Button asChild>
-            <Link href="/brews/new">
+            <Link href="/brews/create">
               <Plus className="mr-2 h-4 w-4" />
               Create Brew
             </Link>
           </Button>
           <Button variant="outline" asChild>
-            <Link href="/beans/new">
+            <Link href="/beans/create">
               <Plus className="mr-2 h-4 w-4" />
               Create Bean
             </Link>
@@ -148,7 +148,7 @@ export default async function DashboardPage() {
                         </span>
                       </div>
                     </div>
-                    <StarRating rating={log.rating} />
+                    <StarRating rating={log.rating ?? 0} />
                   </Link>
                 );
               })}

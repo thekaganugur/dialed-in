@@ -86,6 +86,20 @@ export async function fetchTopBeans(limit: number = 5) {
     .limit(limit);
 }
 
+// Fetch all coffee beans for form selects
+export async function fetchCoffeeBeans() {
+  return await db
+    .select({
+      id: coffeeBeans.id,
+      name: coffeeBeans.name,
+      roaster: coffeeBeans.roaster,
+      origin: coffeeBeans.origin,
+      roastLevel: coffeeBeans.roastLevel,
+    })
+    .from(coffeeBeans)
+    .orderBy(coffeeBeans.name);
+}
+
 // Fetch recent brews
 export async function fetchRecentBrews(
   limit: number = 10,

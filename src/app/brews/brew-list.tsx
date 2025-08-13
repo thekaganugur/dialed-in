@@ -49,7 +49,7 @@ export async function BrewList({ searchQuery, filterMethod }: BrewListProps) {
                   >
                     {brew.log.method.replace("_", " ").toUpperCase()}
                   </Badge>
-                  <StarRating rating={brew.log.rating} />
+                  <StarRating rating={brew.log.rating ?? 0} />
                 </div>
               </div>
             </CardHeader>
