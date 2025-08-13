@@ -138,3 +138,18 @@ export async function fetchRecentBrews(
     .orderBy(desc(coffeeLogs.brewedAt))
     .limit(limit);
 }
+
+// Fetch single brew by ID
+export async function fetchBrewById(id: string) {
+  const result = await db
+    .select({
+      log: coffeeLogs,
+      bean: coffeeBeans,
+    })
+    .from(coffeeLogs)
+    .innerJoin(coffeeBeans, eq(coffeeLogs.beanId, coffeeBeans.id))
+    .where(and(eq(coffeeLogs.id, id), isNull(coffeeLogs.deletedAt)))
+    .limit(1);
+
+  return result[0] || null;
+}

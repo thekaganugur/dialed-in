@@ -23,105 +23,101 @@ export async function BrewList({ searchQuery, filterMethod }: BrewListProps) {
     <>
       <div className="grid gap-4">
         {recentBrews.map((brew) => (
-          <Card
-            key={brew.log.id}
-            className="focus-within:ring-ring transition-shadow focus-within:ring-2 focus-within:ring-offset-2 hover:shadow-md"
-            tabIndex={0}
-            role="article"
-            aria-label={`Coffee brew: ${brew.bean.name}`}
-          >
-            <CardHeader className="pb-3">
-              <div className="flex items-start justify-between">
-                <div className="space-y-1">
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <Coffee className="h-5 w-5" />
-                    {brew.bean.name}
-                  </CardTitle>
-                  <p className="text-muted-foreground text-sm">
-                    {formatBrewDateTime(brew.log.brewedAt)} •{" "}
-                    {brew.bean.roaster}
-                  </p>
+          <Link key={brew.log.id} href={`/brews/${brew.log.id}`}>
+            <Card className="">
+              <CardHeader className="pb-3">
+                <div className="flex items-start justify-between">
+                  <div className="space-y-1">
+                    <CardTitle className="flex items-center gap-2 text-lg">
+                      <Coffee className="h-5 w-5" />
+                      {brew.bean.name}
+                    </CardTitle>
+                    <p className="text-muted-foreground text-sm">
+                      {formatBrewDateTime(brew.log.brewedAt)} •{" "}
+                      {brew.bean.roaster}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge
+                      variant="secondary"
+                      className={getMethodBadgeColor(brew.log.method)}
+                    >
+                      {brew.log.method.replace("_", " ").toUpperCase()}
+                    </Badge>
+                    <StarRating rating={brew.log.rating ?? 0} />
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Badge
-                    variant="secondary"
-                    className={getMethodBadgeColor(brew.log.method)}
-                  >
-                    {brew.log.method.replace("_", " ").toUpperCase()}
-                  </Badge>
-                  <StarRating rating={brew.log.rating ?? 0} />
-                </div>
-              </div>
-            </CardHeader>
+              </CardHeader>
 
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2 md:grid-cols-4">
-                <div className="flex items-center gap-2">
-                  <Bean
-                    className="text-muted-foreground h-4 w-4"
-                    aria-hidden="true"
-                  />
-                  <span
-                    aria-label={`Dose: ${brew.log.doseGrams ? `${brew.log.doseGrams} grams` : "not specified"}`}
-                  >
-                    {brew.log.doseGrams ? `${brew.log.doseGrams}g` : "—"}
-                  </span>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2 md:grid-cols-4">
+                  <div className="flex items-center gap-2">
+                    <Bean
+                      className="text-muted-foreground h-4 w-4"
+                      aria-hidden="true"
+                    />
+                    <span
+                      aria-label={`Dose: ${brew.log.doseGrams ? `${brew.log.doseGrams} grams` : "not specified"}`}
+                    >
+                      {brew.log.doseGrams ? `${brew.log.doseGrams}g` : "—"}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Coffee
+                      className="text-muted-foreground h-4 w-4"
+                      aria-hidden="true"
+                    />
+                    <span
+                      aria-label={`Yield: ${brew.log.yieldGrams ? `${brew.log.yieldGrams} grams` : "not specified"}`}
+                    >
+                      {brew.log.yieldGrams ? `${brew.log.yieldGrams}g` : "—"}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Clock
+                      className="text-muted-foreground h-4 w-4"
+                      aria-hidden="true"
+                    />
+                    <span
+                      aria-label={`Brew time: ${brew.log.brewTimeSeconds ? `${Math.floor(brew.log.brewTimeSeconds / 60)} minutes ${brew.log.brewTimeSeconds % 60} seconds` : "not specified"}`}
+                    >
+                      {formatBrewDuration(brew.log.brewTimeSeconds)}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Thermometer
+                      className="text-muted-foreground h-4 w-4"
+                      aria-hidden="true"
+                    />
+                    <span
+                      aria-label={`Water temperature: ${brew.log.waterTempCelsius ? `${brew.log.waterTempCelsius} degrees Celsius` : "not specified"}`}
+                    >
+                      {brew.log.waterTempCelsius
+                        ? `${brew.log.waterTempCelsius}°C`
+                        : "—"}
+                    </span>
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <Coffee
-                    className="text-muted-foreground h-4 w-4"
-                    aria-hidden="true"
-                  />
-                  <span
-                    aria-label={`Yield: ${brew.log.yieldGrams ? `${brew.log.yieldGrams} grams` : "not specified"}`}
-                  >
-                    {brew.log.yieldGrams ? `${brew.log.yieldGrams}g` : "—"}
-                  </span>
-                </div>
+                {brew.log.grindSetting && (
+                  <div className="text-sm">
+                    <span className="text-muted-foreground">Grind:</span>{" "}
+                    {brew.log.grindSetting}
+                  </div>
+                )}
 
-                <div className="flex items-center gap-2">
-                  <Clock
-                    className="text-muted-foreground h-4 w-4"
-                    aria-hidden="true"
-                  />
-                  <span
-                    aria-label={`Brew time: ${brew.log.brewTimeSeconds ? `${Math.floor(brew.log.brewTimeSeconds / 60)} minutes ${brew.log.brewTimeSeconds % 60} seconds` : "not specified"}`}
-                  >
-                    {formatBrewDuration(brew.log.brewTimeSeconds)}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Thermometer
-                    className="text-muted-foreground h-4 w-4"
-                    aria-hidden="true"
-                  />
-                  <span
-                    aria-label={`Water temperature: ${brew.log.waterTempCelsius ? `${brew.log.waterTempCelsius} degrees Celsius` : "not specified"}`}
-                  >
-                    {brew.log.waterTempCelsius
-                      ? `${brew.log.waterTempCelsius}°C`
-                      : "—"}
-                  </span>
-                </div>
-              </div>
-
-              {brew.log.grindSetting && (
-                <div className="text-sm">
-                  <span className="text-muted-foreground">Grind:</span>{" "}
-                  {brew.log.grindSetting}
-                </div>
-              )}
-
-              {brew.log.notes && (
-                <div className="text-sm">
-                  <span className="text-muted-foreground">Notes:</span>{" "}
-                  <span className="italic">{brew.log.notes}</span>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+                {brew.log.notes && (
+                  <div className="text-sm">
+                    <span className="text-muted-foreground">Notes:</span>{" "}
+                    <span className="italic">{brew.log.notes}</span>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </Link>
         ))}
         {recentBrews.length === 0 && (
           <Card className="p-12 text-center">

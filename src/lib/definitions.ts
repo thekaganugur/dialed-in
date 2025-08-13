@@ -13,3 +13,8 @@ export type CoffeeLog = {
   rating: number;
   brew_date: string;
 };
+
+export type Breadcrumb = {
+  title: string;
+  href?: string; // undefined for current page (no link)
+};
