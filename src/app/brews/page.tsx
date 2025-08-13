@@ -29,9 +29,9 @@ export default async function BrewsPage({ searchParams }: Props) {
           </p>
         </div>
         <Button asChild>
-          <Link href="/brews/new" aria-label="Create a new coffee brew log">
+          <Link href="/brews/create" aria-label="Create a new coffee brew log">
             <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
-            New Brew
+            Create Brew
           </Link>
         </Button>
       </div>
@@ -39,7 +39,7 @@ export default async function BrewsPage({ searchParams }: Props) {
       <SearchBar placeholder="Search by bean name, roaster, or notes..." />
       <BrewFilters />
 
-      <Suspense key={query || 'default'} fallback={<BrewListSkeleton />}>
+      <Suspense key={query || "default"} fallback={<BrewListSkeleton />}>
         <BrewList searchQuery={query} />
       </Suspense>
     </div>

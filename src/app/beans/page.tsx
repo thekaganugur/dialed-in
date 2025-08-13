@@ -16,9 +16,9 @@ export default async function BeansPage() {
           </p>
         </div>
         <Button asChild>
-          <Link href="/beans/new" aria-label="Add new coffee beans">
+          <Link href="/beans/create" aria-label="Add new coffee beans">
             <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
-            Add Beans
+            Create Beans
           </Link>
         </Button>
       </div>
@@ -29,3 +29,4 @@ export default async function BeansPage() {
     </div>
   );
 }
+

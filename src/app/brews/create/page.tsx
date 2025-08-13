@@ -2,31 +2,32 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft, Coffee } from "lucide-react";
+import { Coffee } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { createBrewFormSchema } from "./schemas";
 
-const formSchema = z.object({
-  beanId: z.string().min(1, "Please select a coffee bean"),
-  method: z.string().min(1, "Please select a brew method"),
-  doseGrams: z.string().optional(),
-  yieldGrams: z.string().optional(),
-  brewTimeSeconds: z.string().optional(),
-  waterTempCelsius: z.string().optional(),
-  grindSetting: z.string().optional(),
-  rating: z.string().min(1, "Please rate your brew"),
-  notes: z.string().optional(),
-  flavorNotes: z.string().optional(),
-});
-
-export default function NewBrewPage() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+export default function CreateBrewPage() {
+  const form = useForm<z.infer<typeof createBrewFormSchema>>({
+    resolver: zodResolver(createBrewFormSchema),
     defaultValues: {
       beanId: "",
       method: "",
@@ -46,30 +47,23 @@ export default function NewBrewPage() {
     "v60",
     "aeropress",
     "french_press",
-    "moka", 
+    "moka",
     "chemex",
     "turkish",
     "cold_brew",
   ];
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof createBrewFormSchema>) {
     console.log(values);
   }
 
   return (
-    <div className="container max-w-2xl mx-auto py-8 px-4">
-      <div className="mb-6">
-        <Link href="/brews" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Brews
-        </Link>
-      </div>
-
+    <div className="mx-auto max-w-2xl">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Coffee className="h-5 w-5" />
-            New Brew Log
+            Create Brew Log
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -81,14 +75,19 @@ export default function NewBrewPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Coffee Bean *</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a coffee bean" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="sample">Sample Bean - Ethiopian Yirgacheffe</SelectItem>
+                        <SelectItem value="sample">
+                          Sample Bean - Ethiopian Yirgacheffe
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -102,7 +101,10 @@ export default function NewBrewPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Brew Method *</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select brew method" />
@@ -129,7 +131,12 @@ export default function NewBrewPage() {
                     <FormItem>
                       <FormLabel>Dose (g)</FormLabel>
                       <FormControl>
-                        <Input type="number" step="0.1" placeholder="18.0" {...field} />
+                        <Input
+                          type="number"
+                          step="0.1"
+                          placeholder="18.0"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -143,7 +150,12 @@ export default function NewBrewPage() {
                     <FormItem>
                       <FormLabel>Yield (g)</FormLabel>
                       <FormControl>
-                        <Input type="number" step="0.1" placeholder="36.0" {...field} />
+                        <Input
+                          type="number"
+                          step="0.1"
+                          placeholder="36.0"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -199,7 +211,10 @@ export default function NewBrewPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Rating *</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Rate your brew (1-5)" />
@@ -226,7 +241,7 @@ export default function NewBrewPage() {
                     <FormLabel>Notes</FormLabel>
                     <FormControl>
                       <textarea
-                        className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                        className="border-input bg-background flex min-h-[80px] w-full rounded-md border px-3 py-2 text-sm"
                         placeholder="Brewing notes..."
                         {...field}
                       />
@@ -244,7 +259,7 @@ export default function NewBrewPage() {
                     <FormLabel>Flavor Notes</FormLabel>
                     <FormControl>
                       <textarea
-                        className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                        className="border-input bg-background flex min-h-[80px] w-full rounded-md border px-3 py-2 text-sm"
                         placeholder="Flavor profile..."
                         {...field}
                       />

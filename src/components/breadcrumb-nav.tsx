@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,23 +8,25 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const titles: Record<string, string> = {
   dashboard: "Dashboard",
   brews: "Brews",
-  new: "New Brew",
+  create: "Create Brew",
   beans: "Beans",
 };
 
 export function BreadcrumbNav() {
   const pathname = usePathname();
-  
+
   if (pathname === "/") {
     return <h1 className="text-base font-medium">BrewLog</h1>;
   }
 
   const segments = pathname.split("/").filter(Boolean);
-  
+
   return (
     <Breadcrumb>
       <BreadcrumbList>
@@ -35,7 +35,7 @@ export function BreadcrumbNav() {
           const title = titles[segment] || segment;
           const isLast = index === segments.length - 1;
           const isFirst = index === 0;
-          
+
           return (
             <div key={href} className="flex items-center">
               {!isFirst && <BreadcrumbSeparator />}
@@ -55,3 +55,4 @@ export function BreadcrumbNav() {
     </Breadcrumb>
   );
 }
+

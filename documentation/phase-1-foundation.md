@@ -178,8 +178,8 @@ export const playfair = Playfair_Display({
     /page.tsx          # Dashboard overview
     /brews
       /page.tsx        # All brew logs
-      /new
-        /page.tsx      # Add new brew
+      /create
+        /page.tsx      # Create new brew
       /[id]
         /edit
           /page.tsx    # Edit brew

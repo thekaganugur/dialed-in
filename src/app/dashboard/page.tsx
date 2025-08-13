@@ -39,13 +39,13 @@ export default async function DashboardPage() {
           <Button asChild>
             <Link href="/brews/new">
               <Plus className="mr-2 h-4 w-4" />
-              Add Brew
+              Create Brew
             </Link>
           </Button>
           <Button variant="outline" asChild>
             <Link href="/beans/new">
               <Plus className="mr-2 h-4 w-4" />
-              Add Bean
+              Create Bean
             </Link>
           </Button>
         </div>
@@ -93,14 +93,16 @@ export default async function DashboardPage() {
             {favoriteMethod.length > 0 ? (
               <>
                 <div className="mb-2">
-                  <Badge className={getMethodBadgeColor(favoriteMethod[0].method)}>
+                  <Badge
+                    className={getMethodBadgeColor(favoriteMethod[0].method)}
+                  >
                     {favoriteMethod[0].method.toUpperCase()}
                   </Badge>
                 </div>
                 <p className="text-sm">{favoriteMethod[0].brewCount} brews</p>
               </>
             ) : (
-              <p className="text-sm text-muted-foreground">No data yet</p>
+              <p className="text-muted-foreground text-sm">No data yet</p>
             )}
           </CardContent>
         </Card>
