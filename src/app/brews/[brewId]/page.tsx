@@ -17,6 +17,7 @@ import {
   Edit,
   MapPin,
   Settings,
+  Trash2,
 } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -43,12 +44,18 @@ export default async function BrewDetailPage({ params }: BrewDetailPageProps) {
           </Link>
         </Button>
         <div className="flex-1" />
-        <Button variant="outline" size="sm" asChild>
-          <Link href={`/brews/${brewId}/edit`}>
-            <Edit className="mr-2 h-4 w-4" />
-            Edit
-          </Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" asChild>
+            <Link href={`/brews/${brewId}/edit`}>
+              <Edit className="mr-2 h-4 w-4" />
+              Edit
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm" type="button">
+            <Trash2 className="text-muted-foreground h-4 w-4" />
+            <span className="text-muted-foreground">Delete</span>
+          </Button>
+        </div>
       </div>
 
       <Card>
