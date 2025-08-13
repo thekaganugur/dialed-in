@@ -12,16 +12,6 @@
 
 ## Brews
 
-Current Implementation ✅
-
-- Brew listing: Shows recent brews with key metrics (dose, yield, time, temperature)
-- Loading states: Skeleton components for smooth UX
-- Empty state: Nice onboarding when no brews exist
-- Responsive design: Grid layout that adapts to screen size
-- Accessibility: Proper ARIA labels and semantic HTML
-- Star ratings: Visual rating display
-- Method badges: Color-coded brew method indicators
-
 Missing Key Features 🚧
 
 1. CRUD Operations
@@ -33,9 +23,7 @@ Missing Key Features 🚧
 
 2. Data Management
 
-- Filtering (by method, rating, date range, bean) ✅
 - Sorting (by date, rating, method)
-- Search functionality (by bean name, notes, etc.) ✅
 - Pagination (currently shows all, could be performance issue)
 
 3. Advanced Features

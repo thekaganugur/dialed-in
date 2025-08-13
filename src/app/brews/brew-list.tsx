@@ -2,8 +2,7 @@ import { StarRating } from "@/components/star-rating";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { fetchRecentBrews } from "@/lib/db/data";
-import { brewMethodEnum } from "@/lib/db/schema";
+import { BrewMethodValue, fetchRecentBrews } from "@/lib/db/data";
 import {
   formatBrewDateTime,
   formatBrewDuration,
@@ -11,8 +10,6 @@ import {
 } from "@/lib/utils";
 import { Bean, Clock, Coffee, Plus, Thermometer } from "lucide-react";
 import Link from "next/link";
-
-type BrewMethodValue = typeof brewMethodEnum.enumValues[number];
 
 interface BrewListProps {
   searchQuery?: string;

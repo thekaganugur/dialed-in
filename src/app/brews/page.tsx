@@ -2,12 +2,23 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
+import z from "zod";
 import { BrewFilters } from "./brew-filters";
 import { BrewList } from "./brew-list";
 import { BrewListSkeleton } from "./brew-list-skeleton";
 import { SearchBar } from "./search-bar";
 
-export default async function BrewsPage() {
+const ParamsScheme = z.object({
+  query: z.string().optional(),
+});
+
+type Props = {
+  searchParams: Promise<z.infer<typeof ParamsScheme>>;
+};
+
+export default async function BrewsPage({ searchParams }: Props) {
+  const { query } = ParamsScheme.parse(await searchParams);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -26,11 +37,10 @@ export default async function BrewsPage() {
       </div>
 
       <SearchBar placeholder="Search by bean name, roaster, or notes..." />
-
       <BrewFilters />
 
-      <Suspense fallback={<BrewListSkeleton />}>
-        <BrewList />
+      <Suspense key={query || 'default'} fallback={<BrewListSkeleton />}>
+        <BrewList searchQuery={query} />
       </Suspense>
     </div>
   );

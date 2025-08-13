@@ -1,10 +1,20 @@
 import { db } from "@/lib/db";
-import { coffeeBeans, coffeeLogs, brewMethodEnum } from "@/lib/db/schema";
+import { brewMethodEnum, coffeeBeans, coffeeLogs } from "@/lib/db/schema";
 import { endOfDay, startOfDay, subDays } from "date-fns";
-import { and, avg, count, desc, eq, gte, ilike, isNull, lt, or, max } from "drizzle-orm";
+import {
+  and,
+  avg,
+  count,
+  desc,
+  eq,
+  gte,
+  ilike,
+  isNull,
+  lt,
+  or,
+} from "drizzle-orm";
 
-// Type-safe brew method type
-type BrewMethodValue = typeof brewMethodEnum.enumValues[number];
+export type BrewMethodValue = (typeof brewMethodEnum.enumValues)[number];
 
 // Get today's brew count (with type safety!)
 export async function fetchTodayBrewCount(date = new Date()): Promise<number> {
@@ -83,9 +93,9 @@ export async function fetchRecentBrews(
   filterMethod?: BrewMethodValue | "all",
 ) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  
+
   const conditions = [isNull(coffeeLogs.deletedAt)];
-  
+
   // Add search conditions if query provided
   if (searchQuery && searchQuery.trim()) {
     const searchTerm = `%${searchQuery.trim()}%`;
@@ -97,12 +107,12 @@ export async function fetchRecentBrews(
       )!,
     );
   }
-  
+
   // Add method filter if provided
   if (filterMethod && filterMethod !== "all") {
     conditions.push(eq(coffeeLogs.method, filterMethod));
   }
-  
+
   return await db
     .select({
       log: coffeeLogs,
