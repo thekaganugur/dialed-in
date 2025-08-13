@@ -137,7 +137,7 @@ export const coffeeLogs = pgTable(
     waterTempCelsius: integer("water_temp_celsius"),
     grindSetting: varchar("grind_setting", { length: 50 }),
 
-    rating: integer("rating").notNull(),
+    rating: integer("rating"),
 
     notes: text("notes"),
     flavorNotes: text("flavor_notes"), // simple text field instead of array
@@ -167,7 +167,7 @@ export const coffeeLogs = pgTable(
 
     ratingRange: check(
       "coffee_logs_rating_range",
-      sql`${t.rating} >= 1 and ${t.rating} <= 5`,
+      sql`${t.rating} is null or (${t.rating} >= 1 and ${t.rating} <= 5)`,
     ),
     positiveDose: check(
       "coffee_logs_dose_positive",

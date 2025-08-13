@@ -8,7 +8,7 @@ export const createBrewFormSchema = z.object({
   brewTimeSeconds: z.string().optional(),
   waterTempCelsius: z.string().optional(),
   grindSetting: z.string().optional(),
-  rating: z.string().min(1, "Please rate your brew"),
+  rating: z.string().optional(),
   notes: z.string().optional(),
   flavorNotes: z.string().optional(),
 });
