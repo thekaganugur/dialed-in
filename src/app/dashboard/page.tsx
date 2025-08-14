@@ -11,7 +11,15 @@ import {
 } from "@/lib/db/data";
 import { formatBrewDateTime, getMethodBadgeColor } from "@/lib/utils";
 import { subDays } from "date-fns";
-import { Coffee, Plus } from "lucide-react";
+import {
+  Calendar,
+  Coffee,
+  Package,
+  Plus,
+  Star,
+  TrendingDown,
+  TrendingUp,
+} from "lucide-react";
 import Link from "next/link";
 
 export default async function DashboardPage() {
@@ -30,6 +38,8 @@ export default async function DashboardPage() {
     fetchRecentBrews(),
     fetchTodayBrewCount(subDays(new Date(), 1)),
   ]);
+
+  const brewCountChange = todayBrewsCount - yesterdayBrewsCount;
 
   return (
     <main>
@@ -55,17 +65,31 @@ export default async function DashboardPage() {
         {/* Today's Brew Count */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="flex items-center gap-2 text-sm font-medium">
+              <Calendar className="h-4 w-4" />
               Today&apos;s Brews
             </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-bold">{todayBrewsCount}</p>
-            {todayBrewsCount !== yesterdayBrewsCount && (
-              <p className="text-muted-foreground text-sm">
-                {todayBrewsCount > yesterdayBrewsCount ? "+" : ""}
-                {todayBrewsCount - yesterdayBrewsCount} vs yesterday
-              </p>
+            {brewCountChange !== 0 && (
+              <div className="flex items-center gap-1 text-sm">
+                {brewCountChange > 0 ? (
+                  <>
+                    <TrendingUp className="h-4 w-4 text-green-500" />
+                    <span className="text-green-600">
+                      +{brewCountChange} vs yesterday
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <TrendingDown className="h-4 w-4 text-red-500" />
+                    <span className="text-red-600">
+                      {brewCountChange} vs yesterday
+                    </span>
+                  </>
+                )}
+              </div>
             )}
           </CardContent>
         </Card>
@@ -73,7 +97,8 @@ export default async function DashboardPage() {
         {/* This Week's Average Rating */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="flex items-center gap-2 text-sm font-medium">
+              <Star className="h-4 w-4" />
               Weekly Average
             </CardTitle>
           </CardHeader>
@@ -85,7 +110,8 @@ export default async function DashboardPage() {
         {/* Favorite Brewing Method */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="flex items-center gap-2 text-sm font-medium">
+              <Coffee className="h-4 w-4" />
               Favorite Method
             </CardTitle>
           </CardHeader>
@@ -110,7 +136,8 @@ export default async function DashboardPage() {
         {/* Bean Inventory */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="flex items-center gap-2 text-sm font-medium">
+              <Package className="h-4 w-4" />
               Bean Inventory
             </CardTitle>
           </CardHeader>

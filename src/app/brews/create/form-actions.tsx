@@ -9,15 +9,7 @@ export function FormActions() {
   const { pending } = useFormStatus();
 
   return (
-    <div className="flex flex-col gap-3 pt-2 sm:flex-row">
-      <Button type="submit" className="flex-1" disabled={pending}>
-        {pending ? (
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Coffee className="mr-2 h-4 w-4" />
-        )}
-        {pending ? "Saving..." : "Save Brew Log"}
-      </Button>
+    <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
       <Button
         type="button"
         variant="outline"
@@ -25,7 +17,17 @@ export function FormActions() {
         className="sm:w-auto"
         disabled={pending}
       >
-        <Link href="/brews">Cancel</Link>
+        <Link href="/brews" aria-label="Cancel brew creation and return to brews list">
+          Cancel
+        </Link>
+      </Button>
+      <Button type="submit" className="flex-1 sm:flex-initial" disabled={pending}>
+        {pending ? (
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <Coffee className="mr-2 h-4 w-4" />
+        )}
+        {pending ? "Saving..." : "Save Brew Log"}
       </Button>
     </div>
   );

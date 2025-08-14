@@ -10,7 +10,6 @@ import {
   getMethodBadgeColor,
 } from "@/lib/utils";
 import {
-  ArrowLeft,
   Bean,
   Calendar,
   Coffee,
@@ -36,14 +35,7 @@ export default async function BrewDetailPage({ params }: BrewDetailPageProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" asChild>
-          <Link href="/brews">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Brews
-          </Link>
-        </Button>
-        <div className="flex-1" />
+      <div className="flex items-center justify-end gap-2">
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" asChild>
             <Link href={`/brews/${brewId}/edit`}>

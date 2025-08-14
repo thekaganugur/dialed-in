@@ -12,15 +12,7 @@ export function FormActions() {
   const brewId = params.brewId as string;
 
   return (
-    <div className="flex flex-col gap-3 pt-2 sm:flex-row">
-      <Button type="submit" className="flex-1" disabled={pending}>
-        {pending ? (
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Save className="mr-2 h-4 w-4" />
-        )}
-        {pending ? "Updating..." : "Update Brew Log"}
-      </Button>
+    <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
       <Button
         type="button"
         variant="outline"
@@ -28,8 +20,26 @@ export function FormActions() {
         className="sm:w-auto"
         disabled={pending}
       >
-        <Link href={`/brews/${brewId}`}>Cancel</Link>
+        <Link
+          href={`/brews/${brewId}`}
+          aria-label="Cancel editing and return to brew details"
+        >
+          Cancel
+        </Link>
+      </Button>
+      <Button
+        type="submit"
+        className="flex-1 sm:flex-initial"
+        disabled={pending}
+      >
+        {pending ? (
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <Save className="mr-2 h-4 w-4" />
+        )}
+        {pending ? "Updating..." : "Update Brew Log"}
       </Button>
     </div>
   );
 }
+

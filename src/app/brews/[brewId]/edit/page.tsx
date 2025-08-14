@@ -1,5 +1,4 @@
 import { QuickRating } from "@/components/quick-rating";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Collapsible,
@@ -17,8 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { fetchBrewById, fetchCoffeeBeans } from "@/lib/db/data";
-import { ArrowLeft, ChevronDown, Coffee, Settings2 } from "lucide-react";
-import Link from "next/link";
+import { ChevronDown, Coffee, Settings2 } from "lucide-react";
 import { notFound } from "next/navigation";
 import { updateBrew } from "./actions";
 import { FormActions } from "./form-actions";
@@ -52,16 +50,7 @@ export default async function EditBrewPage({ params }: EditBrewPageProps) {
   const updateBrewAction = updateBrew.bind(null, brewId);
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" asChild>
-          <Link href={`/brews/${brewId}`}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Brew
-          </Link>
-        </Button>
-      </div>
-
+    <div className="mx-auto max-w-2xl">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
