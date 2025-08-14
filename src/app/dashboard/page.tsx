@@ -44,7 +44,12 @@ export default async function DashboardPage() {
   return (
     <main>
       <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-3xl font-bold">☕ Coffee Dashboard</h1>
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+          <p className="text-muted-foreground mt-2">
+            Overview of your coffee brewing activity and statistics
+          </p>
+        </div>
         <div className="flex gap-2">
           <Button asChild>
             <Link href="/brews/create">
