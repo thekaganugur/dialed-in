@@ -9,17 +9,11 @@ import {
   formatBrewDuration,
   getMethodBadgeColor,
 } from "@/lib/utils";
-import {
-  Bean,
-  Calendar,
-  Coffee,
-  Edit,
-  MapPin,
-  Settings,
-  Trash2,
-} from "lucide-react";
+import { Bean, Calendar, Coffee, Edit, MapPin, Settings } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { deleteBrewWithId } from "./actions";
+import { DeleteBrewButton } from "./delete-brew-button";
 
 interface BrewDetailPageProps {
   params: Promise<{ brewId: string }>;
@@ -43,10 +37,8 @@ export default async function BrewDetailPage({ params }: BrewDetailPageProps) {
               Edit
             </Link>
           </Button>
-          <Button variant="ghost" size="sm" type="button">
-            <Trash2 className="text-muted-foreground h-4 w-4" />
-            <span className="text-muted-foreground">Delete</span>
-          </Button>
+
+          <DeleteBrewButton brewId={brewId} deleteAction={deleteBrewWithId} />
         </div>
       </div>
 
