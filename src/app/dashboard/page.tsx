@@ -161,7 +161,7 @@ export default async function DashboardPage() {
                 Start logging your coffee journey
               </p>
               <Button asChild>
-                <Link href="/brews/new">
+                <Link href="/brews/create">
                   <Plus className="mr-2 h-4 w-4" />
                   Log Your First Brew
                 </Link>

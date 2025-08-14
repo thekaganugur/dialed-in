@@ -78,7 +78,7 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <Link href="/brews/new">
+              <Link href="/brews/create">
                 <Plus />
                 <span>Quick Add</span>
               </Link>

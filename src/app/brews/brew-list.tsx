@@ -128,7 +128,7 @@ export async function BrewList({ searchQuery, filterMethod }: BrewListProps) {
             </p>
             <Button asChild>
               <Link
-                href="/brews/new"
+                href="/brews/create"
                 aria-label="Create your first coffee brew log"
               >
                 <Plus className="mr-2 h-4 w-4" aria-hidden="true" />

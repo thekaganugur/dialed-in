@@ -1,22 +1,12 @@
 # Plan
 
-## Dashboard
-
-1. Performance Analytics: Best rated beans, worst rated beans, method performance comparison
-2. Trends: Rating trends over time, brewing frequency trends, method usage trends
-3. Inventory Insights: Top beans by usage, beans that haven't been used recently, low-stock warnings
-4. Goals & Progress: Monthly/weekly targets, quality goals
-5. Quick Actions: Quick links to add new brew, add new bean, view all logs
-6. Time-based Analytics: Best brewing times, weekend vs weekday patterns
-7. Financial Tracking: Coffee spending, cost per cup analysis
-
 ## Brews
 
 Missing Key Features 🚧
 
 1. CRUD Operations
 
-- Create brew form (/brews/new - button links here but doesn't exist)
+- Create brew form (/brews/create - button links here but doesn't exist)
 - Edit brew functionality
 - Delete brew capability
 - Individual brew detail pages (/brews/[id])
