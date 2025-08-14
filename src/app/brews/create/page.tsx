@@ -35,15 +35,19 @@ export default async function CreateBrewPage() {
   const coffeeBeans = await fetchCoffeeBeans();
 
   return (
-    <div className="mx-auto max-w-2xl">
-      <Card>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Create Brew</h1>
+        <p className="text-muted-foreground mt-2">
+          Log your coffee brewing session quickly and easily
+        </p>
+      </div>
+
+      <Card className="max-w-2xl">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Coffee className="h-5 w-5" />
-            Quick Brew Log
-          </CardTitle>
+          <CardTitle>Brew Details</CardTitle>
           <p className="text-muted-foreground text-sm">
-            Log your coffee in seconds. Only bean and method required.
+            Only bean and method required to get started
           </p>
         </CardHeader>
 

@@ -39,6 +39,12 @@ export async function BeanList() {
               )}
             </div>
             
+            {bean.roastDate && (
+              <p className="text-xs text-muted-foreground">
+                Roasted: {new Date(bean.roastDate).toLocaleDateString()}
+              </p>
+            )}
+            
             
             {bean.notes && (
               <p className="text-sm text-muted-foreground line-clamp-2">

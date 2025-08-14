@@ -24,9 +24,7 @@ export async function createBean(formData: FormData) {
     origin: data.origin || null,
     roastLevel: data.roastLevel || null,
     process: data.process || null,
-    purchaseDate: data.purchaseDate || null,
-    price: data.price || null,
-    weightGrams: data.weightGrams ? parseInt(data.weightGrams) : null,
+    roastDate: data.roastDate || null,
     notes: data.notes || null,
   };
 

@@ -97,34 +97,9 @@ export default function CreateBeanPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                <div className="space-y-2">
-                  <Label htmlFor="purchaseDate">Purchase Date</Label>
-                  <Input id="purchaseDate" name="purchaseDate" type="date" />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="price">Price ($)</Label>
-                  <Input
-                    id="price"
-                    name="price"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    placeholder="0.00"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="weightGrams">Weight (g)</Label>
-                  <Input
-                    id="weightGrams"
-                    name="weightGrams"
-                    type="number"
-                    min="1"
-                    placeholder="250"
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="roastDate">Roast Date</Label>
+                <Input id="roastDate" name="roastDate" type="date" />
               </div>
 
 

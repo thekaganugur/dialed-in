@@ -50,15 +50,19 @@ export default async function EditBrewPage({ params }: EditBrewPageProps) {
   const updateBrewAction = updateBrew.bind(null, brewId);
 
   return (
-    <div className="mx-auto max-w-2xl">
-      <Card>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Edit Brew</h1>
+        <p className="text-muted-foreground mt-2">
+          Update your brew details and parameters for {brew.bean.name}
+        </p>
+      </div>
+
+      <Card className="max-w-2xl">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Coffee className="h-5 w-5" />
-            Edit Brew Log
-          </CardTitle>
+          <CardTitle>Brew Details</CardTitle>
           <p className="text-muted-foreground text-sm">
-            Update your brew details and parameters.
+            Modify the parameters for this brew log.
           </p>
         </CardHeader>
 

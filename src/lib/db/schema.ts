@@ -69,22 +69,12 @@ export const coffeeBeans = pgTable(
     origin: varchar("origin", { length: 255 }),
     roastLevel: roastLevelEnum("roast_level"),
     process: processEnum("process"),
-    purchaseDate: date("purchase_date"),
-    price: numeric("price", { precision: 10, scale: 2 }),
-    weightGrams: integer("weight_grams"),
+    roastDate: date("roast_date"),
     notes: text("notes"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (t) => ({
     byUserName: index("coffee_beans_user_name_idx").on(t.userId, t.name),
-    positivePrice: check(
-      "coffee_beans_price_positive",
-      sql`${t.price} is null or ${t.price} > 0`,
-    ),
-    positiveWeight: check(
-      "coffee_beans_weight_positive",
-      sql`${t.weightGrams} is null or ${t.weightGrams} > 0`,
-    ),
   }),
 );
 

@@ -7,9 +7,7 @@ export const createBeanFormSchema = z.object({
   origin: z.string().max(255, "Origin name too long").optional(),
   roastLevel: z.enum(roastLevelEnum.enumValues).optional(),
   process: z.enum(processEnum.enumValues).optional(),
-  purchaseDate: z.string().optional(),
-  price: z.string().optional(),
-  weightGrams: z.string().optional(),
+  roastDate: z.string().optional(),
   notes: z.string().optional(),
 });
 
