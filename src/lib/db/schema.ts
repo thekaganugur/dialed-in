@@ -72,16 +72,11 @@ export const coffeeBeans = pgTable(
     purchaseDate: date("purchase_date"),
     price: numeric("price", { precision: 10, scale: 2 }),
     weightGrams: integer("weight_grams"),
-    rating: integer("rating"),
     notes: text("notes"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (t) => ({
     byUserName: index("coffee_beans_user_name_idx").on(t.userId, t.name),
-    ratingRange: check(
-      "coffee_beans_rating_range",
-      sql`${t.rating} is null or (${t.rating} >= 1 and ${t.rating} <= 5)`,
-    ),
     positivePrice: check(
       "coffee_beans_price_positive",
       sql`${t.price} is null or ${t.price} > 0`,

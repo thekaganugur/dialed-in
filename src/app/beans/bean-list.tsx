@@ -39,14 +39,6 @@ export async function BeanList() {
               )}
             </div>
             
-            {bean.rating && (
-              <div className="flex items-center gap-1 text-sm">
-                <span>{"★".repeat(bean.rating)}</span>
-                <span className="text-muted-foreground">
-                  {"★".repeat(5 - bean.rating)}
-                </span>
-              </div>
-            )}
             
             {bean.notes && (
               <p className="text-sm text-muted-foreground line-clamp-2">
