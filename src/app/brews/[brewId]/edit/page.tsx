@@ -1,3 +1,4 @@
+import { QuickRating } from "@/components/quick-rating";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -110,45 +111,22 @@ export default async function EditBrewPage({ params }: EditBrewPageProps) {
                 </div>
               </div>
 
-              {/* Quick Rating */}
-              <div className="space-y-2">
-                <Label>Quick Rating</Label>
-                <div className="flex gap-2">
-                  {[1, 2, 3, 4, 5].map((rating) => (
-                    <label key={rating} className="flex cursor-pointer items-center space-x-2">
-                      <input
-                        type="radio"
-                        name="rating"
-                        value={rating.toString()}
-                        defaultChecked={brew.log.rating === rating}
-                        className="peer sr-only"
-                      />
-                      <div 
-                        className={`rounded-md border-2 px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-50 ${
-                          rating === 1 
-                            ? "peer-checked:border-red-300 peer-checked:bg-red-100 peer-checked:text-red-600"
-                            : rating === 2 
-                            ? "peer-checked:border-orange-300 peer-checked:bg-orange-100 peer-checked:text-orange-600"
-                            : rating === 3
-                            ? "peer-checked:border-yellow-300 peer-checked:bg-yellow-100 peer-checked:text-yellow-600"
-                            : rating === 4
-                            ? "peer-checked:border-blue-300 peer-checked:bg-blue-100 peer-checked:text-blue-600"
-                            : "peer-checked:border-green-300 peer-checked:bg-green-100 peer-checked:text-green-600"
-                        }`}
-                      >
-                        {rating}P
-                      </div>
-                    </label>
-                  ))}
-                </div>
-                <p className="text-muted-foreground text-xs">
-                  How was this brew?
-                </p>
-              </div>
+              <QuickRating defaultValue={brew.log.rating} />
             </div>
 
             {/* Optional Fields - Collapsible */}
-            <Collapsible defaultOpen={!!(brew.log.doseGrams || brew.log.yieldGrams || brew.log.brewTimeSeconds || brew.log.waterTempCelsius || brew.log.grindSetting || brew.log.notes)}>
+            <Collapsible
+              defaultOpen={
+                !!(
+                  brew.log.doseGrams ||
+                  brew.log.yieldGrams ||
+                  brew.log.brewTimeSeconds ||
+                  brew.log.waterTempCelsius ||
+                  brew.log.grindSetting ||
+                  brew.log.notes
+                )
+              }
+            >
               <CollapsibleTrigger className="bg-muted/30 hover:bg-muted/50 flex w-full cursor-pointer items-center justify-between rounded-lg border p-4 text-sm font-medium data-[state=open]:rounded-b-none">
                 <span className="flex items-center gap-2">
                   <Settings2 className="h-4 w-4" />
@@ -170,7 +148,11 @@ export default async function EditBrewPage({ params }: EditBrewPageProps) {
                         type="number"
                         step="0.1"
                         placeholder="18.0"
-                        defaultValue={brew.log.doseGrams ? brew.log.doseGrams.toString() : ""}
+                        defaultValue={
+                          brew.log.doseGrams
+                            ? brew.log.doseGrams.toString()
+                            : ""
+                        }
                         className="text-sm"
                       />
                     </div>
@@ -183,7 +165,11 @@ export default async function EditBrewPage({ params }: EditBrewPageProps) {
                         type="number"
                         step="0.1"
                         placeholder="36.0"
-                        defaultValue={brew.log.yieldGrams ? brew.log.yieldGrams.toString() : ""}
+                        defaultValue={
+                          brew.log.yieldGrams
+                            ? brew.log.yieldGrams.toString()
+                            : ""
+                        }
                         className="text-sm"
                       />
                     </div>
@@ -195,7 +181,11 @@ export default async function EditBrewPage({ params }: EditBrewPageProps) {
                         name="brewTimeSeconds"
                         type="number"
                         placeholder="30"
-                        defaultValue={brew.log.brewTimeSeconds ? brew.log.brewTimeSeconds.toString() : ""}
+                        defaultValue={
+                          brew.log.brewTimeSeconds
+                            ? brew.log.brewTimeSeconds.toString()
+                            : ""
+                        }
                         className="text-sm"
                       />
                     </div>
@@ -207,7 +197,11 @@ export default async function EditBrewPage({ params }: EditBrewPageProps) {
                         name="waterTempCelsius"
                         type="number"
                         placeholder="93"
-                        defaultValue={brew.log.waterTempCelsius ? brew.log.waterTempCelsius.toString() : ""}
+                        defaultValue={
+                          brew.log.waterTempCelsius
+                            ? brew.log.waterTempCelsius.toString()
+                            : ""
+                        }
                         className="text-sm"
                       />
                     </div>
@@ -261,3 +255,4 @@ export default async function EditBrewPage({ params }: EditBrewPageProps) {
     </div>
   );
 }
+

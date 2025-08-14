@@ -127,7 +127,7 @@ The project follows a phased learning approach based on the Next.js tutorial:
 4. **Phase 4**: Interactivity and CRUD operations
 5. **Phase 5**: Production features (auth, SEO, accessibility)
 
-**Current Status**: Phase 2 completed - database integration with Neon PostgreSQL and Drizzle ORM. Now implementing streaming and performance optimizations in Phase 3.
+**Current Status**: Phase 3 in progress - implementing individual brew detail pages with streaming, Server Actions for CRUD operations, and performance optimizations.
 
 ### Environment Setup
 
@@ -148,3 +148,11 @@ Required environment variables:
 - jsdom environment for React component testing
 - React Testing Library for component testing
 - Test files should be co-located
+
+### Dependencies
+
+Key libraries used in the project:
+- **Forms**: React Hook Form + Zod for validation
+- **Date handling**: date-fns for date manipulation
+- **Debouncing**: use-debounce for search optimization
+- **Calendar**: react-day-picker for date selection

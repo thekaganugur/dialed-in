@@ -1,3 +1,4 @@
+import { QuickRating } from "@/components/quick-rating";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Collapsible,
@@ -84,70 +85,7 @@ export default async function CreateBrewPage() {
                 </div>
               </div>
 
-              {/* Quick Rating */}
-              <div className="space-y-2">
-                <Label>Quick Rating</Label>
-                <div className="flex gap-2">
-                  <label className="flex cursor-pointer items-center space-x-2">
-                    <input
-                      type="radio"
-                      name="rating"
-                      value="1"
-                      className="peer sr-only"
-                    />
-                    <div className="rounded-md border-2 px-3 py-2 text-sm font-medium transition-colors peer-checked:border-red-300 peer-checked:bg-red-100 peer-checked:text-red-600 hover:bg-gray-50">
-                      1⭐
-                    </div>
-                  </label>
-                  <label className="flex cursor-pointer items-center space-x-2">
-                    <input
-                      type="radio"
-                      name="rating"
-                      value="2"
-                      className="peer sr-only"
-                    />
-                    <div className="rounded-md border-2 px-3 py-2 text-sm font-medium transition-colors peer-checked:border-orange-300 peer-checked:bg-orange-100 peer-checked:text-orange-600 hover:bg-gray-50">
-                      2⭐
-                    </div>
-                  </label>
-                  <label className="flex cursor-pointer items-center space-x-2">
-                    <input
-                      type="radio"
-                      name="rating"
-                      value="3"
-                      className="peer sr-only"
-                    />
-                    <div className="rounded-md border-2 px-3 py-2 text-sm font-medium transition-colors peer-checked:border-yellow-300 peer-checked:bg-yellow-100 peer-checked:text-yellow-600 hover:bg-gray-50">
-                      3⭐
-                    </div>
-                  </label>
-                  <label className="flex cursor-pointer items-center space-x-2">
-                    <input
-                      type="radio"
-                      name="rating"
-                      value="4"
-                      className="peer sr-only"
-                    />
-                    <div className="rounded-md border-2 px-3 py-2 text-sm font-medium transition-colors peer-checked:border-blue-300 peer-checked:bg-blue-100 peer-checked:text-blue-600 hover:bg-gray-50">
-                      4⭐
-                    </div>
-                  </label>
-                  <label className="flex cursor-pointer items-center space-x-2">
-                    <input
-                      type="radio"
-                      name="rating"
-                      value="5"
-                      className="peer sr-only"
-                    />
-                    <div className="rounded-md border-2 px-3 py-2 text-sm font-medium transition-colors peer-checked:border-green-300 peer-checked:bg-green-100 peer-checked:text-green-600 hover:bg-gray-50">
-                      5⭐
-                    </div>
-                  </label>
-                </div>
-                <p className="text-muted-foreground text-xs">
-                  Optional: How was this brew?
-                </p>
-              </div>
+              <QuickRating helpText="Optional: How was this brew?" />
             </div>
 
             {/* Optional Fields - Collapsible */}
