@@ -32,7 +32,7 @@ export default async function BrewDetailPage({ params }: BrewDetailPageProps) {
       <div className="flex items-center justify-end gap-2">
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" asChild>
-            <Link href={`/brews/${brewId}/edit`}>
+            <Link href={`/app/brews/${brewId}/edit`}>
               <Edit className="mr-2 h-4 w-4" />
               Edit
             </Link>

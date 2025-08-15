@@ -13,7 +13,7 @@ export async function signUp(formData: FormData) {
   };
 
   const validation = signUpFormSchema.safeParse(rawData);
-  
+
   if (!validation.success) {
     const errors = validation.error.issues.map((err) => err.message).join(", ");
     throw new Error(errors);
@@ -27,17 +27,18 @@ export async function signUp(formData: FormData) {
         email,
         password,
         name,
-      }
+      },
     });
   } catch (error) {
     console.error("Signup error:", error);
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
     if (errorMessage.includes("User already exists")) {
       throw new Error("An account with this email already exists");
     }
     throw new Error(`Failed to create account: ${errorMessage}`);
   }
 
-  // Only redirect if signup was successful
-  redirect("/");
+  redirect("/app");
 }
+

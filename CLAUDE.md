@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-BrewLog is a Next.js coffee logging application built as a learning project following the official Next.js tutorial structure. The app helps coffee enthusiasts track their daily brews, improve technique, and master Next.js fundamentals through a phased approach.
+BrewLog is a Next.js coffee logging application that helps coffee enthusiasts track their daily brews and improve their brewing technique. Originally built as a learning project following the Next.js tutorial structure, it has evolved into a real personal project for coffee logging and analysis.
 
 ## Common Commands
 
@@ -36,6 +36,8 @@ BrewLog is a Next.js coffee logging application built as a learning project foll
 - `npm run db:push` - Push schema changes to database
 - `npm run db:migrate` - Apply migrations to database
 - `npm run db:studio` - Open Drizzle Studio GUI
+- `docker compose up -d` - Start local PostgreSQL database (development)
+- `docker compose down` - Stop local PostgreSQL database
 
 ### Utilities
 
@@ -138,23 +140,33 @@ Key schema features:
 
 ### Development Philosophy
 
-The project follows a phased learning approach based on the Next.js tutorial:
+The project has evolved from a learning exercise to a production-ready coffee logging application. The development approach emphasizes:
 
-1. **Phase 1**: Foundation (styling, navigation, layouts) ✅ Completed
-2. **Phase 2**: Database integration and data fetching 🚧 In Progress
-3. **Phase 3**: Performance optimization and streaming
-4. **Phase 4**: Interactivity and CRUD operations
-5. **Phase 5**: Production features (auth, SEO, accessibility)
+- **User-centered design**: Features are built based on real coffee brewing needs
+- **Progressive enhancement**: Core functionality works without JavaScript **Performance first**: Optimized for fast loading and smooth interactions
+- **Type safety**: Comprehensive TypeScript usage throughout
+- **Modern React patterns**: Server Components, Server Actions, and streaming
 
-**Current Status**: Phase 4+ in progress - Full CRUD operations implemented with Server Actions, authentication with Better Auth, individual brew detail pages with edit/delete functionality.
+**Current Status**: Full-featured application with complete CRUD operations, authentication, dashboard analytics, and advanced search capabilities.
 
 ### Environment Setup
 
 Required environment variables:
 
-- `DATABASE_URL`: Neon PostgreSQL connection string (required for all database operations)
+- `DATABASE_URL`: PostgreSQL connection string (required for all database operations)
+  - Production: Neon PostgreSQL connection string
+  - Development: Can use local Docker PostgreSQL (`postgresql://postgres:devpass@localhost:5432/appdb`)
 - `BETTER_AUTH_SECRET`: Secret key for Better Auth session management (required for authentication)
 - `BETTER_AUTH_URL`: Base URL for Better Auth (defaults to localhost:3000 in development)
+
+### Local Development Database
+
+The project includes Docker Compose for local PostgreSQL development:
+
+- Uses PostgreSQL 16 with persistent data volume
+- Default credentials: `postgres`/`devpass` on port 5432
+- Database name: `appdb`
+- Alternative to hosted Neon database for development
 
 ### Code Quality Standards
 
@@ -209,3 +221,17 @@ Key libraries used in the project:
 - **Date handling**: date-fns for date manipulation
 - **Debouncing**: use-debounce for search optimization
 - **Calendar**: react-day-picker for date selection
+
+## Rules
+
+1. **Edge Runtime by Default** – Add `export const runtime = "edge"` to all pages and route handlers unless Node APIs are required; never import `fs`, `net`, etc.
+2. **Server Components First** – Generate components as Server Components by default; add `"use client"` only to files needing interactivity or browser APIs.
+3. **Styling Rules** – Use Tailwind CSS utility classes or shadcn/ui components exclusively; no custom CSS files, inline styles, or other frameworks.
+4. **Database Access** – Use Drizzle ORM with typed schemas in server-only modules; import the singleton `db` instance in Server Components, Server Actions, or route handlers only.
+5. **Authentication** – Implement with Better Auth’s official Next.js integration (`/api/auth/[...all]/route.ts` + `nextCookies()` plugin); use its hooks and client helpers for auth flows.
+6. **Routing Structure** – Follow App Router conventions with `layout.tsx` for shared UI, route groups `(group)` for organization, and `route.ts` files for API endpoints.
+7. **Mutations** – Handle create/update/delete via `'use server'` Server Actions or POST route handlers; call `revalidatePath`/`revalidateTag` after mutations.
+8. **Streaming UX** – Provide `loading.tsx` in segments with async data for streaming feedback; use skeletons or placeholders.
+9. **Error Boundaries** – Include `error.tsx` per route segment as a `"use client"` component with `error` and `reset` props to display fallback UI and retry.
+10. **Caching & ISR** – Default to static generation with `export const revalidate = N` or fetch `{ next: { revalidate: N } }`; use `dynamic = "force-dynamic"` only when real-time data is required.
+

@@ -30,13 +30,18 @@ export function BreadcrumbNav() {
     return <h1 className="text-base font-medium">BrewLog</h1>;
   }
 
-  const segments = pathname.split("/").filter(Boolean);
+  const filteredSegments = pathname
+    .split("/")
+    .filter(Boolean)
+    .filter((segment) => segment !== "app");
+
+  const segments = filteredSegments.length === 0 ? ["dashboard"] : filteredSegments;
 
   return (
     <Breadcrumb>
       <BreadcrumbList>
         {segments.map((segment, index) => {
-          const href = "/" + segments.slice(0, index + 1).join("/");
+          const href = "/app/" + segments.slice(0, index + 1).join("/");
           const title =
             titles[segment] ||
             (UUID_PATTERN.test(segment) ? "Detail" : segment);

@@ -33,7 +33,7 @@ export async function requireAuthOrRedirect() {
   });
 
   if (!session?.user) {
-    redirect("/api/auth/sign-in");
+    redirect("/login");
   }
 
   return session;

@@ -34,6 +34,5 @@ export async function signIn(formData: FormData) {
     throw new Error(`Failed to sign in: ${errorMessage}`);
   }
 
-  redirect("/");
+  redirect("/app");
 }
-

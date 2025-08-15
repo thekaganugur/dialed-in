@@ -1,15 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Loader2, Save } from "lucide-react";
+import { Coffee, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { useFormStatus } from "react-dom";
 
 export function FormActions() {
   const { pending } = useFormStatus();
-  const params = useParams();
-  const brewId = params.brewId as string;
 
   return (
     <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
@@ -20,26 +17,18 @@ export function FormActions() {
         className="sm:w-auto"
         disabled={pending}
       >
-        <Link
-          href={`/brews/${brewId}`}
-          aria-label="Cancel editing and return to brew details"
-        >
+        <Link href="/app/brews" aria-label="Cancel brew creation and return to brews list">
           Cancel
         </Link>
       </Button>
-      <Button
-        type="submit"
-        className="flex-1 sm:flex-initial"
-        disabled={pending}
-      >
+      <Button type="submit" className="flex-1 sm:flex-initial" disabled={pending}>
         {pending ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         ) : (
-          <Save className="mr-2 h-4 w-4" />
+          <Coffee className="mr-2 h-4 w-4" />
         )}
-        {pending ? "Updating..." : "Update Brew Log"}
+        {pending ? "Saving..." : "Save Brew Log"}
       </Button>
     </div>
   );
 }
-

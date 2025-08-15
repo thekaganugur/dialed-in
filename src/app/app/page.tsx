@@ -52,13 +52,13 @@ export default async function DashboardPage() {
         </div>
         <div className="flex gap-2">
           <Button asChild>
-            <Link href="/brews/create">
+            <Link href="/app/brews/create">
               <Plus className="mr-2 h-4 w-4" />
               Create Brew
             </Link>
           </Button>
           <Button variant="outline" asChild>
-            <Link href="/beans/create">
+            <Link href="/app/beans/create">
               <Plus className="mr-2 h-4 w-4" />
               Create Bean
             </Link>
@@ -165,7 +165,7 @@ export default async function DashboardPage() {
                 return (
                   <Link
                     key={log.id}
-                    href={`/brews/${log.id}`}
+                    href={`/app/brews/${log.id}`}
                     className="hover:bg-muted/50 hover:border-primary/20 flex items-center justify-between rounded-lg border p-4 transition-colors"
                   >
                     <div className="flex-1">
@@ -193,7 +193,7 @@ export default async function DashboardPage() {
                 Start logging your coffee journey
               </p>
               <Button asChild>
-                <Link href="/brews/create">
+                <Link href="/app/brews/create">
                   <Plus className="mr-2 h-4 w-4" />
                   Log Your First Brew
                 </Link>

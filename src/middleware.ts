@@ -1,19 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export const config = {
-  matcher: ["/"],
-};
+export function middleware(request: NextRequest) {
+  const cookie = request.cookies.get("better-auth.session_token");
+  const isAuthenticated = !!(cookie && cookie.value);
+  const { pathname } = request.nextUrl;
 
-export async function middleware(request: NextRequest) {
-  // Check for session cookie to determine if user is authenticated
-  const sessionCookie = request.cookies.get("better-auth.session_token");
-
-  // If user has session cookie, rewrite to dashboard
-  if (sessionCookie?.value) {
-    const dashboardURL = new URL("/dashboard", request.url);
-    return NextResponse.rewrite(dashboardURL);
+  // Redirect authenticated users away from auth pages
+  if (isAuthenticated && (pathname === "/login" || pathname === "/signup")) {
+    return NextResponse.redirect(new URL("/app/", request.url));
   }
 
-  // If not authenticated, let it fall through to (marketing)/page.tsx
+  // Redirect unauthenticated users from protected routes
+  if (!isAuthenticated && pathname.startsWith("/app")) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
   return NextResponse.next();
 }
+
+export const config = {
+  matcher: ["/app/:path*", "/login", "/signup"],
+};

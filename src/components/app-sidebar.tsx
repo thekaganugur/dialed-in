@@ -18,23 +18,18 @@ import { NavUser } from "./nav-user";
 
 const navigationItems = [
   {
-    title: "Dashboard",
-    href: "/",
-    icon: Home,
-  },
-  {
     title: "Brews",
-    href: "/brews",
+    href: "/app/brews",
     icon: Coffee,
   },
   {
     title: "Beans",
-    href: "/beans",
+    href: "/app/beans",
     icon: Bean,
   },
   {
     title: "Analytics",
-    href: "/analytics",
+    href: "/app/analytics",
     icon: BarChart3,
   },
 ];
@@ -47,9 +42,9 @@ export function AppSidebar() {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link href="/">
-                <CoffeeIcon />
+            <SidebarMenuButton asChild isActive={pathName === "/app"}>
+              <Link href="/app" aria-label="Go to dashboard">
+                <Home className="h-3 w-3" />
                 <span className="text-base font-semibold">Dialed In.</span>
               </Link>
             </SidebarMenuButton>

@@ -29,7 +29,7 @@ export default async function BrewsPage({ searchParams }: Props) {
           </p>
         </div>
         <Button asChild>
-          <Link href="/brews/create" aria-label="Create a new coffee brew log">
+          <Link href="/app/brews/create" aria-label="Create a new coffee brew log">
             <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
             Create Brew
           </Link>

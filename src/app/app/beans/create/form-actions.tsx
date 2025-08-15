@@ -17,7 +17,7 @@ export function FormActions() {
         className="sm:w-auto"
         disabled={pending}
       >
-        <Link href="/beans" aria-label="Cancel bean creation and return to beans list">
+        <Link href="/app/beans" aria-label="Cancel bean creation and return to beans list">
           Cancel
         </Link>
       </Button>
