@@ -16,7 +16,7 @@ export default async function BeansPage() {
           </p>
         </div>
         <Button asChild>
-          <Link href="/beans/create" aria-label="Add new coffee beans">
+          <Link href="/app/beans/create" aria-label="Add new coffee beans">
             <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
             Create Beans
           </Link>

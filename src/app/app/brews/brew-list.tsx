@@ -23,7 +23,7 @@ export async function BrewList({ searchQuery, filterMethod }: BrewListProps) {
     <>
       <div className="grid gap-4">
         {recentBrews.map((brew) => (
-          <Link key={brew.log.id} href={`/brews/${brew.log.id}`}>
+          <Link key={brew.log.id} href={`/app/brews/${brew.log.id}`}>
             <Card className="">
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
@@ -128,7 +128,7 @@ export async function BrewList({ searchQuery, filterMethod }: BrewListProps) {
             </p>
             <Button asChild>
               <Link
-                href="/brews/create"
+                href="/app/brews/create"
                 aria-label="Create your first coffee brew log"
               >
                 <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
