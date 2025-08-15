@@ -1,4 +1,3 @@
-import { auth } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export const config = {
@@ -6,15 +5,15 @@ export const config = {
 };
 
 export async function middleware(request: NextRequest) {
-  const session = await auth.api.getSession({ headers: request.headers });
+  // Check for session cookie to determine if user is authenticated
+  const sessionCookie = request.cookies.get("better-auth.session_token");
 
-  // If user is authenticated, rewrite to dashboard
-  if (session?.user) {
+  // If user has session cookie, rewrite to dashboard
+  if (sessionCookie?.value) {
     const dashboardURL = new URL("/dashboard", request.url);
     return NextResponse.rewrite(dashboardURL);
   }
 
   // If not authenticated, let it fall through to (marketing)/page.tsx
-  // No rewrite needed - the (marketing) route group handles "/" by default
   return NextResponse.next();
 }
