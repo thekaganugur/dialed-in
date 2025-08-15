@@ -2,12 +2,15 @@
 
 import { db } from "@/lib/db";
 import { coffeeLogs } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { requireAuth } from "@/lib/auth-utils";
+import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { editBrewFormSchema } from "./schemas";
 
 export async function updateBrew(brewId: string, formData: FormData) {
+  const session = await requireAuth();
+  
   const rawFormData = Object.fromEntries(formData.entries());
 
   const validatedFields = editBrewFormSchema.safeParse(rawFormData);
@@ -18,6 +21,7 @@ export async function updateBrew(brewId: string, formData: FormData) {
 
   const data = validatedFields.data;
 
+  // Only allow updating user's own brews
   await db
     .update(coffeeLogs)
     .set({
@@ -37,10 +41,15 @@ export async function updateBrew(brewId: string, formData: FormData) {
       flavorNotes: data.flavorNotes || null,
       updatedAt: new Date(),
     })
-    .where(eq(coffeeLogs.id, brewId));
+    .where(
+      and(
+        eq(coffeeLogs.id, brewId),
+        eq(coffeeLogs.userId, session.user.id),
+      ),
+    );
 
   revalidatePath("/brews");
-  revalidatePath("/dashboard");
+  revalidatePath("/");
   revalidatePath(`/brews/${brewId}`);
   redirect(`/brews/${brewId}`);
 }

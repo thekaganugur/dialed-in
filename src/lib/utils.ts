@@ -49,3 +49,10 @@ export function calculateBrewRatio(
 
   return `1:${(yield_ / dose).toFixed(1)}`;
 }
+
+export function deriveInitials(str: string) {
+  return str
+    .split(" ")
+    .map((word) => word[0])
+    .join("");
+}

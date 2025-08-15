@@ -2,11 +2,21 @@
 
 import { db } from "@/lib/db";
 import { coffeeLogs } from "@/lib/db/schema";
+import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { createBrewFormSchema } from "./schemas";
 
 export async function createBrew(formData: FormData) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
   const rawFormData = Object.fromEntries(formData.entries());
 
   const validatedFields = createBrewFormSchema.safeParse(rawFormData);
@@ -18,7 +28,7 @@ export async function createBrew(formData: FormData) {
   const data = validatedFields.data;
 
   await db.insert(coffeeLogs).values({
-    userId: "user_demo_1", // TODO: Replace with actual user ID from auth
+    userId: session.user.id,
     beanId: data.beanId,
 
     method: data.method,
@@ -37,6 +47,6 @@ export async function createBrew(formData: FormData) {
   });
 
   revalidatePath("/brews");
-  revalidatePath("/dashboard");
+  revalidatePath("/");
   redirect("/brews");
 }

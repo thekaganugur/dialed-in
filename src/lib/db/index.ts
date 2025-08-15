@@ -17,4 +17,11 @@ export type {
   NewCoffeeLog,
   BrewMethod,
   User,
+  NewUser,
+  Session,
+  NewSession,
+  Account,
+  NewAccount,
+  Verification,
+  NewVerification,
 } from "./schema";

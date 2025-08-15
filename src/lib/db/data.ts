@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { brewMethodEnum, coffeeBeans, coffeeLogs } from "@/lib/db/schema";
+import { requireAuth } from "@/lib/auth-utils";
 import { endOfDay, startOfDay, subDays } from "date-fns";
 import {
   and,
@@ -16,8 +17,9 @@ import {
 
 export type BrewMethodValue = (typeof brewMethodEnum.enumValues)[number];
 
-// Get today's brew count (with type safety!)
+// Get today's brew count for the authenticated user
 export async function fetchTodayBrewCount(date = new Date()): Promise<number> {
+  const session = await requireAuth();
   const todayStart = startOfDay(date);
   const todayEnd = endOfDay(date);
 
@@ -26,6 +28,7 @@ export async function fetchTodayBrewCount(date = new Date()): Promise<number> {
     .from(coffeeLogs)
     .where(
       and(
+        eq(coffeeLogs.userId, session.user.id),
         gte(coffeeLogs.brewedAt, todayStart),
         lt(coffeeLogs.brewedAt, todayEnd),
         isNull(coffeeLogs.deletedAt),
@@ -35,42 +38,61 @@ export async function fetchTodayBrewCount(date = new Date()): Promise<number> {
   return result[0]?.count || 0;
 }
 
-// Calculate weekly average rating
+// Calculate weekly average rating for the authenticated user
 export async function fetchWeeklyAverageRating(): Promise<number> {
+  const session = await requireAuth();
   const weekAgo = subDays(new Date(), 7);
 
   const result = await db
     .select({ avgRating: avg(coffeeLogs.rating) })
     .from(coffeeLogs)
     .where(
-      and(gte(coffeeLogs.brewedAt, weekAgo), isNull(coffeeLogs.deletedAt)),
+      and(
+        eq(coffeeLogs.userId, session.user.id),
+        gte(coffeeLogs.brewedAt, weekAgo),
+        isNull(coffeeLogs.deletedAt),
+      ),
     );
 
   return Number(result[0]?.avgRating) || 0;
 }
 
 export async function fetchFavoriteBrewingMethod(limit: number = 5) {
+  const session = await requireAuth();
+  
   return await db
     .select({
       method: coffeeLogs.method,
       brewCount: count(coffeeLogs.id),
     })
     .from(coffeeLogs)
-    .where(isNull(coffeeLogs.deletedAt))
+    .where(
+      and(
+        eq(coffeeLogs.userId, session.user.id),
+        isNull(coffeeLogs.deletedAt),
+      ),
+    )
     .groupBy(coffeeLogs.method)
     .orderBy(desc(count(coffeeLogs.id)))
     .limit(limit);
 }
 
-// Get total bean count for inventory
+// Get total bean count for the authenticated user's inventory
 export async function fetchBeanCount(): Promise<number> {
-  const result = await db.select({ count: count() }).from(coffeeBeans);
+  const session = await requireAuth();
+  
+  const result = await db
+    .select({ count: count() })
+    .from(coffeeBeans)
+    .where(eq(coffeeBeans.userId, session.user.id));
 
   return result[0]?.count || 0;
 }
 
-// Get top beans with brew count
+// Get top beans with brew count for the authenticated user
 export async function fetchTopBeans(limit: number = 5) {
+  const session = await requireAuth();
+  
   return await db
     .select({
       bean: coffeeBeans,
@@ -79,15 +101,22 @@ export async function fetchTopBeans(limit: number = 5) {
     .from(coffeeBeans)
     .leftJoin(
       coffeeLogs,
-      and(eq(coffeeLogs.beanId, coffeeBeans.id), isNull(coffeeLogs.deletedAt)),
+      and(
+        eq(coffeeLogs.beanId, coffeeBeans.id),
+        eq(coffeeLogs.userId, session.user.id),
+        isNull(coffeeLogs.deletedAt),
+      ),
     )
+    .where(eq(coffeeBeans.userId, session.user.id))
     .groupBy(coffeeBeans.id)
     .orderBy(desc(count(coffeeLogs.id)))
     .limit(limit);
 }
 
-// Fetch all coffee beans for form selects
+// Fetch all coffee beans for the authenticated user (for form selects)
 export async function fetchCoffeeBeans() {
+  const session = await requireAuth();
+  
   return await db
     .select({
       id: coffeeBeans.id,
@@ -97,18 +126,23 @@ export async function fetchCoffeeBeans() {
       roastLevel: coffeeBeans.roastLevel,
     })
     .from(coffeeBeans)
+    .where(eq(coffeeBeans.userId, session.user.id))
     .orderBy(coffeeBeans.name);
 }
 
-// Fetch recent brews
+// Fetch recent brews for the authenticated user
 export async function fetchRecentBrews(
   limit: number = 10,
   searchQuery?: string,
   filterMethod?: BrewMethodValue | "all",
 ) {
+  const session = await requireAuth();
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  const conditions = [isNull(coffeeLogs.deletedAt)];
+  const conditions = [
+    eq(coffeeLogs.userId, session.user.id),
+    isNull(coffeeLogs.deletedAt),
+  ];
 
   // Add search conditions if query provided
   if (searchQuery && searchQuery.trim()) {
@@ -133,22 +167,42 @@ export async function fetchRecentBrews(
       bean: coffeeBeans,
     })
     .from(coffeeLogs)
-    .innerJoin(coffeeBeans, eq(coffeeLogs.beanId, coffeeBeans.id))
+    .innerJoin(
+      coffeeBeans,
+      and(
+        eq(coffeeLogs.beanId, coffeeBeans.id),
+        eq(coffeeBeans.userId, session.user.id),
+      ),
+    )
     .where(and(...conditions))
     .orderBy(desc(coffeeLogs.brewedAt))
     .limit(limit);
 }
 
-// Fetch single brew by ID
+// Fetch single brew by ID for the authenticated user
 export async function fetchBrewById(id: string) {
+  const session = await requireAuth();
+  
   const result = await db
     .select({
       log: coffeeLogs,
       bean: coffeeBeans,
     })
     .from(coffeeLogs)
-    .innerJoin(coffeeBeans, eq(coffeeLogs.beanId, coffeeBeans.id))
-    .where(and(eq(coffeeLogs.id, id), isNull(coffeeLogs.deletedAt)))
+    .innerJoin(
+      coffeeBeans,
+      and(
+        eq(coffeeLogs.beanId, coffeeBeans.id),
+        eq(coffeeBeans.userId, session.user.id),
+      ),
+    )
+    .where(
+      and(
+        eq(coffeeLogs.id, id),
+        eq(coffeeLogs.userId, session.user.id),
+        isNull(coffeeLogs.deletedAt),
+      ),
+    )
     .limit(1);
 
   return result[0] || null;

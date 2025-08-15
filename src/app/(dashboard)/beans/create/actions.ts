@@ -2,11 +2,21 @@
 
 import { db } from "@/lib/db";
 import { coffeeBeans, type NewCoffeeBean } from "@/lib/db/schema";
+import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { createBeanFormSchema } from "./schemas";
 
 export async function createBean(formData: FormData) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
   const rawFormData = Object.fromEntries(formData.entries());
 
   const validatedFields = createBeanFormSchema.safeParse(rawFormData);
@@ -18,7 +28,7 @@ export async function createBean(formData: FormData) {
   const data = validatedFields.data;
 
   const newBean: NewCoffeeBean = {
-    userId: "user_demo_1", // TODO: Replace with actual user ID from auth
+    userId: session.user.id,
     name: data.name,
     roaster: data.roaster || null,
     origin: data.origin || null,
@@ -31,6 +41,6 @@ export async function createBean(formData: FormData) {
   await db.insert(coffeeBeans).values(newBean);
 
   revalidatePath("/beans");
-  revalidatePath("/dashboard");
+  revalidatePath("/");
   redirect("/beans");
 }

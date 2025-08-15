@@ -36,7 +36,6 @@ BrewLog is a Next.js coffee logging application built as a learning project foll
 - `npm run db:push` - Push schema changes to database
 - `npm run db:migrate` - Apply migrations to database
 - `npm run db:studio` - Open Drizzle Studio GUI
-- `npm run seed` - Seed database with placeholder data
 
 ### Utilities
 
@@ -58,45 +57,65 @@ BrewLog is a Next.js coffee logging application built as a learning project foll
 
 ```
 src/
-├── app/                    # Next.js App Router
-│   ├── layout.tsx         # Root layout with fonts
-│   ├── page.tsx           # Landing page
-│   ├── dashboard/         # Main dashboard with statistics
-│   ├── brews/             # Brew logs and history
-│   └── globals.css        # Global styles
+├── app/                           # Next.js App Router
+│   ├── (dashboard)/              # Route group for authenticated pages
+│   │   ├── dashboard/            # Main dashboard with statistics
+│   │   ├── brews/                # Brew logs and history with CRUD
+│   │   ├── beans/                # Coffee bean management
+│   │   └── layout.tsx            # Dashboard layout with sidebar
+│   ├── (marketing)/              # Route group for public pages
+│   │   ├── page.tsx              # Landing page
+│   │   └── signup/               # User registration
+│   ├── api/auth/[...all]/        # Better Auth API endpoints
+│   ├── layout.tsx                # Root layout with fonts
+│   ├── globals.css               # Global styles
+│   └── ui/fonts.ts               # Font configuration
 ├── components/
-│   ├── ui/                # shadcn/ui components
-│   └── app-sidebar.tsx    # App navigation
+│   ├── ui/                       # shadcn/ui components
+│   ├── app-sidebar.tsx           # App navigation sidebar
+│   ├── breadcrumb-nav.tsx        # Navigation breadcrumbs
+│   ├── nav-user.tsx              # User dropdown menu
+│   ├── star-rating.tsx           # Rating components
+│   └── quick-rating.tsx          # Quick rating component
+├── hooks/
+│   └── use-mobile.ts             # Mobile detection hook
 ├── lib/
-│   ├── db/                # Database layer
-│   │   ├── index.ts       # Drizzle client setup
-│   │   ├── schema.ts      # Database schema definitions
-│   │   └── data.ts        # Database queries and data fetching
-│   ├── utils.ts           # Utility functions (cn helper)
-│   └── definitions.ts     # Type definitions
-components.json             # shadcn/ui configuration
-drizzle.config.ts          # Drizzle ORM configuration
-documentation/              # Phase-based learning documentation
+│   ├── db/                       # Database layer
+│   │   ├── index.ts              # Drizzle client setup
+│   │   ├── schema.ts             # Database schema definitions
+│   │   └── data.ts               # Database queries and data fetching
+│   ├── auth.ts                   # Better Auth configuration
+│   ├── auth-client.ts            # Client-side auth utilities
+│   ├── auth-utils.ts             # Server-side auth utilities
+│   ├── definitions.ts            # Type definitions
+│   └── utils.ts                  # Utility functions (cn helper)
+├── middleware.ts                  # Auth middleware
+components.json                    # shadcn/ui configuration
+drizzle.config.ts                 # Drizzle ORM configuration
+documentation/                     # Phase-based learning documentation
 ```
 
 ### Key Architecture Patterns
 
 - **Server Components First**: Default to Server Components, use `"use client"` sparingly
+- **Route Groups**: `(dashboard)` and `(marketing)` for different layouts without affecting URLs
 - **Progressive Enhancement**: Application works without JavaScript
 - **URL State Management**: Use search params for filters and state
 - **Server Actions**: Prefer Server Actions over separate API routes
 - **Component Composition**: Uses shadcn/ui for consistent design system
+- **Auth Middleware**: Route-level protection using Next.js middleware
 
 ### Database Schema
 
 The application uses a PostgreSQL database with the following core entities:
 
-- **Users**: Authentication and user management (text IDs for NextAuth compatibility)
+- **Users**: Authentication and user management using Better Auth (text IDs for compatibility)
 - **Coffee Beans**: Track coffee bean purchases with roast level, origin, processing method
 - **Coffee Logs**: Main entity tracking individual brews with ratings, parameters, and notes
 - **Brew Methods**: Reference data for brewing equipment and default parameters
 
 Key schema features:
+
 - Type-safe enums for roast levels, processing methods, and brew methods
 - Comprehensive constraints and indexes for performance
 - Soft delete support on coffee logs with `deletedAt` timestamp
@@ -127,12 +146,15 @@ The project follows a phased learning approach based on the Next.js tutorial:
 4. **Phase 4**: Interactivity and CRUD operations
 5. **Phase 5**: Production features (auth, SEO, accessibility)
 
-**Current Status**: Phase 3 in progress - implementing individual brew detail pages with streaming, Server Actions for CRUD operations, and performance optimizations.
+**Current Status**: Phase 4+ in progress - Full CRUD operations implemented with Server Actions, authentication with Better Auth, individual brew detail pages with edit/delete functionality.
 
 ### Environment Setup
 
 Required environment variables:
+
 - `DATABASE_URL`: Neon PostgreSQL connection string (required for all database operations)
+- `BETTER_AUTH_SECRET`: Secret key for Better Auth session management (required for authentication)
+- `BETTER_AUTH_URL`: Base URL for Better Auth (defaults to localhost:3000 in development)
 
 ### Code Quality Standards
 
@@ -149,9 +171,40 @@ Required environment variables:
 - React Testing Library for component testing
 - Test files should be co-located
 
+### Authentication System
+
+The app uses Better Auth for authentication:
+
+- Email/password authentication enabled
+- Drizzle adapter for database integration
+- Next.js cookies plugin for session management
+- User tables integrated with coffee data via foreign keys
+
+### Data Access Patterns
+
+All database operations use Server Actions and direct Drizzle queries:
+
+- Actions are co-located with pages in `actions.ts` files
+- Form validation uses Zod schemas in `schemas.ts` files
+- No API routes - Server Actions handle all mutations
+- Data fetching functions centralized in `src/lib/db/data.ts`
+- Soft delete pattern implemented for coffee logs
+
+### Current Implementation Status
+
+- ✅ **Authentication**: Better Auth with email/password
+- ✅ **Coffee Bean Management**: Full CRUD operations
+- ✅ **Brew Logging**: Create, read, update, delete with ratings
+- ✅ **Dashboard**: Statistics with aggregated data
+- ✅ **Search & Filtering**: Real-time search with debouncing
+- ✅ **Navigation**: Breadcrumbs and sidebar navigation
+- ✅ **User Context**: Uses actual user ID from Better Auth session
+
 ### Dependencies
 
 Key libraries used in the project:
+
+- **Authentication**: Better Auth with Drizzle adapter
 - **Forms**: React Hook Form + Zod for validation
 - **Date handling**: date-fns for date manipulation
 - **Debouncing**: use-debounce for search optimization

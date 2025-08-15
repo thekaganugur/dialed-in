@@ -15,10 +15,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { fetchBrewById, fetchCoffeeBeans } from "@/lib/db/data";
-import { ChevronDown, Coffee, Settings2 } from "lucide-react";
-import { notFound } from "next/navigation";
-import { updateBrew } from "./actions";
+import { fetchCoffeeBeans } from "@/lib/db/data";
+import { ChevronDown, Settings2 } from "lucide-react";
+import { createBrew } from "./actions";
 import { FormActions } from "./form-actions";
 
 const brewMethods = [
@@ -32,29 +31,15 @@ const brewMethods = [
   "cold_brew",
 ];
 
-interface EditBrewPageProps {
-  params: Promise<{ brewId: string }>;
-}
-
-export default async function EditBrewPage({ params }: EditBrewPageProps) {
-  const { brewId } = await params;
-  const [brew, coffeeBeans] = await Promise.all([
-    fetchBrewById(brewId),
-    fetchCoffeeBeans(),
-  ]);
-
-  if (!brew) {
-    notFound();
-  }
-
-  const updateBrewAction = updateBrew.bind(null, brewId);
+export default async function CreateBrewPage() {
+  const coffeeBeans = await fetchCoffeeBeans();
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Edit Brew</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Create Brew</h1>
         <p className="text-muted-foreground mt-2">
-          Update your brew details and parameters for {brew.bean.name}
+          Log your coffee brewing session quickly and easily
         </p>
       </div>
 
@@ -62,18 +47,18 @@ export default async function EditBrewPage({ params }: EditBrewPageProps) {
         <CardHeader>
           <CardTitle>Brew Details</CardTitle>
           <p className="text-muted-foreground text-sm">
-            Modify the parameters for this brew log.
+            Only bean and method required to get started
           </p>
         </CardHeader>
 
         <CardContent>
-          <form action={updateBrewAction} className="space-y-6">
+          <form action={createBrew} className="space-y-6">
             {/* Essential Fields - Always Visible */}
             <div className="space-y-4">
               <div className="flex flex-col gap-4 sm:flex-row sm:gap-6">
                 <div className="flex-1 space-y-2">
                   <Label htmlFor="beanId">Coffee Bean *</Label>
-                  <Select name="beanId" defaultValue={brew.log.beanId} required>
+                  <Select name="beanId" required>
                     <SelectTrigger id="beanId" className="w-full">
                       <SelectValue placeholder="Select a coffee bean" />
                     </SelectTrigger>
@@ -89,7 +74,7 @@ export default async function EditBrewPage({ params }: EditBrewPageProps) {
 
                 <div className="flex-1 space-y-2">
                   <Label htmlFor="method">Brew Method *</Label>
-                  <Select name="method" defaultValue={brew.log.method} required>
+                  <Select name="method" required>
                     <SelectTrigger id="method" className="w-full">
                       <SelectValue placeholder="Select brew method" />
                     </SelectTrigger>
@@ -104,26 +89,15 @@ export default async function EditBrewPage({ params }: EditBrewPageProps) {
                 </div>
               </div>
 
-              <QuickRating defaultValue={brew.log.rating} />
+              <QuickRating helpText="Optional: How was this brew?" />
             </div>
 
             {/* Optional Fields - Collapsible */}
-            <Collapsible
-              defaultOpen={
-                !!(
-                  brew.log.doseGrams ||
-                  brew.log.yieldGrams ||
-                  brew.log.brewTimeSeconds ||
-                  brew.log.waterTempCelsius ||
-                  brew.log.grindSetting ||
-                  brew.log.notes
-                )
-              }
-            >
+            <Collapsible>
               <CollapsibleTrigger className="bg-muted/30 hover:bg-muted/50 flex w-full cursor-pointer items-center justify-between rounded-lg border p-4 text-sm font-medium data-[state=open]:rounded-b-none">
                 <span className="flex items-center gap-2">
                   <Settings2 className="h-4 w-4" />
-                  Brewing Details
+                  Add Brewing Details (optional)
                 </span>
                 <ChevronDown className="h-4 w-4 transition-transform data-[state=open]:rotate-180" />
               </CollapsibleTrigger>
@@ -141,11 +115,6 @@ export default async function EditBrewPage({ params }: EditBrewPageProps) {
                         type="number"
                         step="0.1"
                         placeholder="18.0"
-                        defaultValue={
-                          brew.log.doseGrams
-                            ? brew.log.doseGrams.toString()
-                            : ""
-                        }
                         className="text-sm"
                       />
                     </div>
@@ -158,11 +127,6 @@ export default async function EditBrewPage({ params }: EditBrewPageProps) {
                         type="number"
                         step="0.1"
                         placeholder="36.0"
-                        defaultValue={
-                          brew.log.yieldGrams
-                            ? brew.log.yieldGrams.toString()
-                            : ""
-                        }
                         className="text-sm"
                       />
                     </div>
@@ -174,27 +138,17 @@ export default async function EditBrewPage({ params }: EditBrewPageProps) {
                         name="brewTimeSeconds"
                         type="number"
                         placeholder="30"
-                        defaultValue={
-                          brew.log.brewTimeSeconds
-                            ? brew.log.brewTimeSeconds.toString()
-                            : ""
-                        }
                         className="text-sm"
                       />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="waterTempCelsius" className="text-xs">
-                        Temp (�C)
+                        Temp (°C)
                       </Label>
                       <Input
                         name="waterTempCelsius"
                         type="number"
                         placeholder="93"
-                        defaultValue={
-                          brew.log.waterTempCelsius
-                            ? brew.log.waterTempCelsius.toString()
-                            : ""
-                        }
                         className="text-sm"
                       />
                     </div>
@@ -207,36 +161,24 @@ export default async function EditBrewPage({ params }: EditBrewPageProps) {
                     <Input
                       name="grindSetting"
                       placeholder="e.g., 15 (Comandante), Medium-fine"
-                      defaultValue={brew.log.grindSetting || ""}
                       className="text-sm"
                     />
                   </div>
 
-                  {/* Notes */}
+                  {/* Combined Notes */}
                   <div className="space-y-2">
                     <Label htmlFor="notes" className="text-sm">
-                      Notes
+                      Notes & Flavors
                     </Label>
                     <Textarea
                       name="notes"
-                      placeholder="Any brewing notes or thoughts about this brew..."
-                      defaultValue={brew.log.notes || ""}
+                      placeholder="Any brewing notes, flavor observations, or thoughts about this brew..."
                       className="min-h-[80px] text-sm"
                     />
                   </div>
 
-                  {/* Flavor Notes */}
-                  <div className="space-y-2">
-                    <Label htmlFor="flavorNotes" className="text-sm">
-                      Flavor Notes
-                    </Label>
-                    <Textarea
-                      name="flavorNotes"
-                      placeholder="Flavor observations, tasting notes..."
-                      defaultValue={brew.log.flavorNotes || ""}
-                      className="min-h-[60px] text-sm"
-                    />
-                  </div>
+                  {/* Hidden field to maintain compatibility */}
+                  <input type="hidden" name="flavorNotes" value="" />
                 </div>
               </CollapsibleContent>
             </Collapsible>
@@ -248,4 +190,3 @@ export default async function EditBrewPage({ params }: EditBrewPageProps) {
     </div>
   );
 }
-

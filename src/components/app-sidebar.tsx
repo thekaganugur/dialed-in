@@ -11,14 +11,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { BarChart3, Bean, Coffee, CoffeeIcon, Home, Plus } from "lucide-react";
+import { BarChart3, Bean, Coffee, CoffeeIcon, Home } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { NavUser } from "./nav-user";
 
 const navigationItems = [
   {
     title: "Dashboard",
-    href: "/dashboard",
+    href: "/",
     icon: Home,
   },
   {
@@ -40,6 +41,7 @@ const navigationItems = [
 
 export function AppSidebar() {
   const pathName = usePathname();
+
   return (
     <Sidebar collapsible="icon" variant="floating">
       <SidebarHeader>
@@ -75,16 +77,7 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link href="/brews/create">
-                <Plus />
-                <span>Quick Add</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   );

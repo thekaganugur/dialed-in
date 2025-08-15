@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { AppSidebar } from "@/components/app-sidebar";
-import { SiteHeader } from "@/components/site-header";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { inter } from "./ui/fonts";
 
@@ -24,13 +21,7 @@ export default function RootLayout({
           inter.className,
         )}
       >
-        <SidebarProvider>
-          <AppSidebar />
-          <div className="flex flex-1 flex-col">
-            <SiteHeader />
-            <div className="p-6">{children}</div>
-          </div>
-        </SidebarProvider>
+        {children}
       </body>
     </html>
   );
