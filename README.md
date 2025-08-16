@@ -1,4 +1,4 @@
-# ☕ BrewLog - Next.js Coffee Logger
+# ☕ Dialed In - Next.js Coffee Logger
 
 A personal coffee logging app built while learning Next.js fundamentals.  
 Track your daily brews, improve your technique, and master Next.js.

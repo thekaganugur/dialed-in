@@ -1,11 +1,11 @@
 "use server";
 
+import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { coffeeBeans, type NewCoffeeBean } from "@/lib/db/schema";
-import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { createBeanFormSchema } from "./schemas";
 
 export async function createBean(formData: FormData) {
@@ -40,7 +40,7 @@ export async function createBean(formData: FormData) {
 
   await db.insert(coffeeBeans).values(newBean);
 
-  revalidatePath("/beans");
-  revalidatePath("/");
-  redirect("/beans");
+  revalidatePath("/app/beans");
+  revalidatePath("/app");
+  redirect("/app/beans");
 }

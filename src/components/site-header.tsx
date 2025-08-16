@@ -1,6 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { BreadcrumbNav } from "./breadcrumb-nav";
+import { ModeSwitcher } from "./mode-switcher";
 
 export function SiteHeader() {
   return (
@@ -13,6 +14,9 @@ export function SiteHeader() {
           className="mx-2 data-[orientation=vertical]:h-4"
         />
         <BreadcrumbNav />
+      </div>
+      <div className="px-3">
+        <ModeSwitcher />
       </div>
     </header>
   );

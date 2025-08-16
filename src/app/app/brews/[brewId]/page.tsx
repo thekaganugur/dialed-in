@@ -14,6 +14,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { deleteBrewWithId } from "./actions";
 import { DeleteBrewButton } from "./delete-brew-button";
+import { ShareBrewButton } from "./share-brew-button";
 
 interface BrewDetailPageProps {
   params: Promise<{ brewId: string }>;
@@ -31,6 +32,8 @@ export default async function BrewDetailPage({ params }: BrewDetailPageProps) {
     <div className="space-y-6">
       <div className="flex items-center justify-end gap-2">
         <div className="flex items-center gap-2">
+          <ShareBrewButton brewId={brewId} isPublic={brew.log.isPublic} />
+
           <Button variant="outline" size="sm" asChild>
             <Link href={`/app/brews/${brewId}/edit`}>
               <Edit className="mr-2 h-4 w-4" />

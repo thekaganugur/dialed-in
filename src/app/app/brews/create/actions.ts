@@ -1,11 +1,11 @@
 "use server";
 
+import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { coffeeLogs } from "@/lib/db/schema";
-import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { createBrewFormSchema } from "./schemas";
 
 export async function createBrew(formData: FormData) {
@@ -46,7 +46,7 @@ export async function createBrew(formData: FormData) {
     flavorNotes: data.flavorNotes || null,
   });
 
-  revalidatePath("/brews");
-  revalidatePath("/");
-  redirect("/brews");
+  revalidatePath("/app/brews");
+  revalidatePath("/app");
+  redirect("/app/brews");
 }

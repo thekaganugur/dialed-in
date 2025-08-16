@@ -1,8 +1,8 @@
 "use server";
 
+import { requireAuth } from "@/lib/auth-utils";
 import { db } from "@/lib/db";
 import { coffeeLogs } from "@/lib/db/schema";
-import { requireAuth } from "@/lib/auth-utils";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -10,7 +10,7 @@ import { editBrewFormSchema } from "./schemas";
 
 export async function updateBrew(brewId: string, formData: FormData) {
   const session = await requireAuth();
-  
+
   const rawFormData = Object.fromEntries(formData.entries());
 
   const validatedFields = editBrewFormSchema.safeParse(rawFormData);
@@ -42,14 +42,11 @@ export async function updateBrew(brewId: string, formData: FormData) {
       updatedAt: new Date(),
     })
     .where(
-      and(
-        eq(coffeeLogs.id, brewId),
-        eq(coffeeLogs.userId, session.user.id),
-      ),
+      and(eq(coffeeLogs.id, brewId), eq(coffeeLogs.userId, session.user.id)),
     );
 
-  revalidatePath("/brews");
-  revalidatePath("/");
-  revalidatePath(`/brews/${brewId}`);
-  redirect(`/brews/${brewId}`);
+  revalidatePath("/app/brews");
+  revalidatePath("/app");
+  revalidatePath(`/app/brews/${brewId}`);
+  redirect(`/app/brews/${brewId}`);
 }

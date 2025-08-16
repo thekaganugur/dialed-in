@@ -8,6 +8,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { UUID_PATTERN } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -19,23 +20,16 @@ const titles: Record<string, string> = {
   edit: "Edit",
 };
 
-// UUID pattern to detect dynamic IDs
-const UUID_PATTERN =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
 export function BreadcrumbNav() {
   const pathname = usePathname();
-
-  if (pathname === "/") {
-    return <h1 className="text-base font-medium">BrewLog</h1>;
-  }
 
   const filteredSegments = pathname
     .split("/")
     .filter(Boolean)
     .filter((segment) => segment !== "app");
 
-  const segments = filteredSegments.length === 0 ? ["dashboard"] : filteredSegments;
+  const segments =
+    filteredSegments.length === 0 ? ["dashboard"] : filteredSegments;
 
   return (
     <Breadcrumb>

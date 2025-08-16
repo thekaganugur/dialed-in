@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-BrewLog is a Next.js coffee logging application that helps coffee enthusiasts track their daily brews and improve their brewing technique. Originally built as a learning project following the Next.js tutorial structure, it has evolved into a real personal project for coffee logging and analysis.
+Dialed In is a Next.js coffee logging application that helps coffee enthusiasts track their daily brews and improve their brewing technique. Originally built as a learning project following the Next.js tutorial structure, it has evolved into a real personal project for coffee logging and analysis.
 
 ## Common Commands
 
@@ -60,14 +60,17 @@ BrewLog is a Next.js coffee logging application that helps coffee enthusiasts tr
 ```
 src/
 ├── app/                           # Next.js App Router
-│   ├── (dashboard)/              # Route group for authenticated pages
-│   │   ├── dashboard/            # Main dashboard with statistics
-│   │   ├── brews/                # Brew logs and history with CRUD
+│   ├── app/                      # Main application routes (prefixed with /app)
 │   │   ├── beans/                # Coffee bean management
-│   │   └── layout.tsx            # Dashboard layout with sidebar
+│   │   ├── brews/                # Brew logs and history with CRUD
+│   │   ├── page.tsx              # Dashboard with statistics
+│   │   └── layout.tsx            # Application layout with sidebar
 │   ├── (marketing)/              # Route group for public pages
 │   │   ├── page.tsx              # Landing page
+│   │   ├── login/                # User login
 │   │   └── signup/               # User registration
+│   ├── share/                    # Public sharing routes
+│   │   └── brew/[brewId]/        # Public brew sharing pages
 │   ├── api/auth/[...all]/        # Better Auth API endpoints
 │   ├── layout.tsx                # Root layout with fonts
 │   ├── globals.css               # Global styles
@@ -100,7 +103,7 @@ documentation/                     # Phase-based learning documentation
 ### Key Architecture Patterns
 
 - **Server Components First**: Default to Server Components, use `"use client"` sparingly
-- **Route Groups**: `(dashboard)` and `(marketing)` for different layouts without affecting URLs
+- **Route Structure**: `/app` prefix for authenticated application routes, `(marketing)` group for public pages
 - **Progressive Enhancement**: Application works without JavaScript
 - **URL State Management**: Use search params for filters and state
 - **Server Actions**: Prefer Server Actions over separate API routes
@@ -202,6 +205,17 @@ All database operations use Server Actions and direct Drizzle queries:
 - Data fetching functions centralized in `src/lib/db/data.ts`
 - Soft delete pattern implemented for coffee logs
 
+### Sharing System
+
+The application includes a public sharing feature for individual brews:
+
+- **Private by Default**: All brews are private by default
+- **Public Sharing**: Users can make individual brews public via share button
+- **Public Pages**: Shared brews have dedicated public pages at `/share/brew/[brewId]`
+- **No Auth Required**: Public brew pages accessible without authentication
+- **Marketing Integration**: Public pages include CTAs to join the platform
+- **Toggle Privacy**: Users can make public brews private again at any time
+
 ### Current Implementation Status
 
 - ✅ **Authentication**: Better Auth with email/password
@@ -211,6 +225,7 @@ All database operations use Server Actions and direct Drizzle queries:
 - ✅ **Search & Filtering**: Real-time search with debouncing
 - ✅ **Navigation**: Breadcrumbs and sidebar navigation
 - ✅ **User Context**: Uses actual user ID from Better Auth session
+- ✅ **Public Sharing**: Share individual brews publicly with dedicated public pages
 
 ### Dependencies
 
@@ -221,6 +236,8 @@ Key libraries used in the project:
 - **Date handling**: date-fns for date manipulation
 - **Debouncing**: use-debounce for search optimization
 - **Calendar**: react-day-picker for date selection
+- **Notifications**: Sonner for toast notifications
+- **Themes**: next-themes for dark mode support
 
 ## Rules
 
@@ -234,4 +251,3 @@ Key libraries used in the project:
 8. **Streaming UX** – Provide `loading.tsx` in segments with async data for streaming feedback; use skeletons or placeholders.
 9. **Error Boundaries** – Include `error.tsx` per route segment as a `"use client"` component with `error` and `reset` props to display fallback UI and retry.
 10. **Caching & ISR** – Default to static generation with `export const revalidate = N` or fetch `{ next: { revalidate: N } }`; use `dynamic = "force-dynamic"` only when real-time data is required.
-

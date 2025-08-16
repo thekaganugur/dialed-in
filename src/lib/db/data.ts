@@ -1,6 +1,6 @@
-import { db } from "@/lib/db";
-import { brewMethodEnum, coffeeBeans, coffeeLogs } from "@/lib/db/schema";
 import { requireAuth } from "@/lib/auth-utils";
+import { db } from "@/lib/db";
+import { brewMethodEnum, coffeeBeans, coffeeLogs, user } from "@/lib/db/schema";
 import { endOfDay, startOfDay, subDays } from "date-fns";
 import {
   and,
@@ -14,6 +14,7 @@ import {
   lt,
   or,
 } from "drizzle-orm";
+import { z } from "zod";
 
 export type BrewMethodValue = (typeof brewMethodEnum.enumValues)[number];
 
@@ -59,7 +60,7 @@ export async function fetchWeeklyAverageRating(): Promise<number> {
 
 export async function fetchFavoriteBrewingMethod(limit: number = 5) {
   const session = await requireAuth();
-  
+
   return await db
     .select({
       method: coffeeLogs.method,
@@ -67,10 +68,7 @@ export async function fetchFavoriteBrewingMethod(limit: number = 5) {
     })
     .from(coffeeLogs)
     .where(
-      and(
-        eq(coffeeLogs.userId, session.user.id),
-        isNull(coffeeLogs.deletedAt),
-      ),
+      and(eq(coffeeLogs.userId, session.user.id), isNull(coffeeLogs.deletedAt)),
     )
     .groupBy(coffeeLogs.method)
     .orderBy(desc(count(coffeeLogs.id)))
@@ -80,7 +78,7 @@ export async function fetchFavoriteBrewingMethod(limit: number = 5) {
 // Get total bean count for the authenticated user's inventory
 export async function fetchBeanCount(): Promise<number> {
   const session = await requireAuth();
-  
+
   const result = await db
     .select({ count: count() })
     .from(coffeeBeans)
@@ -92,7 +90,7 @@ export async function fetchBeanCount(): Promise<number> {
 // Get top beans with brew count for the authenticated user
 export async function fetchTopBeans(limit: number = 5) {
   const session = await requireAuth();
-  
+
   return await db
     .select({
       bean: coffeeBeans,
@@ -116,7 +114,7 @@ export async function fetchTopBeans(limit: number = 5) {
 // Fetch all coffee beans for the authenticated user (for form selects)
 export async function fetchCoffeeBeans() {
   const session = await requireAuth();
-  
+
   return await db
     .select({
       id: coffeeBeans.id,
@@ -182,7 +180,7 @@ export async function fetchRecentBrews(
 // Fetch single brew by ID for the authenticated user
 export async function fetchBrewById(id: string) {
   const session = await requireAuth();
-  
+
   const result = await db
     .select({
       log: coffeeLogs,
@@ -200,6 +198,39 @@ export async function fetchBrewById(id: string) {
       and(
         eq(coffeeLogs.id, id),
         eq(coffeeLogs.userId, session.user.id),
+        isNull(coffeeLogs.deletedAt),
+      ),
+    )
+    .limit(1);
+
+  return result[0] || null;
+}
+
+// Fetch public brew by ID (no authentication required)
+export async function fetchPublicBrewById(id: string) {
+  const brewIdSchema = z.string().uuid();
+  const validatedId = brewIdSchema.safeParse(id);
+  
+  if (!validatedId.success) {
+    return null;
+  }
+
+  const result = await db
+    .select({
+      log: coffeeLogs,
+      bean: coffeeBeans,
+      user: {
+        id: user.id,
+        name: user.name,
+      },
+    })
+    .from(coffeeLogs)
+    .innerJoin(coffeeBeans, eq(coffeeLogs.beanId, coffeeBeans.id))
+    .innerJoin(user, eq(coffeeLogs.userId, user.id))
+    .where(
+      and(
+        eq(coffeeLogs.id, validatedId.data),
+        eq(coffeeLogs.isPublic, true),
         isNull(coffeeLogs.deletedAt),
       ),
     )
