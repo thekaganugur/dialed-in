@@ -1,140 +1,255 @@
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Coffee, Github, TrendingUp, BarChart3, Clock, Star, Database, Zap } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  BarChart3,
+  Scale,
+  Star,
+  Target,
+  Thermometer,
+  Timer,
+  TrendingUp,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
+      <a
+        href="#main-content"
+        className="focus:bg-primary focus:text-primary-foreground sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded focus:px-4 focus:py-2"
+      >
+        Skip to main content
+      </a>
       {/* Hero Section */}
-      <section className="container flex flex-col items-center justify-center space-y-8 py-12 md:py-24 lg:py-32">
-        <div className="flex max-w-[980px] flex-col items-center gap-4 text-center">
-          <Badge variant="outline" className="text-sm">
-            Open Source Coffee Tracking
-          </Badge>
-          
-          <h1 className="text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:text-6xl lg:leading-[1.1]">
-            An example app built using{" "}
-            <span className="text-gradient bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
-              Next.js 15
-            </span>{" "}
-            server components
-          </h1>
-          
-          <p className="max-w-[750px] text-lg text-muted-foreground sm:text-xl">
-            Track your coffee brewing journey with BrewLog. Built with modern React patterns,
-            server components, and a focus on performance. Includes authentication, database,
-            and a beautiful UI.
-          </p>
-        </div>
+      <main id="main-content" role="main">
+        <section
+          className="container flex flex-col items-center justify-center space-y-8 py-12 md:py-24 lg:py-32"
+          aria-labelledby="hero-heading"
+        >
+          <div className="flex max-w-[980px] flex-col items-center gap-4 text-center">
+            <Badge variant="outline" className="text-sm">
+              Perfect Your Coffee Journey
+            </Badge>
 
-        <div className="flex gap-4">
-          <Button asChild size="lg">
-            <Link href="/signup">
-              <Coffee className="mr-2 h-4 w-4" />
-              Get Started
-            </Link>
-          </Button>
-          
-          <Button variant="outline" size="lg" asChild>
-            <Link href="https://github.com/kgnugur/dialed-in" target="_blank" rel="noopener noreferrer">
-              <Github className="mr-2 h-4 w-4" />
-              GitHub
-            </Link>
-          </Button>
-        </div>
-      </section>
+            <h1
+              id="hero-heading"
+              className="text-3xl leading-tight font-bold tracking-tighter md:text-5xl lg:text-6xl lg:leading-[1.1]"
+            >
+              Master Your Coffee Brewing with{" "}
+              <span className="text-gradient bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+                Dialed In
+              </span>
+            </h1>
 
-      {/* Features Section */}
-      <section className="container py-12 md:py-24 lg:py-32">
-        <div className="mx-auto flex max-w-[980px] flex-col items-center gap-4 text-center">
-          <h2 className="text-3xl font-bold leading-tight tracking-tighter md:text-5xl">
-            Features
-          </h2>
-          <p className="max-w-[750px] text-lg text-muted-foreground sm:text-xl">
-            This project showcases modern web development practices and Next.js capabilities
-          </p>
-        </div>
-
-        <div className="mx-auto grid max-w-5xl gap-6 py-12 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="group relative overflow-hidden rounded-lg border p-6">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
-              <Database className="h-6 w-6" />
-            </div>
-            <h3 className="mt-4 text-lg font-semibold">Database</h3>
-            <p className="mt-2 text-muted-foreground">
-              Powered by Neon PostgreSQL with Drizzle ORM for type-safe database operations
+            <p className="text-muted-foreground max-w-[750px] text-lg sm:text-xl">
+              Track brewing parameters, rate your cups, and discover what makes
+              the perfect coffee. Join coffee enthusiasts who have improved
+              their technique one brew at a time.
             </p>
           </div>
 
-          <div className="group relative overflow-hidden rounded-lg border p-6">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
-              <Zap className="h-6 w-6" />
+          <div className="flex flex-col gap-4 md:flex-row">
+            <Button asChild size="lg">
+              <Link href="/signup">
+                <TrendingUp className="mr-1 h-4 w-4" />
+                Start Brewing Better Coffee
+              </Link>
+            </Button>
+
+            <Button variant="outline" size="lg" asChild>
+              <Link href="/login">
+                <Target className="mr-1 h-4 w-4" />
+                Sign In
+              </Link>
+            </Button>
+          </div>
+        </section>
+
+        {/* Project Story Section */}
+        <section className="container py-12">
+          <div className="mx-auto max-w-4xl">
+            <div className="bg-muted/50 rounded-lg p-8 text-center">
+              <h2 className="mb-3 text-xl font-semibold">
+                Built for Coffee Enthusiasts
+              </h2>
+              <p className="text-muted-foreground mb-4">
+                A passion project combining modern web development with real
+                coffee brewing needs. Track your journey from beginner to
+                expert, one cup at a time.
+              </p>
+              <div className="flex justify-center gap-8 text-sm">
+                <span className="flex items-center gap-2">
+                  <Star className="h-4 w-4" />
+                  Open Source
+                </span>
+                <span className="flex items-center gap-2">
+                  <Users className="h-4 w-4" />
+                  Community Driven
+                </span>
+              </div>
             </div>
-            <h3 className="mt-4 text-lg font-semibold">Performance</h3>
-            <p className="mt-2 text-muted-foreground">
-              Built with Next.js 15 server components and streaming for optimal performance
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section
+          className="container py-12 md:py-24 lg:py-32"
+          aria-labelledby="features-heading"
+        >
+          <div className="mx-auto flex max-w-[980px] flex-col items-center gap-4 text-center">
+            <h2
+              id="features-heading"
+              className="text-3xl leading-tight font-bold tracking-tighter md:text-5xl"
+            >
+              Everything You Need to Brew Better
+            </h2>
+            <p className="text-muted-foreground max-w-[750px] text-lg sm:text-xl">
+              Track every detail that matters, from grind size to water
+              temperature, and discover your perfect cup
             </p>
           </div>
 
-          <div className="group relative overflow-hidden rounded-lg border p-6">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
-              <BarChart3 className="h-6 w-6" />
+          <div className="mx-auto grid max-w-5xl gap-6 py-12 sm:grid-cols-2 lg:grid-cols-3">
+            <div
+              className="group relative overflow-hidden rounded-lg border p-6"
+              role="article"
+              aria-labelledby="track-parameters"
+            >
+              <div
+                className="bg-muted flex h-12 w-12 items-center justify-center rounded-lg"
+                aria-hidden="true"
+              >
+                <Thermometer className="h-6 w-6" />
+              </div>
+              <h3 id="track-parameters" className="mt-4 text-lg font-semibold">
+                Track Brew Parameters
+              </h3>
+              <p className="text-muted-foreground mt-2">
+                Log water temperature, grind size, brewing time, and ratios to
+                find your perfect formula
+              </p>
             </div>
-            <h3 className="mt-4 text-lg font-semibold">Analytics</h3>
-            <p className="mt-2 text-muted-foreground">
-              Track brewing statistics, ratings, and improve your coffee technique over time
-            </p>
-          </div>
 
-          <div className="group relative overflow-hidden rounded-lg border p-6">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
-              <Star className="h-6 w-6" />
+            <div
+              className="group relative overflow-hidden rounded-lg border p-6"
+              role="article"
+              aria-labelledby="rate-review"
+            >
+              <div
+                className="bg-muted flex h-12 w-12 items-center justify-center rounded-lg"
+                aria-hidden="true"
+              >
+                <Star className="h-6 w-6" />
+              </div>
+              <h3 id="rate-review" className="mt-4 text-lg font-semibold">
+                Rate & Review
+              </h3>
+              <p className="text-muted-foreground mt-2">
+                Rate every cup and add tasting notes to remember what made each
+                brew special
+              </p>
             </div>
-            <h3 className="mt-4 text-lg font-semibold">Modern UI</h3>
-            <p className="mt-2 text-muted-foreground">
-              Beautiful interface built with Tailwind CSS and shadcn/ui components
-            </p>
-          </div>
 
-          <div className="group relative overflow-hidden rounded-lg border p-6">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
-              <Clock className="h-6 w-6" />
+            <div
+              className="group relative overflow-hidden rounded-lg border p-6"
+              role="article"
+              aria-labelledby="discover-trends"
+            >
+              <div
+                className="bg-muted flex h-12 w-12 items-center justify-center rounded-lg"
+                aria-hidden="true"
+              >
+                <BarChart3 className="h-6 w-6" />
+              </div>
+              <h3 id="discover-trends" className="mt-4 text-lg font-semibold">
+                Discover Trends
+              </h3>
+              <p className="text-muted-foreground mt-2">
+                Analyze which beans, ratios, and methods consistently produce
+                your highest-rated cups
+              </p>
             </div>
-            <h3 className="mt-4 text-lg font-semibold">Real-time</h3>
-            <p className="mt-2 text-muted-foreground">
-              Server components with streaming and suspense for instant loading states
-            </p>
-          </div>
 
-          <div className="group relative overflow-hidden rounded-lg border p-6">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
-              <TrendingUp className="h-6 w-6" />
+            <div
+              className="group relative overflow-hidden rounded-lg border p-6"
+              role="article"
+              aria-labelledby="bean-inventory"
+            >
+              <div
+                className="bg-muted flex h-12 w-12 items-center justify-center rounded-lg"
+                aria-hidden="true"
+              >
+                <Scale className="h-6 w-6" />
+              </div>
+              <h3 id="bean-inventory" className="mt-4 text-lg font-semibold">
+                Bean Inventory
+              </h3>
+              <p className="text-muted-foreground mt-2">
+                Keep track of your coffee beans, roast dates, and origins to
+                never lose track of favorites
+              </p>
             </div>
-            <h3 className="mt-4 text-lg font-semibold">TypeScript</h3>
-            <p className="mt-2 text-muted-foreground">
-              Fully typed with strict TypeScript for better developer experience and reliability
-            </p>
+
+            <div
+              className="group relative overflow-hidden rounded-lg border p-6"
+              role="article"
+              aria-labelledby="brewing-timer"
+            >
+              <div
+                className="bg-muted flex h-12 w-12 items-center justify-center rounded-lg"
+                aria-hidden="true"
+              >
+                <Timer className="h-6 w-6" />
+              </div>
+              <h3 id="brewing-timer" className="mt-4 text-lg font-semibold">
+                Brewing Timer
+              </h3>
+              <p className="text-muted-foreground mt-2">
+                Built-in timers for different brewing methods to ensure
+                consistent extraction every time
+              </p>
+            </div>
+
+            <div
+              className="group relative overflow-hidden rounded-lg border p-6"
+              role="article"
+              aria-labelledby="share-discoveries"
+            >
+              <div
+                className="bg-muted flex h-12 w-12 items-center justify-center rounded-lg"
+                aria-hidden="true"
+              >
+                <Users className="h-6 w-6" />
+              </div>
+              <h3 id="share-discoveries" className="mt-4 text-lg font-semibold">
+                Share Discoveries
+              </h3>
+              <p className="text-muted-foreground mt-2">
+                Share your best brews publicly and discover new techniques from
+                the coffee community
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
       {/* Footer */}
       <footer className="border-t py-6 md:py-0">
         <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
-          <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
+          <p className="text-muted-foreground text-center text-sm leading-loose md:text-left">
             Built by{" "}
             <Link
-              href="https://github.com/kgnugur"
+              href="https://github.com/thekaganugur"
               target="_blank"
               rel="noreferrer"
               className="font-medium underline underline-offset-4"
             >
-              kgnugur
+              Kagan
             </Link>
             . The source code is available on{" "}
             <Link
-              href="https://github.com/kgnugur/dialed-in"
+              href="https://github.com/thekaganugur/dialed-in"
               target="_blank"
               rel="noreferrer"
               className="font-medium underline underline-offset-4"

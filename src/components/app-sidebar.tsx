@@ -11,7 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { BarChart3, Bean, Coffee, Home } from "lucide-react";
+import { BarChart3, Bean, Coffee, Home, Zap } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NavUser } from "./nav-user";
@@ -26,6 +26,11 @@ const navigationItems = [
     title: "Beans",
     href: "/app/beans",
     icon: Bean,
+  },
+  {
+    title: "Methods",
+    href: "/app/methods",
+    icon: Zap,
   },
   {
     title: "Analytics",
@@ -44,8 +49,11 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton asChild isActive={pathName === "/app"}>
               <Link href="/app" aria-label="Go to dashboard">
-                <Home className="h-3 w-3" />
-                <span className="text-base font-semibold">Dialed In.</span>
+                <Home className="h-4 w-4" />
+
+                <span className="bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-base font-bold text-transparent">
+                  Dialed In
+                </span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
