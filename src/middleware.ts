@@ -1,17 +1,13 @@
+import { getSessionCookie } from "better-auth/cookies";
 import { NextRequest, NextResponse } from "next/server";
 
-export function middleware(request: NextRequest) {
-  const cookie = request.cookies.get("better-auth.session_token");
-  const isAuthenticated = !!(cookie && cookie.value);
-  const { pathname } = request.nextUrl;
+export async function middleware(request: NextRequest) {
+  const sessionCookie = getSessionCookie(request);
 
-  // Redirect authenticated users away from auth pages
-  if (isAuthenticated && (pathname === "/login" || pathname === "/signup")) {
-    return NextResponse.redirect(new URL("/app/", request.url));
-  }
-
-  // Redirect unauthenticated users from protected routes
-  if (!isAuthenticated && pathname.startsWith("/app")) {
+  // THIS IS NOT SECURE!
+  // This is the recommended approach to optimistically redirect users
+  // We recommend handling auth checks in each page/route
+  if (!sessionCookie) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
@@ -19,5 +15,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/app/:path*", "/login", "/signup"],
+  matcher: ["/app/:path*"],
 };
