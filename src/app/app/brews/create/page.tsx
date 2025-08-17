@@ -1,4 +1,5 @@
 import { QuickRating } from "@/components/quick-rating";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Collapsible,
@@ -15,10 +16,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { fetchCoffeeBeans } from "@/lib/db/data";
-import { ChevronDown, Settings2 } from "lucide-react";
+import { fetchBrewById, fetchCoffeeBeans } from "@/lib/db/data";
+import { formatBrewDateTime } from "@/lib/utils";
+import { ChevronDown, Info, Settings2 } from "lucide-react";
 import { createBrew } from "./actions";
 import { FormActions } from "./form-actions";
+import { transformBrewForDuplication } from "./utils";
 
 const brewMethods = [
   "espresso",
@@ -31,17 +34,50 @@ const brewMethods = [
   "cold_brew",
 ];
 
-export default async function CreateBrewPage() {
+interface CreateBrewPageProps {
+  searchParams: Promise<{ duplicate?: string }>;
+}
+
+export default async function CreateBrewPage({
+  searchParams,
+}: CreateBrewPageProps) {
+  const { duplicate } = await searchParams;
   const coffeeBeans = await fetchCoffeeBeans();
+
+  // Handle duplication using pure function
+  const duplicateData = duplicate
+    ? await fetchBrewById(duplicate).then((brew) =>
+        brew ? transformBrewForDuplication(brew) : null,
+      )
+    : null;
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Create Brew</h1>
+        <h1 className="text-3xl font-bold tracking-tight">
+          {duplicateData ? "Duplicate Brew" : "Create Brew"}
+        </h1>
         <p className="text-muted-foreground mt-2">
-          Log your coffee brewing session quickly and easily
+          {duplicateData
+            ? "Creating a new brew based on your previous session"
+            : "Log your coffee brewing session quickly and easily"}
         </p>
       </div>
+
+      {duplicateData && (
+        <Alert>
+          <Info className="h-4 w-4" />
+          <AlertDescription>
+            <span>
+              Creating new brew based on{" "}
+              <strong className="inline">
+                {duplicateData.originalBrewName}
+              </strong>{" "}
+              from {formatBrewDateTime(duplicateData.originalBrewDate)}
+            </span>
+          </AlertDescription>
+        </Alert>
+      )}
 
       <Card className="max-w-2xl">
         <CardHeader>
@@ -58,7 +94,11 @@ export default async function CreateBrewPage() {
               <div className="flex flex-col gap-4 sm:flex-row sm:gap-6">
                 <div className="flex-1 space-y-2">
                   <Label htmlFor="beanId">Coffee Bean *</Label>
-                  <Select name="beanId" required>
+                  <Select
+                    name="beanId"
+                    required
+                    defaultValue={duplicateData?.beanId}
+                  >
                     <SelectTrigger id="beanId" className="w-full">
                       <SelectValue placeholder="Select a coffee bean" />
                     </SelectTrigger>
@@ -74,7 +114,11 @@ export default async function CreateBrewPage() {
 
                 <div className="flex-1 space-y-2">
                   <Label htmlFor="method">Brew Method *</Label>
-                  <Select name="method" required>
+                  <Select
+                    name="method"
+                    required
+                    defaultValue={duplicateData?.method}
+                  >
                     <SelectTrigger id="method" className="w-full">
                       <SelectValue placeholder="Select brew method" />
                     </SelectTrigger>
@@ -116,6 +160,7 @@ export default async function CreateBrewPage() {
                         step="0.1"
                         placeholder="18.0"
                         className="text-sm"
+                        defaultValue={duplicateData?.doseGrams}
                       />
                     </div>
                     <div className="space-y-2">
@@ -128,6 +173,7 @@ export default async function CreateBrewPage() {
                         step="0.1"
                         placeholder="36.0"
                         className="text-sm"
+                        defaultValue={duplicateData?.yieldGrams}
                       />
                     </div>
                     <div className="space-y-2">
@@ -139,6 +185,7 @@ export default async function CreateBrewPage() {
                         type="number"
                         placeholder="30"
                         className="text-sm"
+                        defaultValue={duplicateData?.brewTimeSeconds}
                       />
                     </div>
                     <div className="space-y-2">
@@ -150,6 +197,7 @@ export default async function CreateBrewPage() {
                         type="number"
                         placeholder="93"
                         className="text-sm"
+                        defaultValue={duplicateData?.waterTempCelsius}
                       />
                     </div>
                   </div>
@@ -162,6 +210,7 @@ export default async function CreateBrewPage() {
                       name="grindSetting"
                       placeholder="e.g., 15 (Comandante), Medium-fine"
                       className="text-sm"
+                      defaultValue={duplicateData?.grindSetting}
                     />
                   </div>
 

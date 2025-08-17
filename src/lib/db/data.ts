@@ -113,6 +113,7 @@ export async function fetchTopBeans(limit: number = 5) {
 
 // Fetch all coffee beans for the authenticated user (for form selects)
 export async function fetchCoffeeBeans() {
+  await new Promise((r) => setTimeout(r, 2000));
   const session = await requireAuth();
 
   return await db
@@ -210,7 +211,7 @@ export async function fetchBrewById(id: string) {
 export async function fetchPublicBrewById(id: string) {
   const brewIdSchema = z.string().uuid();
   const validatedId = brewIdSchema.safeParse(id);
-  
+
   if (!validatedId.success) {
     return null;
   }

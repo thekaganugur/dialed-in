@@ -9,7 +9,15 @@ import {
   formatBrewDuration,
   getMethodBadgeColor,
 } from "@/lib/utils";
-import { Bean, Calendar, Coffee, Edit, MapPin, Settings } from "lucide-react";
+import {
+  Bean,
+  Calendar,
+  Coffee,
+  Edit,
+  MapPin,
+  RotateCcw,
+  Settings,
+} from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { deleteBrewWithId } from "./actions";
@@ -33,6 +41,18 @@ export default async function BrewDetailPage({ params }: BrewDetailPageProps) {
       <div className="flex items-center justify-end gap-2">
         <div className="flex items-center gap-2">
           <ShareBrewButton brewId={brewId} isPublic={brew.log.isPublic} />
+
+          <Button
+            variant="outline"
+            size="sm"
+            asChild
+            className="border-primary/40 text-primary hover:bg-primary/10 hover:border-primary/30"
+          >
+            <Link href={`/app/brews/create?duplicate=${brewId}`}>
+              <RotateCcw className="mr-2 h-4 w-4" />
+              Duplicate
+            </Link>
+          </Button>
 
           <Button variant="outline" size="sm" asChild>
             <Link href={`/app/brews/${brewId}/edit`}>
