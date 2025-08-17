@@ -53,11 +53,11 @@ export default async function CreateBrewPage({
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">
+      <div className="space-y-1">
+        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
           {duplicateData ? "Duplicate Brew" : "Create Brew"}
         </h1>
-        <p className="text-muted-foreground mt-2">
+        <p className="text-muted-foreground text-sm sm:text-base">
           {duplicateData
             ? "Creating a new brew based on your previous session"
             : "Log your coffee brewing session quickly and easily"}
@@ -80,8 +80,8 @@ export default async function CreateBrewPage({
       )}
 
       <Card className="max-w-2xl">
-        <CardHeader>
-          <CardTitle>Brew Details</CardTitle>
+        <CardHeader className="space-y-2">
+          <CardTitle className="text-lg">Brew Details</CardTitle>
           <p className="text-muted-foreground text-sm">
             Only bean and method required to get started
           </p>
@@ -149,80 +149,96 @@ export default async function CreateBrewPage({
               <CollapsibleContent>
                 <div className="bg-muted/10 space-y-4 rounded-lg rounded-t-none border border-t-0 p-4">
                   {/* Quick Parameters */}
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  <div className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4">
                     <div className="space-y-2">
-                      <Label htmlFor="doseGrams" className="text-xs">
+                      <Label
+                        htmlFor="doseGrams"
+                        className="text-sm font-medium"
+                      >
                         Dose (g)
                       </Label>
                       <Input
+                        id="doseGrams"
                         name="doseGrams"
                         type="number"
                         step="0.1"
                         placeholder="18.0"
-                        className="text-sm"
                         defaultValue={duplicateData?.doseGrams}
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="yieldGrams" className="text-xs">
+                      <Label
+                        htmlFor="yieldGrams"
+                        className="text-sm font-medium"
+                      >
                         Yield (g)
                       </Label>
                       <Input
+                        id="yieldGrams"
                         name="yieldGrams"
                         type="number"
                         step="0.1"
                         placeholder="36.0"
-                        className="text-sm"
                         defaultValue={duplicateData?.yieldGrams}
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="brewTimeSeconds" className="text-xs">
+                      <Label
+                        htmlFor="brewTimeSeconds"
+                        className="text-sm font-medium"
+                      >
                         Time (s)
                       </Label>
                       <Input
+                        id="brewTimeSeconds"
                         name="brewTimeSeconds"
                         type="number"
                         placeholder="30"
-                        className="text-sm"
                         defaultValue={duplicateData?.brewTimeSeconds}
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="waterTempCelsius" className="text-xs">
+                      <Label
+                        htmlFor="waterTempCelsius"
+                        className="text-sm font-medium"
+                      >
                         Temp (°C)
                       </Label>
                       <Input
+                        id="waterTempCelsius"
                         name="waterTempCelsius"
                         type="number"
                         placeholder="93"
-                        className="text-sm"
                         defaultValue={duplicateData?.waterTempCelsius}
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="grindSetting" className="text-sm">
+                    <Label
+                      htmlFor="grindSetting"
+                      className="text-sm font-medium"
+                    >
                       Grind Setting
                     </Label>
                     <Input
+                      id="grindSetting"
                       name="grindSetting"
                       placeholder="e.g., 15 (Comandante), Medium-fine"
-                      className="text-sm"
                       defaultValue={duplicateData?.grindSetting}
                     />
                   </div>
 
                   {/* Combined Notes */}
                   <div className="space-y-2">
-                    <Label htmlFor="notes" className="text-sm">
+                    <Label htmlFor="notes" className="text-sm font-medium">
                       Notes & Flavors
                     </Label>
                     <Textarea
+                      id="notes"
                       name="notes"
                       placeholder="Any brewing notes, flavor observations, or thoughts about this brew..."
-                      className="min-h-[80px] text-sm"
+                      className="min-h-[80px]"
                     />
                   </div>
 

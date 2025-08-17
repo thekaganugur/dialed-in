@@ -115,7 +115,7 @@ documentation/                     # Phase-based learning documentation
 The application uses a PostgreSQL database with the following core entities:
 
 - **Users**: Authentication and user management using Better Auth (text IDs for compatibility)
-- **Coffee Beans**: Track coffee bean purchases with roast level, origin, processing method
+- **Coffee Beans**: Track coffee bean purchases with roast level, origin, processing method and roastery
 - **Coffee Logs**: Main entity tracking individual brews with ratings, parameters, and notes
 - **Brew Methods**: Reference data for brewing equipment and default parameters
 
