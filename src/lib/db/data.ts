@@ -13,6 +13,7 @@ import {
   isNull,
   lt,
   or,
+  sql,
 } from "drizzle-orm";
 import { z } from "zod";
 
@@ -238,4 +239,44 @@ export async function fetchPublicBrewById(id: string) {
     .limit(1);
 
   return result[0] || null;
+}
+
+// Pure function to calculate streak from sorted date strings
+const calculateStreak = (dates: string[]): number => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  const expectedDates = Array.from({ length: dates.length }, (_, i) => {
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+    return date.toISOString().split('T')[0];
+  });
+  
+  const firstMismatch = dates
+    .map((date, index) => date === expectedDates[index])
+    .findIndex(match => !match);
+    
+  return firstMismatch === -1 ? dates.length : firstMismatch;
+};
+
+// Calculate current brewing streak
+export async function fetchCurrentStreak(): Promise<number> {
+  const session = await requireAuth();
+  const ninetyDaysAgo = subDays(new Date(), 90);
+
+  const brewDates = await db
+    .select({ date: sql<string>`DATE(${coffeeLogs.brewedAt})`.as("date") })
+    .from(coffeeLogs)
+    .where(
+      and(
+        eq(coffeeLogs.userId, session.user.id),
+        gte(coffeeLogs.brewedAt, ninetyDaysAgo),
+        isNull(coffeeLogs.deletedAt),
+      ),
+    )
+    .groupBy(sql`DATE(${coffeeLogs.brewedAt})`)
+    .orderBy(desc(sql`DATE(${coffeeLogs.brewedAt})`))
+    .then(rows => rows.map(row => row.date));
+
+  return brewDates.length === 0 ? 0 : calculateStreak(brewDates);
 }

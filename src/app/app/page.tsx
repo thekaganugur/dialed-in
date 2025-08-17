@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  fetchBeanCount,
+  fetchCurrentStreak,
   fetchFavoriteBrewingMethod,
   fetchRecentBrews,
   fetchTodayBrewCount,
@@ -14,7 +14,7 @@ import { subDays } from "date-fns";
 import {
   Calendar,
   Coffee,
-  Package,
+  Flame,
   Plus,
   Star,
   TrendingDown,
@@ -27,14 +27,14 @@ export default async function DashboardPage() {
     todayBrewsCount,
     averageRating,
     favoriteMethod,
-    beancount,
+    currentStreak,
     recentBrews,
     yesterdayBrewsCount,
   ] = await Promise.all([
     fetchTodayBrewCount(),
     fetchWeeklyAverageRating(),
     fetchFavoriteBrewingMethod(1),
-    fetchBeanCount(),
+    fetchCurrentStreak(),
     fetchRecentBrews(),
     fetchTodayBrewCount(subDays(new Date(), 1)),
   ]);
@@ -43,30 +43,34 @@ export default async function DashboardPage() {
 
   return (
     <main>
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-6 space-y-4 sm:mb-8 sm:flex sm:items-center sm:justify-between sm:space-y-0">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-muted-foreground mt-2">
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+            Dashboard
+          </h1>
+          <p className="text-muted-foreground mt-1 text-base sm:mt-2">
             Overview of your coffee brewing activity and statistics
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button asChild>
+        <div className="flex gap-3 sm:gap-2">
+          <Button className="flex-1 sm:flex-none" asChild>
             <Link href="/app/brews/create">
               <Plus className="mr-2 h-4 w-4" />
-              Create Brew
+              <span className="sm:hidden">Brew</span>
+              <span className="hidden sm:inline">Create Brew</span>
             </Link>
           </Button>
-          <Button variant="outline" asChild>
+          <Button variant="outline" className="flex-1 sm:flex-none" asChild>
             <Link href="/app/beans/create">
               <Plus className="mr-2 h-4 w-4" />
-              Create Bean
+              <span className="sm:hidden">Bean</span>
+              <span className="hidden sm:inline">Create Bean</span>
             </Link>
           </Button>
         </div>
       </div>
 
-      <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mb-6 grid grid-cols-2 gap-3 sm:mb-8 sm:gap-6 md:grid-cols-2 lg:grid-cols-4">
         {/* Today's Brew Count */}
         <Card>
           <CardHeader>
@@ -75,8 +79,8 @@ export default async function DashboardPage() {
               Today&apos;s Brews
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">{todayBrewsCount}</p>
+          <CardContent className="space-y-2">
+            <p className="text-2xl font-bold sm:text-3xl">{todayBrewsCount}</p>
             {brewCountChange !== 0 && (
               <div className="flex items-center gap-1 text-sm">
                 {brewCountChange > 0 ? (
@@ -104,11 +108,16 @@ export default async function DashboardPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-sm font-medium">
               <Star className="h-4 w-4" />
-              Weekly Average
+              Week Avg
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <StarRating rating={averageRating} />
+          <CardContent className="space-y-2">
+            <div className="space-y-1">
+              <StarRating rating={averageRating} />
+              <p className="text-muted-foreground text-xs sm:text-sm">
+                {averageRating.toFixed(1)} stars avg
+              </p>
+            </div>
           </CardContent>
         </Card>
 
@@ -117,38 +126,40 @@ export default async function DashboardPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-sm font-medium">
               <Coffee className="h-4 w-4" />
-              Favorite Method
+              Top Method
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-2">
             {favoriteMethod.length > 0 ? (
-              <>
-                <div className="mb-2">
-                  <Badge
-                    className={getMethodBadgeColor(favoriteMethod[0].method)}
-                  >
-                    {favoriteMethod[0].method.toUpperCase()}
-                  </Badge>
-                </div>
-                <p className="text-sm">{favoriteMethod[0].brewCount} brews</p>
-              </>
+              <div className="space-y-2">
+                <Badge
+                  className={getMethodBadgeColor(favoriteMethod[0].method)}
+                >
+                  {favoriteMethod[0].method.toUpperCase()}
+                </Badge>
+                <p className="text-muted-foreground text-sm">
+                  {favoriteMethod[0].brewCount} brews
+                </p>
+              </div>
             ) : (
               <p className="text-muted-foreground text-sm">No data yet</p>
             )}
           </CardContent>
         </Card>
 
-        {/* Bean Inventory */}
+        {/* Current Streak */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-sm font-medium">
-              <Package className="h-4 w-4" />
-              Bean Inventory
+              <Flame className="h-4 w-4" />
+              Streak
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">{beancount}</p>
-            <p className="text-sm">varieties</p>
+          <CardContent className="space-y-2">
+            <p className="text-2xl font-bold sm:text-3xl">{currentStreak}</p>
+            <p className="text-muted-foreground text-sm">
+              {currentStreak === 1 ? "day" : "days"}
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -160,33 +171,51 @@ export default async function DashboardPage() {
         </CardHeader>
         <CardContent>
           {recentBrews.length > 0 ? (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {recentBrews.map(({ bean, log }) => {
                 return (
-                  <Link
+                  <Card
                     key={log.id}
-                    href={`/app/brews/${log.id}`}
-                    className="hover:bg-muted/50 hover:border-primary/20 flex items-center justify-between rounded-lg border p-4 transition-colors"
+                    className="hover:border-border/60 hover:bg-muted/25 active:bg-muted/40 transition-colors"
                   >
-                    <div className="flex-1">
-                      <h3 className="font-medium">{bean?.name}</h3>
-                      <div className="mt-1 flex items-center gap-2">
-                        <Badge className={getMethodBadgeColor(log.method)}>
-                          {log.method.toUpperCase()}
-                        </Badge>
-                        <span className="text-sm">•</span>
-                        <span className="text-sm">
-                          {formatBrewDateTime(log.brewedAt)}
-                        </span>
+                    <CardHeader>
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <Link
+                            href={`/app/brews/${log.id}`}
+                            aria-label={`View brew details for ${bean?.name} by ${bean?.roaster}`}
+                          >
+                            <CardTitle className="truncate text-base font-medium transition-colors hover:text-blue-600">
+                              {bean?.name}
+                            </CardTitle>
+                          </Link>
+                          <p className="text-muted-foreground mt-0.5 truncate text-sm">
+                            {bean?.roaster}
+                          </p>
+                          <div className="mt-2 sm:hidden">
+                            <StarRating rating={log.rating ?? 0} />
+                          </div>
+                          <div className="mt-2 flex items-center gap-2">
+                            {/* bg-amber-100 */}
+                            <Badge className={getMethodBadgeColor(log.method)}>
+                              {log.method.replace("_", " ").toUpperCase()}
+                            </Badge>
+                            <span className="text-muted-foreground text-sm">
+                              {formatBrewDateTime(log.brewedAt)}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="hidden sm:block">
+                          <StarRating rating={log.rating ?? 0} />
+                        </div>
                       </div>
-                    </div>
-                    <StarRating rating={log.rating ?? 0} />
-                  </Link>
+                    </CardHeader>
+                  </Card>
                 );
               })}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-8 text-center">
+            <div className="flex flex-col items-center justify-center py-6 text-center sm:py-8">
               <Coffee className="text-muted-foreground mb-4 h-12 w-12" />
               <h3 className="mb-2 text-lg font-semibold">No brews yet</h3>
               <p className="text-muted-foreground mb-4">

@@ -1,7 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { Loader2, Search, X } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 import { useDebouncedCallback } from "use-debounce";
@@ -11,16 +11,13 @@ interface SearchBarProps {
   placeholder?: string;
 }
 
-export function SearchBar({
-  onSearch,
-  placeholder = "Search brews...",
-}: SearchBarProps) {
+export function SearchBar({ placeholder = "Search brews..." }: SearchBarProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  const queryParam = searchParams.get("query")?.toString();
+  const queryParam = searchParams.get("query") || "";
 
   const debouncedSearch = useDebouncedCallback((value: string) => {
     const params = new URLSearchParams(searchParams);
@@ -34,10 +31,6 @@ export function SearchBar({
     });
   }, 300);
 
-  const handleClear = () => {
-    onSearch?.("");
-  };
-
   return (
     <div className="relative">
       {isPending ? (
@@ -49,16 +42,8 @@ export function SearchBar({
         defaultValue={queryParam}
         onChange={(e) => debouncedSearch(e.target.value)}
         placeholder={placeholder}
-        className="pr-10 pl-10"
+        className="pl-10"
       />
-      {queryParam && (
-        <button
-          onClick={handleClear}
-          className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2"
-        >
-          <X className="h-4 w-4" />
-        </button>
-      )}
     </div>
   );
 }

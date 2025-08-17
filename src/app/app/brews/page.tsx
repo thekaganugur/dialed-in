@@ -21,15 +21,18 @@ export default async function BrewsPage({ searchParams }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Brews</h1>
           <p className="text-muted-foreground mt-2">
             Track your coffee brewing journey
           </p>
         </div>
-        <Button asChild>
-          <Link href="/app/brews/create" aria-label="Create a new coffee brew log">
+        <Button asChild className="sm:shrink-0">
+          <Link
+            href="/app/brews/create"
+            aria-label="Create a new coffee brew log"
+          >
             <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
             Create Brew
           </Link>
