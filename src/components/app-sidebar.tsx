@@ -50,7 +50,6 @@ export function AppSidebar() {
             <SidebarMenuButton asChild isActive={pathName === "/app"}>
               <Link href="/app" aria-label="Go to dashboard">
                 <Home className="h-4 w-4" />
-
                 <span className="bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-base font-bold text-transparent">
                   Dialed In
                 </span>

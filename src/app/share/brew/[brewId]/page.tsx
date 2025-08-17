@@ -26,23 +26,26 @@ export default async function PublicBrewPage({ params }: PublicBrewPageProps) {
   }
 
   return (
-    <div className="bg-background min-h-screen">
-      <header className="border-b bg-white/50 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Coffee className="text-primary h-6 w-6" />
-              <span className="text-xl font-semibold">Dialed In</span>
-            </div>
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/">
-                <ExternalLink className="mr-2 h-4 w-4" />
-                Join Dialed In
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </header>
+    <div className="">
+      <div className="container mx-auto px-6">
+        <header className="flex min-h-16 items-center justify-between border-b">
+          <Link
+            href="/"
+            className="transition-opacity hover:opacity-80"
+            aria-label="Return to Dialed In homepage"
+          >
+            <span className="bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-xl font-bold text-transparent">
+              Dialed In
+            </span>
+          </Link>
+          <Button variant="outline" size="sm" asChild>
+            <Link href="/">
+              <ExternalLink className="mr-2 h-4 w-4" />
+              Join Dialed In
+            </Link>
+          </Button>
+        </header>
+      </div>
 
       <main className="container mx-auto max-w-4xl px-4 py-8">
         <div className="space-y-8">
