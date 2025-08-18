@@ -74,7 +74,7 @@ export function ShareBrewButton({ brewId, isPublic }: ShareBrewButtonProps) {
 
   if (isPublic) {
     return (
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <Badge variant="secondary" className="text-xs">
           Public
         </Badge>
@@ -84,7 +84,7 @@ export function ShareBrewButton({ brewId, isPublic }: ShareBrewButtonProps) {
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="px-2">
+            <Button variant="ghost" size="sm">
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>

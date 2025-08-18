@@ -1,15 +1,12 @@
+import { BeanDetails } from "@/components/bean-details";
+import { BrewMetrics } from "@/components/brew-metrics";
 import { StarRating } from "@/components/star-rating";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchPublicBrewById } from "@/lib/db/data";
-import {
-  calculateBrewRatio,
-  formatBrewDateTime,
-  formatBrewDuration,
-  getMethodBadgeColor,
-} from "@/lib/utils";
-import { Bean, Coffee, ExternalLink, MapPin, Settings } from "lucide-react";
+import { formatBrewDateTime, getMethodBadgeColor } from "@/lib/utils";
+import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -82,145 +79,8 @@ export default async function PublicBrewPage({ params }: PublicBrewPageProps) {
           </section>
 
           <div className="grid gap-6 md:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Settings className="h-5 w-5" />
-                  <h2>Key Metrics</h2>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-6">
-                  {(brew.log.doseGrams ||
-                    brew.log.yieldGrams ||
-                    calculateBrewRatio(
-                      brew.log.doseGrams,
-                      brew.log.yieldGrams,
-                    )) && (
-                    <div className="space-y-3">
-                      <h3 className="text-muted-foreground text-sm font-semibold tracking-wide uppercase">
-                        Core Measurements
-                      </h3>
-                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                        {brew.log.doseGrams && (
-                          <div className="text-center">
-                            <div className="text-2xl font-bold">
-                              {brew.log.doseGrams}g
-                            </div>
-                            <div className="text-muted-foreground text-sm">
-                              Dose
-                            </div>
-                          </div>
-                        )}
-                        {brew.log.yieldGrams && (
-                          <div className="text-center">
-                            <div className="text-2xl font-bold">
-                              {brew.log.yieldGrams}g
-                            </div>
-                            <div className="text-muted-foreground text-sm">
-                              Yield
-                            </div>
-                          </div>
-                        )}
-                        {calculateBrewRatio(
-                          brew.log.doseGrams,
-                          brew.log.yieldGrams,
-                        ) && (
-                          <div className="text-center">
-                            <div className="text-2xl font-bold">
-                              {calculateBrewRatio(
-                                brew.log.doseGrams,
-                                brew.log.yieldGrams,
-                              )}
-                            </div>
-                            <div className="text-muted-foreground text-sm">
-                              Ratio
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                  {(brew.log.brewTimeSeconds ||
-                    brew.log.waterTempCelsius ||
-                    brew.log.grindSetting) && (
-                    <div className="space-y-3">
-                      <h3 className="text-muted-foreground text-sm font-semibold tracking-wide uppercase">
-                        Brewing Parameters
-                      </h3>
-                      <div className="grid gap-3">
-                        {brew.log.brewTimeSeconds && (
-                          <div className="flex items-center justify-between">
-                            <span className="text-muted-foreground">
-                              Brew Time:
-                            </span>
-                            <span className="text-lg font-semibold">
-                              {formatBrewDuration(brew.log.brewTimeSeconds)}
-                            </span>
-                          </div>
-                        )}
-                        {brew.log.waterTempCelsius && (
-                          <div className="flex items-center justify-between">
-                            <span className="text-muted-foreground">
-                              Water Temp:
-                            </span>
-                            <span className="text-lg font-semibold">
-                              {brew.log.waterTempCelsius}°C
-                            </span>
-                          </div>
-                        )}
-                        {brew.log.grindSetting && (
-                          <div className="flex items-center justify-between">
-                            <span className="text-muted-foreground">
-                              Grind:
-                            </span>
-                            <span className="text-lg font-semibold">
-                              {brew.log.grindSetting}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Bean className="h-5 w-5" />
-                  <h2>Bean Details</h2>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid gap-3">
-                  {brew.bean.origin && (
-                    <div className="flex items-center gap-2">
-                      <MapPin className="text-muted-foreground h-4 w-4" />
-                      <span className="font-medium">Origin:</span>
-                      <span>{brew.bean.origin}</span>
-                    </div>
-                  )}
-                  {brew.bean.roastLevel && (
-                    <div className="flex items-center gap-2">
-                      <Coffee className="text-muted-foreground h-4 w-4" />
-                      <span className="font-medium">Roast Level:</span>
-                      <span className="capitalize">
-                        {brew.bean.roastLevel.replace("-", " ")}
-                      </span>
-                    </div>
-                  )}
-                  {brew.bean.process && (
-                    <div className="flex items-center gap-2">
-                      <Settings className="text-muted-foreground h-4 w-4" />
-                      <span className="font-medium">Process:</span>
-                      <span className="capitalize">{brew.bean.process}</span>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+            <BrewMetrics brewLog={brew.log} />
+            <BeanDetails bean={brew.bean} />
           </div>
 
           {(brew.log.notes || brew.log.flavorNotes) && (
