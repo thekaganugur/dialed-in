@@ -9,18 +9,72 @@ import { formatBrewDateTime, getMethodBadgeColor } from "@/lib/utils";
 import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { cache } from "react";
 
 interface PublicBrewPageProps {
   params: Promise<{ brewId: string }>;
 }
 
+const getCachedPublicBrew = cache(async (brewId: string) => {
+  return await fetchPublicBrewById(brewId);
+});
+
+export async function generateMetadata({ params }: PublicBrewPageProps) {
+  const { brewId } = await params;
+  const brew = await getCachedPublicBrew(brewId);
+
+  if (!brew) {
+    return {
+      title: "Brew Not Found",
+      description: "This brew is no longer available or has been made private.",
+    };
+  }
+
+  const formatMethod = (method: string) => method.replace("_", " ").replace(/\b\w/g, l => l.toUpperCase());
+  const buildDescription = (brewData: { bean: { name: string; roaster?: string | null }; log: { method: string; rating?: number | null }; user: { name: string | null } }) => [
+    brewData.bean.roaster,
+    brewData.bean.name,
+    `brewed using ${formatMethod(brewData.log.method)} method`,
+    brewData.log.rating && `(${brewData.log.rating}/5 stars)`,
+    `Shared by ${brewData.user.name} on Dialed In`
+  ].filter(Boolean).join(" - ");
+
+  const title = `${brew.bean.name} ${formatMethod(brew.log.method)} Recipe`;
+  const description = buildDescription(brew);
+  const url = `${process.env.NEXT_PUBLIC_BASE_URL || "https://dialed-in.app"}/share/brew/${brewId}`;
+
+  return {
+    title: `${title} | Dialed In`,
+    description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      url,
+      siteName: "Dialed In",
+      publishedTime: brew.log.brewedAt.toISOString(),
+      authors: [brew.user.name],
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+    },
+  };
+}
+
 export default async function PublicBrewPage({ params }: PublicBrewPageProps) {
   const { brewId } = await params;
-  const brew = await fetchPublicBrewById(brewId);
+  const brew = await getCachedPublicBrew(brewId);
 
   if (!brew) {
     notFound();
   }
+
+  const formatMethod = (method: string) => method.replace("_", " ").replace(/\b\w/g, l => l.toUpperCase());
 
   return (
     <div className="">
@@ -53,7 +107,7 @@ export default async function PublicBrewPage({ params }: PublicBrewPageProps) {
                   variant="secondary"
                   className={`text-base ${getMethodBadgeColor(brew.log.method)}`}
                 >
-                  {brew.log.method.replace("_", " ").toUpperCase()}
+                  {formatMethod(brew.log.method).toUpperCase()}
                 </Badge>
               </div>
 
@@ -120,7 +174,7 @@ export default async function PublicBrewPage({ params }: PublicBrewPageProps) {
           <div className="rounded-lg border border-orange-100 bg-gradient-to-r from-orange-50 to-amber-50 p-6 text-center">
             <div className="space-y-4">
               <h2 className="text-xl font-semibold">
-                Want to recreate this {brew.log.method.replace("_", " ")}{" "}
+                Want to recreate this {formatMethod(brew.log.method).toLowerCase()}{" "}
                 recipe?
               </h2>
               <p className="text-muted-foreground mx-auto max-w-lg">
