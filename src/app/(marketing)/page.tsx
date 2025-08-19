@@ -13,6 +13,10 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+export const metadata = {
+  title: "Perfect Your Coffee Brewing Journey",
+};
+
 function FeatureCard({
   icon,
   title,
@@ -37,7 +41,9 @@ function FeatureCard({
       >
         <Icon className="h-6 w-6" />
       </div>
-      <h3 id={id} className="mt-4 text-lg font-semibold">{title}</h3>
+      <h3 id={id} className="mt-4 text-lg font-semibold">
+        {title}
+      </h3>
       <p className="text-muted-foreground mt-2">{description}</p>
     </div>
   );

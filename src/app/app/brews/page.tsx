@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import z from "zod";
@@ -7,6 +8,10 @@ import { BrewFilters } from "./brew-filters";
 import { BrewList } from "./brew-list";
 import { BrewListSkeleton } from "./brew-list-skeleton";
 import { SearchBar } from "./search-bar";
+
+export const metadata: Metadata = {
+  title: "Brews",
+};
 
 const ParamsScheme = z.object({
   query: z.string().optional(),

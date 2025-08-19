@@ -17,9 +17,14 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { fetchBrewById, fetchCoffeeBeans } from "@/lib/db/data";
 import { ChevronDown, Settings2 } from "lucide-react";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { updateBrew } from "./actions";
 import { FormActions } from "./form-actions";
+
+export const metadata: Metadata = {
+  title: "Edit Brew",
+};
 
 const brewMethods = [
   "espresso",
@@ -248,4 +253,3 @@ export default async function EditBrewPage({ params }: EditBrewPageProps) {
     </div>
   );
 }
-

@@ -7,11 +7,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchBrewById } from "@/lib/db/data";
 import { formatBrewDateTime, getMethodBadgeColor } from "@/lib/utils";
 import { Calendar, Coffee, Edit, RotateCcw } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { deleteBrewWithId } from "./actions";
 import { DeleteBrewButton } from "./delete-brew-button";
 import { ShareBrewButton } from "./share-brew-button";
+
+export const metadata: Metadata = {
+  title: "Brew Details",
+};
 
 interface BrewDetailPageProps {
   params: Promise<{ brewId: string }>;

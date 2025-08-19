@@ -19,9 +19,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { fetchBrewById, fetchCoffeeBeans } from "@/lib/db/data";
 import { formatBrewDateTime } from "@/lib/utils";
 import { ChevronDown, Info, Settings2 } from "lucide-react";
+import type { Metadata } from "next";
 import { createBrew } from "./actions";
 import { FormActions } from "./form-actions";
 import { transformBrewForDuplication } from "./utils";
+
+export const metadata: Metadata = {
+  title: "Create Brew",
+};
 
 const brewMethods = [
   "espresso",

@@ -1,9 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { BeanList } from "./bean-list";
 import { BeanListSkeleton } from "./bean-list-skeleton";
+
+export const metadata: Metadata = {
+  title: "Coffee Beans",
+};
 
 export default async function BeansPage() {
   return (
@@ -29,4 +34,3 @@ export default async function BeansPage() {
     </div>
   );
 }
-

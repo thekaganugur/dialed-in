@@ -2,8 +2,15 @@ import { PasswordInput } from "@/components/password-input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import type { Metadata } from "next";
 import { signUp } from "./actions";
 import { FormActions } from "./form-actions";
+
+export const metadata: Metadata = {
+  title: "Sign Up",
+  description:
+    "Join the coffee community and start dialing in your perfect brew. Track brewing parameters, rate your cups, and improve your technique.",
+};
 
 export default function SignUpPage() {
   return (

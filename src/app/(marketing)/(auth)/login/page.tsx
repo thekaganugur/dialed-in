@@ -2,8 +2,15 @@ import { PasswordInput } from "@/components/password-input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import type { Metadata } from "next";
 import { signIn } from "./actions";
 import { FormActions } from "./form-actions";
+
+export const metadata: Metadata = {
+  title: "Sign In",
+  description:
+    "Welcome back! Sign in to continue tracking your coffee brewing journey and dial in your perfect cup.",
+};
 
 export default function LoginPage() {
   return (

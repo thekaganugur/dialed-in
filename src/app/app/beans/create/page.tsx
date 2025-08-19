@@ -10,8 +10,13 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { processEnum, roastLevelEnum } from "@/lib/db/schema";
+import type { Metadata } from "next";
 import { createBean } from "../create/actions";
 import { FormActions } from "./form-actions";
+
+export const metadata: Metadata = {
+  title: "Create Coffee Beans",
+};
 
 export default function CreateBeanPage() {
   return (
@@ -101,7 +106,6 @@ export default function CreateBeanPage() {
                 <Label htmlFor="roastDate">Roast Date</Label>
                 <Input id="roastDate" name="roastDate" type="date" />
               </div>
-
 
               <div className="space-y-2">
                 <Label htmlFor="notes">Notes</Label>
