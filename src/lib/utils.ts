@@ -59,3 +59,7 @@ export function deriveInitials(str: string) {
 
 export const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export function formatMethod(method: string) {
+  return method.replace("_", " ").replace(/\b\w/g, (l) => l.toUpperCase());
+}

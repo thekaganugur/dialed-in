@@ -146,7 +146,8 @@ Key schema features:
 The project has evolved from a learning exercise to a production-ready coffee logging application. The development approach emphasizes:
 
 - **User-centered design**: Features are built based on real coffee brewing needs
-- **Progressive enhancement**: Core functionality works without JavaScript **Performance first**: Optimized for fast loading and smooth interactions
+- **Progressive enhancement**: Core functionality works without JavaScript
+- **Performance first**: Optimized for fast loading and smooth interactions
 - **Type safety**: Comprehensive TypeScript usage throughout
 - **Modern React patterns**: Server Components, Server Actions, and streaming
 
@@ -204,6 +205,7 @@ All database operations use Server Actions and direct Drizzle queries:
 - No API routes - Server Actions handle all mutations
 - Data fetching functions centralized in `src/lib/db/data.ts`
 - Soft delete pattern implemented for coffee logs
+- **Request-level caching**: Use React's `cache()` function for database queries to prevent duplicate calls within the same render pass (required for ORM/DB calls, unlike `fetch` which is automatically memoized)
 
 ### Sharing System
 
@@ -215,6 +217,7 @@ The application includes a public sharing feature for individual brews:
 - **No Auth Required**: Public brew pages accessible without authentication
 - **Marketing Integration**: Public pages include CTAs to join the platform
 - **Toggle Privacy**: Users can make public brews private again at any time
+- **SEO Optimized**: Public pages include comprehensive Open Graph and Twitter Card metadata for social sharing
 
 ### Current Implementation Status
 
@@ -225,7 +228,7 @@ The application includes a public sharing feature for individual brews:
 - ✅ **Search & Filtering**: Real-time search with debouncing
 - ✅ **Navigation**: Breadcrumbs and sidebar navigation
 - ✅ **User Context**: Uses actual user ID from Better Auth session
-- ✅ **Public Sharing**: Share individual brews publicly with dedicated public pages
+- ✅ **Public Sharing**: Share individual brews publicly with dedicated public pages and social media optimization
 
 ### Dependencies
 
