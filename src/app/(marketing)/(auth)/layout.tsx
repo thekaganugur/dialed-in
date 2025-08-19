@@ -1,3 +1,4 @@
+import { ModeSwitcher } from "@/components/mode-switcher";
 import Link from "next/link";
 
 export default function MarketinLayout({
@@ -5,8 +6,8 @@ export default function MarketinLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <div className="flex flex-col gap-12">
-      <div className="container mx-auto px-6">
-        <header className="flex min-h-16 items-center border-b">
+      <div className="container">
+        <header className="flex min-h-16 items-center justify-between border-b">
           <Link
             href="/"
             className="transition-opacity hover:opacity-80"
@@ -16,9 +17,11 @@ export default function MarketinLayout({
               Dialed In
             </span>
           </Link>
+
+          <ModeSwitcher />
         </header>
       </div>
-      <main className="p-6">{children}</main>
+      <main className="container">{children}</main>
     </div>
   );
 }

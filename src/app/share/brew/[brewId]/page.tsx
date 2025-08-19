@@ -86,8 +86,8 @@ export default async function PublicBrewPage({ params }: PublicBrewPageProps) {
   }
 
   return (
-    <div className="">
-      <div className="container mx-auto px-6">
+    <div>
+      <div className="container">
         <header className="flex min-h-16 items-center justify-between gap-4 border-b">
           <Link
             href="/"
@@ -110,7 +110,7 @@ export default async function PublicBrewPage({ params }: PublicBrewPageProps) {
         </header>
       </div>
 
-      <main className="container mx-auto max-w-4xl px-4 py-8">
+      <main className="container py-8 lg:max-w-4xl">
         <div className="space-y-8">
           <section className="space-y-6">
             <div className="space-y-4 text-center">
