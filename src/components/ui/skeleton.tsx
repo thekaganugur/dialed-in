@@ -11,19 +11,6 @@ function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function PageSkeleton() {
-  return (
-    <div className="space-y-6">
-      <Skeleton className="h-8 w-1/3" />
-      <div className="space-y-4">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <Skeleton key={i} className="h-20 w-full" />
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function CardSkeleton({ className }: { className?: string }) {
   return (
     <Card className={className}>
@@ -84,7 +71,6 @@ function FormSkeleton() {
 
 export {
   Skeleton,
-  PageSkeleton,
   CardSkeleton,
   SimpleCardSkeleton,
   ListSkeleton,

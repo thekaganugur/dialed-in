@@ -1,6 +1,6 @@
 import { FormSkeleton, Skeleton } from "@/components/ui/skeleton";
 
-export default function CreateBrewLoading() {
+export default function EditBrewLoading() {
   return (
     <div className="space-y-6">
       <div className="space-y-3">
