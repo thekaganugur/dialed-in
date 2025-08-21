@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatRoastLevel } from "@/lib/utils";
 import { Bean } from "lucide-react";
 
 interface CoffeeBean {
@@ -29,21 +30,21 @@ export function BeanDetails({ bean }: BeanDetailsProps) {
       <CardContent>
         <div className="space-y-3">
           {bean.origin && (
-            <div className="grid grid-cols-[80px_1fr] gap-4 text-sm">
+            <div className="grid grid-cols-[100px_1fr] gap-4 text-sm">
               <span className="text-muted-foreground font-medium">Origin</span>
               <span className="font-semibold">{bean.origin}</span>
             </div>
           )}
           {bean.roastLevel && (
-            <div className="grid grid-cols-[80px_1fr] gap-4 text-sm">
+            <div className="grid grid-cols-[100px_1fr] gap-4 text-sm">
               <span className="text-muted-foreground font-medium">Roast</span>
               <span className="font-semibold capitalize">
-                {bean.roastLevel.replace("-", " ")}
+                {formatRoastLevel(bean.roastLevel)}
               </span>
             </div>
           )}
           {bean.process && (
-            <div className="grid grid-cols-[80px_1fr] gap-4 text-sm">
+            <div className="grid grid-cols-[100px_1fr] gap-4 text-sm">
               <span className="text-muted-foreground font-medium">Process</span>
               <span className="font-semibold capitalize">{bean.process}</span>
             </div>
@@ -53,4 +54,3 @@ export function BeanDetails({ bean }: BeanDetailsProps) {
     </Card>
   );
 }
-

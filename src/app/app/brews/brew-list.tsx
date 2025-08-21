@@ -6,6 +6,7 @@ import { BrewMethodValue, fetchRecentBrews } from "@/lib/db/data";
 import {
   formatBrewDateTime,
   formatBrewDuration,
+  formatMethodDisplay,
   getMethodBadgeColor,
 } from "@/lib/utils";
 import { Bean, Clock, Coffee, Plus, Thermometer } from "lucide-react";
@@ -44,7 +45,7 @@ export async function BrewList({ searchQuery, filterMethod }: BrewListProps) {
                   <div className="mt-2 flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
                     {/* bg-amber-100  */}
                     <Badge className={getMethodBadgeColor(brew.log.method)}>
-                      {brew.log.method.replace("_", " ").toUpperCase()}
+                      {formatMethodDisplay(brew.log.method)}
                     </Badge>
                     <div className="flex flex-col gap-0.5 sm:flex-row sm:gap-2">
                       <span className="text-muted-foreground text-xs sm:text-sm">

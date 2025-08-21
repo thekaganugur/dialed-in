@@ -14,10 +14,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { useTransition } from "react";
+import { toast } from "sonner";
 
 interface DeleteBrewButtonProps {
   brewId: string;
-  deleteAction: (brewId: string) => void;
+  deleteAction: (brewId: string) => Promise<void>;
 }
 
 export function DeleteBrewButton({
@@ -27,8 +28,15 @@ export function DeleteBrewButton({
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = () => {
-    startTransition(() => {
-      deleteAction(brewId);
+    startTransition(async () => {
+      try {
+        await deleteAction(brewId);
+        toast.success("Brew deleted successfully");
+      } catch (error) {
+        toast.error(
+          error instanceof Error ? error.message : "Failed to delete brew",
+        );
+      }
     });
   };
 
@@ -58,4 +66,3 @@ export function DeleteBrewButton({
     </AlertDialog>
   );
 }
-

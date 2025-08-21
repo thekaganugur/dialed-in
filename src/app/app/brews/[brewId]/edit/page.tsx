@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { fetchBrewById, fetchCoffeeBeans } from "@/lib/db/data";
+import { formatMethodDisplay } from "@/lib/utils";
 import { ChevronDown, Settings2 } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -35,7 +36,7 @@ const brewMethods = [
   "chemex",
   "turkish",
   "cold_brew",
-];
+] as const;
 
 interface EditBrewPageProps {
   params: Promise<{ brewId: string }>;
@@ -101,7 +102,7 @@ export default async function EditBrewPage({ params }: EditBrewPageProps) {
                     <SelectContent>
                       {brewMethods.map((method) => (
                         <SelectItem key={method} value={method}>
-                          {method.replace(/_/g, " ").toUpperCase()}
+                          {formatMethodDisplay(method)}
                         </SelectItem>
                       ))}
                     </SelectContent>

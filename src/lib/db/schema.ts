@@ -157,7 +157,7 @@ export const coffeeLogs = pgTable(
 
     beanId: uuid("bean_id")
       .notNull()
-      .references(() => coffeeBeans.id, { onDelete: "cascade" }),
+      .references(() => coffeeBeans.id, { onDelete: "restrict" }),
 
     method: brewMethodEnum("method").notNull(),
 

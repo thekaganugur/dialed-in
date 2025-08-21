@@ -9,7 +9,11 @@ import {
   fetchTodayBrewCount,
   fetchWeeklyAverageRating,
 } from "@/lib/db/data";
-import { formatBrewDateTime, getMethodBadgeColor } from "@/lib/utils";
+import {
+  formatBrewDateTime,
+  formatMethodDisplay,
+  getMethodBadgeColor,
+} from "@/lib/utils";
 import { subDays } from "date-fns";
 import {
   Calendar,
@@ -140,7 +144,7 @@ export default async function DashboardPage() {
                 <Badge
                   className={getMethodBadgeColor(favoriteMethod[0].method)}
                 >
-                  {favoriteMethod[0].method.toUpperCase()}
+                  {formatMethodDisplay(favoriteMethod[0].method)}
                 </Badge>
                 <p className="text-muted-foreground text-sm">
                   {favoriteMethod[0].brewCount} brews
@@ -203,7 +207,7 @@ export default async function DashboardPage() {
                           <div className="mt-2 flex items-center gap-2">
                             {/* bg-amber-100 */}
                             <Badge className={getMethodBadgeColor(log.method)}>
-                              {log.method.replace("_", " ").toUpperCase()}
+                              {formatMethodDisplay(log.method)}
                             </Badge>
                             <span className="text-muted-foreground text-sm">
                               {formatBrewDateTime(log.brewedAt)}

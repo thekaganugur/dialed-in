@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchBrewById } from "@/lib/db/data";
-import { formatBrewDateTime, getMethodBadgeColor } from "@/lib/utils";
+import { formatBrewDateTime, formatMethodDisplay, getMethodBadgeColor } from "@/lib/utils";
 import { Calendar, Coffee, Edit, RotateCcw } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -74,7 +74,7 @@ export default async function BrewDetailPage({ params }: BrewDetailPageProps) {
                 variant="secondary"
                 className={`text-sm sm:text-base ${getMethodBadgeColor(brew.log.method)}`}
               >
-                {brew.log.method.replace("_", " ").toUpperCase()}
+                {formatMethodDisplay(brew.log.method)}
               </Badge>
             </div>
             {brew.log.rating && (

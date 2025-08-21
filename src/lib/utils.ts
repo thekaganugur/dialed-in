@@ -20,8 +20,9 @@ export function getMethodBadgeColor(method: BrewMethod["name"]) {
   return colors[method] || "bg-gray-100 text-gray-800";
 }
 
-export function formatBrewDateTime(date: Date) {
-  return date.toLocaleDateString("en-US", {
+export function formatBrewDateTime(date: Date | string) {
+  const dateObj = typeof date === "string" ? new Date(date) : date;
+  return dateObj.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -60,6 +61,18 @@ export function deriveInitials(str: string) {
 export const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+export function capatilize(str: string) {
+  return str[0].toUpperCase() + str.slice(1);
+}
+
 export function formatMethod(method: string) {
   return method.replace("_", " ").replace(/\b\w/g, (l) => l.toUpperCase());
+}
+
+export function formatMethodDisplay(method: BrewMethod["name"]) {
+  return method.replace("_", " ").toUpperCase();
+}
+
+export function formatRoastLevel(roastLevel: string) {
+  return capatilize(roastLevel.replace("-", " "));
 }

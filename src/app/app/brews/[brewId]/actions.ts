@@ -15,8 +15,7 @@ export async function deleteBrewWithId(id: z.infer<typeof brewIdSchema>) {
 
   const validatedField = brewIdSchema.safeParse(id);
   if (!validatedField.success) {
-    console.error("Validation errors:", validatedField.error);
-    throw new Error(`Invalid Inputs: ${JSON.stringify(validatedField.error)}`);
+    throw new Error("Invalid brew ID format");
   }
 
   const data = validatedField.data;

@@ -12,6 +12,8 @@ import {
   ilike,
   isNull,
   lt,
+  max,
+  min,
   or,
   sql,
 } from "drizzle-orm";
@@ -279,4 +281,108 @@ export async function fetchCurrentStreak(): Promise<number> {
     .then(rows => rows.map(row => row.date));
 
   return brewDates.length === 0 ? 0 : calculateStreak(brewDates);
+}
+
+// Fetch single bean by ID for the authenticated user
+export async function fetchBeanById(id: string) {
+  const session = await requireAuth();
+
+  // Validate UUID format
+  const beanIdSchema = z.string().uuid();
+  const validatedId = beanIdSchema.safeParse(id);
+
+  if (!validatedId.success) {
+    return null;
+  }
+
+  const result = await db
+    .select()
+    .from(coffeeBeans)
+    .where(
+      and(
+        eq(coffeeBeans.id, validatedId.data),
+        eq(coffeeBeans.userId, session.user.id),
+      ),
+    )
+    .limit(1);
+
+  return result[0] || null;
+}
+
+// Fetch brews made with a specific bean
+export async function fetchBrewsByBeanId(beanId: string, limit: number = 20) {
+  const session = await requireAuth();
+
+  // Validate UUID format
+  const beanIdSchema = z.string().uuid();
+  const validatedId = beanIdSchema.safeParse(beanId);
+
+  if (!validatedId.success) {
+    return [];
+  }
+
+  return await db
+    .select({
+      log: coffeeLogs,
+      bean: coffeeBeans,
+    })
+    .from(coffeeLogs)
+    .innerJoin(
+      coffeeBeans,
+      and(
+        eq(coffeeLogs.beanId, coffeeBeans.id),
+        eq(coffeeBeans.userId, session.user.id),
+      ),
+    )
+    .where(
+      and(
+        eq(coffeeLogs.beanId, validatedId.data),
+        eq(coffeeLogs.userId, session.user.id),
+        isNull(coffeeLogs.deletedAt),
+      ),
+    )
+    .orderBy(desc(coffeeLogs.brewedAt))
+    .limit(limit);
+}
+
+// Get bean statistics
+export async function fetchBeanStats(beanId: string) {
+  const session = await requireAuth();
+
+  // Validate UUID format
+  const beanIdSchema = z.string().uuid();
+  const validatedId = beanIdSchema.safeParse(beanId);
+
+  if (!validatedId.success) {
+    return {
+      totalBrews: 0,
+      averageRating: null,
+      lastBrewedAt: null,
+      firstBrewedAt: null,
+    };
+  }
+
+  const statsResult = await db
+    .select({
+      totalBrews: count(coffeeLogs.id),
+      averageRating: avg(coffeeLogs.rating),
+      lastBrewedAt: max(coffeeLogs.brewedAt),
+      firstBrewedAt: min(coffeeLogs.brewedAt),
+    })
+    .from(coffeeLogs)
+    .where(
+      and(
+        eq(coffeeLogs.beanId, validatedId.data),
+        eq(coffeeLogs.userId, session.user.id),
+        isNull(coffeeLogs.deletedAt),
+      ),
+    );
+
+  const stats = statsResult[0];
+  return {
+    totalBrews: stats?.totalBrews || 0,
+    averageRating: stats?.averageRating ? Number(stats.averageRating) : null,
+    lastBrewedAt: stats?.lastBrewedAt || null,
+    firstBrewedAt: stats?.firstBrewedAt || null,
+  };
 }

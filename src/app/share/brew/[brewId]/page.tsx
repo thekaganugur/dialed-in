@@ -9,6 +9,7 @@ import { fetchPublicBrewById } from "@/lib/db/data";
 import {
   formatBrewDateTime,
   formatMethod,
+  formatMethodDisplay,
   getMethodBadgeColor,
 } from "@/lib/utils";
 import { ExternalLink } from "lucide-react";
@@ -119,7 +120,7 @@ export default async function PublicBrewPage({ params }: PublicBrewPageProps) {
                   variant="secondary"
                   className={`text-base ${getMethodBadgeColor(brew.log.method)}`}
                 >
-                  {formatMethod(brew.log.method).toUpperCase()}
+                  {formatMethodDisplay(brew.log.method)}
                 </Badge>
               </div>
 

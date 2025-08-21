@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { fetchBrewById, fetchCoffeeBeans } from "@/lib/db/data";
-import { formatBrewDateTime } from "@/lib/utils";
+import { formatBrewDateTime, formatMethodDisplay } from "@/lib/utils";
 import { ChevronDown, Info, Settings2 } from "lucide-react";
 import type { Metadata } from "next";
 import { createBrew } from "./actions";
@@ -37,7 +37,7 @@ const brewMethods = [
   "chemex",
   "turkish",
   "cold_brew",
-];
+] as const;
 
 interface CreateBrewPageProps {
   searchParams: Promise<{ duplicate?: string }>;
@@ -130,7 +130,7 @@ export default async function CreateBrewPage({
                     <SelectContent>
                       {brewMethods.map((method) => (
                         <SelectItem key={method} value={method}>
-                          {method.replace(/_/g, " ").toUpperCase()}
+                          {formatMethodDisplay(method)}
                         </SelectItem>
                       ))}
                     </SelectContent>

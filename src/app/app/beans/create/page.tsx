@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { processEnum, roastLevelEnum } from "@/lib/db/schema";
+import { capatilize, formatRoastLevel } from "@/lib/utils";
 import type { Metadata } from "next";
 import { createBean } from "../create/actions";
 import { FormActions } from "./form-actions";
@@ -77,8 +78,7 @@ export default function CreateBeanPage() {
                     <SelectContent>
                       {roastLevelEnum.enumValues.map((level) => (
                         <SelectItem key={level} value={level}>
-                          {level.charAt(0).toUpperCase() +
-                            level.slice(1).replace("-", " ")}
+                          {formatRoastLevel(level)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -94,7 +94,7 @@ export default function CreateBeanPage() {
                     <SelectContent>
                       {processEnum.enumValues.map((process) => (
                         <SelectItem key={process} value={process}>
-                          {process.charAt(0).toUpperCase() + process.slice(1)}
+                          {capatilize(process)}
                         </SelectItem>
                       ))}
                     </SelectContent>
