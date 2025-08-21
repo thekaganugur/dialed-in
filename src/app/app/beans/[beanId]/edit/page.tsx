@@ -9,32 +9,51 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { fetchBeanById } from "@/lib/db/data";
 import { processEnum, roastLevelEnum } from "@/lib/db/schema";
 import { capitalize, formatRoastLevel } from "@/lib/utils";
 import type { Metadata } from "next";
-import { createBean } from "../create/actions";
+import { notFound } from "next/navigation";
+import { updateBean } from "./actions";
 import { FormActions } from "./form-actions";
 
 export const metadata: Metadata = {
-  title: "Create Coffee Beans",
+  title: "Edit Bean",
 };
 
-export default function CreateBeanPage() {
+interface EditBeanPageProps {
+  params: Promise<{ beanId: string }>;
+}
+
+export default async function EditBeanPage({ params }: EditBeanPageProps) {
+  const { beanId } = await params;
+  const bean = await fetchBeanById(beanId);
+
+  if (!bean) {
+    notFound();
+  }
+
+  const updateBeanAction = updateBean.bind(null, beanId);
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Create Bean</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Edit Bean</h1>
         <p className="text-muted-foreground mt-2">
-          Add a new coffee bean to your collection
+          Update the details for {bean.name}
         </p>
       </div>
 
       <Card className="max-w-2xl">
         <CardHeader>
           <CardTitle>Bean Details</CardTitle>
+          <p className="text-muted-foreground text-sm">
+            Modify the information for this coffee bean.
+          </p>
         </CardHeader>
+
         <CardContent>
-          <form action={createBean} className="space-y-6">
+          <form action={updateBeanAction} className="space-y-6">
             <div className="grid gap-4">
               <div className="space-y-2">
                 <Label htmlFor="name">
@@ -44,6 +63,7 @@ export default function CreateBeanPage() {
                   id="name"
                   name="name"
                   placeholder="e.g., Ethiopian Yirgacheffe"
+                  defaultValue={bean.name}
                   required
                 />
               </div>
@@ -55,6 +75,7 @@ export default function CreateBeanPage() {
                     id="roaster"
                     name="roaster"
                     placeholder="e.g., Blue Bottle Coffee"
+                    defaultValue={bean.roaster || ""}
                   />
                 </div>
 
@@ -64,6 +85,7 @@ export default function CreateBeanPage() {
                     id="origin"
                     name="origin"
                     placeholder="e.g., Ethiopia"
+                    defaultValue={bean.origin || ""}
                   />
                 </div>
               </div>
@@ -71,7 +93,7 @@ export default function CreateBeanPage() {
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="roastLevel">Roast Level</Label>
-                  <Select name="roastLevel">
+                  <Select name="roastLevel" defaultValue={bean.roastLevel || ""}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select roast level" />
                     </SelectTrigger>
@@ -87,7 +109,7 @@ export default function CreateBeanPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="process">Process</Label>
-                  <Select name="process">
+                  <Select name="process" defaultValue={bean.process || ""}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select process" />
                     </SelectTrigger>
@@ -104,7 +126,16 @@ export default function CreateBeanPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="roastDate">Roast Date</Label>
-                <Input id="roastDate" name="roastDate" type="date" />
+                <Input
+                  id="roastDate"
+                  name="roastDate"
+                  type="date"
+                  defaultValue={
+                    bean.roastDate
+                      ? new Date(bean.roastDate).toISOString().split("T")[0]
+                      : ""
+                  }
+                />
               </div>
 
               <div className="space-y-2">
@@ -113,6 +144,7 @@ export default function CreateBeanPage() {
                   id="notes"
                   name="notes"
                   placeholder="Additional notes about this bean..."
+                  defaultValue={bean.notes || ""}
                   rows={3}
                 />
               </div>

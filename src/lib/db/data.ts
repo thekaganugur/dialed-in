@@ -1,6 +1,12 @@
 import { requireAuth } from "@/lib/auth-utils";
 import { db } from "@/lib/db";
-import { brewMethodEnum, coffeeBeans, coffeeLogs, user } from "@/lib/db/schema";
+import {
+  brewMethodEnum,
+  brewMethods,
+  coffeeBeans,
+  coffeeLogs,
+  user,
+} from "@/lib/db/schema";
 import { endOfDay, startOfDay, subDays } from "date-fns";
 import {
   and,
@@ -212,7 +218,7 @@ export async function fetchBrewById(id: string) {
 
 // Fetch public brew by ID (no authentication required)
 export async function fetchPublicBrewById(id: string) {
-  const brewIdSchema = z.string().uuid();
+  const brewIdSchema = z.uuid();
   const validatedId = brewIdSchema.safeParse(id);
 
   if (!validatedId.success) {
@@ -247,17 +253,17 @@ export async function fetchPublicBrewById(id: string) {
 const calculateStreak = (dates: string[]): number => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  
+
   const expectedDates = Array.from({ length: dates.length }, (_, i) => {
     const date = new Date(today);
     date.setDate(date.getDate() - i);
-    return date.toISOString().split('T')[0];
+    return date.toISOString().split("T")[0];
   });
-  
+
   const firstMismatch = dates
     .map((date, index) => date === expectedDates[index])
-    .findIndex(match => !match);
-    
+    .findIndex((match) => !match);
+
   return firstMismatch === -1 ? dates.length : firstMismatch;
 };
 
@@ -278,7 +284,7 @@ export async function fetchCurrentStreak(): Promise<number> {
     )
     .groupBy(sql`DATE(${coffeeLogs.brewedAt})`)
     .orderBy(desc(sql`DATE(${coffeeLogs.brewedAt})`))
-    .then(rows => rows.map(row => row.date));
+    .then((rows) => rows.map((row) => row.date));
 
   return brewDates.length === 0 ? 0 : calculateStreak(brewDates);
 }
@@ -288,7 +294,7 @@ export async function fetchBeanById(id: string) {
   const session = await requireAuth();
 
   // Validate UUID format
-  const beanIdSchema = z.string().uuid();
+  const beanIdSchema = z.uuid();
   const validatedId = beanIdSchema.safeParse(id);
 
   if (!validatedId.success) {
@@ -314,7 +320,7 @@ export async function fetchBrewsByBeanId(beanId: string, limit: number = 20) {
   const session = await requireAuth();
 
   // Validate UUID format
-  const beanIdSchema = z.string().uuid();
+  const beanIdSchema = z.uuid();
   const validatedId = beanIdSchema.safeParse(beanId);
 
   if (!validatedId.success) {
@@ -345,12 +351,10 @@ export async function fetchBrewsByBeanId(beanId: string, limit: number = 20) {
     .limit(limit);
 }
 
-// Get bean statistics
 export async function fetchBeanStats(beanId: string) {
   const session = await requireAuth();
 
-  // Validate UUID format
-  const beanIdSchema = z.string().uuid();
+  const beanIdSchema = z.uuid();
   const validatedId = beanIdSchema.safeParse(beanId);
 
   if (!validatedId.success) {
