@@ -139,6 +139,17 @@ export default async function EditBeanPage({ params }: EditBeanPageProps) {
               </div>
 
               <div className="space-y-2">
+                <Label htmlFor="link">Roastery Link</Label>
+                <Input
+                  id="link"
+                  name="link"
+                  type="url"
+                  placeholder="e.g., https://roastery.com/product/bean-name"
+                  defaultValue={bean.link || ""}
+                />
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="notes">Notes</Label>
                 <Textarea
                   id="notes"

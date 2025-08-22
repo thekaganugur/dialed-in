@@ -108,6 +108,16 @@ export default function CreateBeanPage() {
               </div>
 
               <div className="space-y-2">
+                <Label htmlFor="link">Roastery Link</Label>
+                <Input
+                  id="link"
+                  name="link"
+                  type="url"
+                  placeholder="e.g., https://roastery.com/product/bean-name"
+                />
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="notes">Notes</Label>
                 <Textarea
                   id="notes"

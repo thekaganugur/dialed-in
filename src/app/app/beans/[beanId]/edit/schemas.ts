@@ -8,6 +8,7 @@ export const editBeanFormSchema = z.object({
   roastLevel: z.enum(roastLevelEnum.enumValues).optional(),
   process: z.enum(processEnum.enumValues).optional(),
   roastDate: z.string().date("Invalid date format").optional().or(z.literal("")),
+  link: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
   notes: z.string().optional(),
 });
 

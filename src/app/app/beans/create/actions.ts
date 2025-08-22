@@ -1,21 +1,14 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { requireAuth } from "@/lib/auth-utils";
 import { db } from "@/lib/db";
 import { coffeeBeans, type NewCoffeeBean } from "@/lib/db/schema";
 import { revalidatePath } from "next/cache";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createBeanFormSchema } from "./schemas";
 
 export async function createBean(formData: FormData) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session) {
-    throw new Error("Unauthorized");
-  }
+  const session = await requireAuth();
 
   const rawFormData = Object.fromEntries(formData.entries());
 
@@ -35,6 +28,7 @@ export async function createBean(formData: FormData) {
     roastLevel: data.roastLevel || null,
     process: data.process || null,
     roastDate: data.roastDate || null,
+    link: data.link || null,
     notes: data.notes || null,
   };
 

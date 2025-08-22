@@ -7,7 +7,8 @@ export const createBeanFormSchema = z.object({
   origin: z.string().max(255, "Origin name too long").optional(),
   roastLevel: z.enum(roastLevelEnum.enumValues).optional(),
   process: z.enum(processEnum.enumValues).optional(),
-  roastDate: z.string().optional(),
+  roastDate: z.string().date("Invalid date format").optional().or(z.literal("")),
+  link: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
   notes: z.string().optional(),
 });
 

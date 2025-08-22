@@ -1,21 +1,14 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { requireAuth } from "@/lib/auth-utils";
 import { db } from "@/lib/db";
 import { coffeeLogs } from "@/lib/db/schema";
 import { revalidatePath } from "next/cache";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createBrewFormSchema } from "./schemas";
 
 export async function createBrew(formData: FormData) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session) {
-    throw new Error("Unauthorized");
-  }
+  const session = await requireAuth();
 
   const rawFormData = Object.fromEntries(formData.entries());
 

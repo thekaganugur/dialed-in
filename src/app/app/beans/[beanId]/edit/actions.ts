@@ -37,6 +37,7 @@ export async function updateBean(beanId: string, formData: FormData) {
         roastLevel: data.roastLevel || null,
         process: data.process || null,
         roastDate: data.roastDate || null,
+        link: data.link || null,
         notes: data.notes || null,
       })
       .where(
