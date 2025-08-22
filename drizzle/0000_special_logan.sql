@@ -1,6 +1,22 @@
 CREATE TYPE "public"."brew_method" AS ENUM('espresso', 'v60', 'aeropress', 'french_press', 'moka', 'chemex', 'turkish', 'cold_brew');--> statement-breakpoint
 CREATE TYPE "public"."process" AS ENUM('washed', 'natural', 'honey', 'anaerobic');--> statement-breakpoint
 CREATE TYPE "public"."roast_level" AS ENUM('light', 'medium', 'medium-dark', 'dark');--> statement-breakpoint
+CREATE TABLE "account" (
+	"id" text PRIMARY KEY NOT NULL,
+	"account_id" text NOT NULL,
+	"provider_id" text NOT NULL,
+	"user_id" text NOT NULL,
+	"access_token" text,
+	"refresh_token" text,
+	"id_token" text,
+	"access_token_expires_at" timestamp,
+	"refresh_token_expires_at" timestamp,
+	"scope" text,
+	"password" text,
+	"created_at" timestamp NOT NULL,
+	"updated_at" timestamp NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "brew_methods" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" "brew_method" NOT NULL,
@@ -19,13 +35,9 @@ CREATE TABLE "coffee_beans" (
 	"origin" varchar(255),
 	"roast_level" "roast_level",
 	"process" "process",
-	"purchase_date" date,
-	"price" numeric(10, 2),
-	"weight_grams" integer,
+	"roast_date" date,
 	"notes" text,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	CONSTRAINT "coffee_beans_price_positive" CHECK ("coffee_beans"."price" is null or "coffee_beans"."price" > 0),
-	CONSTRAINT "coffee_beans_weight_positive" CHECK ("coffee_beans"."weight_grams" is null or "coffee_beans"."weight_grams" > 0)
+	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "coffee_logs" (
@@ -52,17 +64,43 @@ CREATE TABLE "coffee_logs" (
 	CONSTRAINT "coffee_logs_yield_positive" CHECK ("coffee_logs"."yield_grams" is null or "coffee_logs"."yield_grams" > 0)
 );
 --> statement-breakpoint
-CREATE TABLE "users" (
+CREATE TABLE "session" (
 	"id" text PRIMARY KEY NOT NULL,
-	"email" varchar(255) NOT NULL,
-	"password_hash" varchar(255),
-	"name" varchar(255),
-	"created_at" timestamp DEFAULT now() NOT NULL
+	"expires_at" timestamp NOT NULL,
+	"token" text NOT NULL,
+	"created_at" timestamp NOT NULL,
+	"updated_at" timestamp NOT NULL,
+	"ip_address" text,
+	"user_agent" text,
+	"user_id" text NOT NULL,
+	CONSTRAINT "session_token_unique" UNIQUE("token")
 );
 --> statement-breakpoint
-ALTER TABLE "coffee_beans" ADD CONSTRAINT "coffee_beans_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "coffee_logs" ADD CONSTRAINT "coffee_logs_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "coffee_logs" ADD CONSTRAINT "coffee_logs_bean_id_coffee_beans_id_fk" FOREIGN KEY ("bean_id") REFERENCES "public"."coffee_beans"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+CREATE TABLE "user" (
+	"id" text PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"email" text NOT NULL,
+	"email_verified" boolean NOT NULL,
+	"image" text,
+	"created_at" timestamp NOT NULL,
+	"updated_at" timestamp NOT NULL,
+	CONSTRAINT "user_email_unique" UNIQUE("email")
+);
+--> statement-breakpoint
+CREATE TABLE "verification" (
+	"id" text PRIMARY KEY NOT NULL,
+	"identifier" text NOT NULL,
+	"value" text NOT NULL,
+	"expires_at" timestamp NOT NULL,
+	"created_at" timestamp,
+	"updated_at" timestamp
+);
+--> statement-breakpoint
+ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "coffee_beans" ADD CONSTRAINT "coffee_beans_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "coffee_logs" ADD CONSTRAINT "coffee_logs_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "coffee_logs" ADD CONSTRAINT "coffee_logs_bean_id_coffee_beans_id_fk" FOREIGN KEY ("bean_id") REFERENCES "public"."coffee_beans"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE UNIQUE INDEX "brew_methods_name_key" ON "brew_methods" USING btree ("name");--> statement-breakpoint
 CREATE INDEX "coffee_beans_user_name_idx" ON "coffee_beans" USING btree ("user_id","name");--> statement-breakpoint
 CREATE INDEX "coffee_logs_user_idx" ON "coffee_logs" USING btree ("user_id");--> statement-breakpoint
@@ -71,5 +109,4 @@ CREATE INDEX "coffee_logs_method_idx" ON "coffee_logs" USING btree ("method");--
 CREATE INDEX "coffee_logs_brewed_at_idx" ON "coffee_logs" USING btree ("brewed_at");--> statement-breakpoint
 CREATE INDEX "coffee_logs_user_brewed_at_idx" ON "coffee_logs" USING btree ("user_id","brewed_at");--> statement-breakpoint
 CREATE INDEX "coffee_logs_user_method_idx" ON "coffee_logs" USING btree ("user_id","method");--> statement-breakpoint
-CREATE INDEX "coffee_logs_active_idx" ON "coffee_logs" USING btree ("user_id","brewed_at") WHERE "coffee_logs"."deleted_at" is null;--> statement-breakpoint
-CREATE UNIQUE INDEX "users_email_key" ON "users" USING btree ("email");
+CREATE INDEX "coffee_logs_active_idx" ON "coffee_logs" USING btree ("user_id","brewed_at") WHERE "coffee_logs"."deleted_at" is null;

@@ -120,6 +120,7 @@ export const coffeeBeans = pgTable(
     roastLevel: roastLevelEnum("roast_level"),
     process: processEnum("process"),
     roastDate: date("roast_date"),
+    link: text("link"),
     notes: text("notes"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },

@@ -1,0 +1,1 @@
+ALTER TABLE "coffee_beans" ADD COLUMN "link" text;
