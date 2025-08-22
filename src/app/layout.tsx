@@ -13,30 +13,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://dialed-in.vercel.app",
   },
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: "https://dialed-in.vercel.app",
-    siteName: "Dialed In",
-    title: "Dialed In - Perfect Your Coffee Brewing Journey",
-    description:
-      "Track brewing parameters, rate your cups, and discover what makes the perfect coffee. Join coffee enthusiasts who've improved their technique one brew at a time.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Dialed In - Coffee Brewing Tracker",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Dialed In - Perfect Your Coffee Brewing Journey",
-    description:
-      "Track brewing parameters, rate your cups, and discover what makes the perfect coffee. Join coffee enthusiasts who've improved their technique one brew at a time.",
-    images: ["/og-image.jpg"],
-  },
   robots: {
     index: true,
     follow: true,

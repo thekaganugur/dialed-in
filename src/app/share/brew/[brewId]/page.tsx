@@ -61,20 +61,6 @@ export async function generateMetadata({ params }: PublicBrewPageProps) {
     alternates: {
       canonical: url,
     },
-    openGraph: {
-      title,
-      description,
-      type: "article",
-      url,
-      siteName: "Dialed In",
-      publishedTime: brew.log.brewedAt.toISOString(),
-      authors: [brew.user.name],
-    },
-    twitter: {
-      card: "summary",
-      title,
-      description,
-    },
   };
 }
 
