@@ -1,12 +1,6 @@
 import { requireAuth } from "@/lib/auth-utils";
 import { db } from "@/lib/db";
-import {
-  brewMethodEnum,
-  brewMethods,
-  coffeeBeans,
-  coffeeLogs,
-  user,
-} from "@/lib/db/schema";
+import { brewMethodEnum, coffeeBeans, coffeeLogs, user } from "@/lib/db/schema";
 import { endOfDay, startOfDay, subDays } from "date-fns";
 import {
   and,
