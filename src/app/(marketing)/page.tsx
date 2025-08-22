@@ -5,7 +5,6 @@ import {
   LucideIcon,
   Scale,
   Star,
-  Target,
   Thermometer,
   Timer,
   TrendingUp,
@@ -73,15 +72,9 @@ export default function Home() {
 
           <div className="flex flex-col gap-4 md:flex-row">
             <Button asChild size="lg">
-              <Link href="/signup">
+              <Link href="/auth">
                 <TrendingUp className="mr-1 h-4 w-4" />
                 Start Brewing Better Coffee
-              </Link>
-            </Button>
-            <Button variant="outline" size="lg" asChild>
-              <Link href="/login">
-                <Target className="mr-1 h-4 w-4" />
-                Sign In
               </Link>
             </Button>
           </div>

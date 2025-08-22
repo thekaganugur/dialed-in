@@ -13,9 +13,9 @@ export default function Error({
   const router = useRouter();
 
   useEffect(() => {
-    // Handle authentication errors by redirecting to login
+    // Handle authentication errors by redirecting to auth
     if (error.message === "Authentication required") {
-      router.replace("/login");
+      router.replace("/auth");
       return;
     }
 
@@ -28,7 +28,7 @@ export default function Error({
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <p className="text-muted-foreground">Redirecting to login...</p>
+          <p className="text-muted-foreground">Redirecting to authentication...</p>
         </div>
       </div>
     );
