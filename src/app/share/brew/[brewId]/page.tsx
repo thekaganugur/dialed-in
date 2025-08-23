@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: PublicBrewPageProps) {
 
   const title = `${brew.bean.name} ${formatMethod(brew.log.method)} Recipe`;
   const description = buildDescription(brew);
-  const url = `${process.env.NEXT_PUBLIC_BASE_URL || "https://dialed-in.app"}/share/brew/${brewId}`;
+  const url = `https://dialed-in.app/share/brew/${brewId}`;
 
   return {
     title: `${title} | Dialed In`,

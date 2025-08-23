@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  // Authentication
   GOOGLE_CLIENT_ID: z.string().min(1, "Google Client ID is required"),
   GOOGLE_CLIENT_SECRET: z.string().min(1, "Google Client Secret is required"),
   GITHUB_CLIENT_ID: z.string().min(1, "GitHub Client ID is required"),
@@ -9,10 +8,8 @@ const envSchema = z.object({
   BETTER_AUTH_SECRET: z.string().min(1, "Better Auth Secret is required"),
   BETTER_AUTH_URL: z.url().optional(),
 
-  // Database
   DATABASE_URL: z.url("Database URL must be a valid URL"),
 
-  // Environment
   NODE_ENV: z
     .enum(["development", "production", "test"])
     .default("development"),
@@ -35,4 +32,3 @@ function validateEnv() {
 }
 
 export const env = validateEnv();
-

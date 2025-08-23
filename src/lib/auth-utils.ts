@@ -1,11 +1,6 @@
-import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-
-/**
- * Authentication utility functions to ensure secure access patterns
- * These functions prevent data leakage by enforcing user context
- */
 
 /**
  * Get authenticated user session or throw error
@@ -63,3 +58,4 @@ export function verifyOwnership(resourceUserId: string, currentUserId: string) {
     throw new Error("Unauthorized: You can only access your own data");
   }
 }
+

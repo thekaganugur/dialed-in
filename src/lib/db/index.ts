@@ -1,11 +1,8 @@
 import { neon } from "@neondatabase/serverless";
 import { drizzle as drizzleHttp } from "drizzle-orm/neon-http";
 import type { NeonHttpDatabase } from "drizzle-orm/neon-http";
+import { env } from "../env";
 import * as schema from "./schema";
-
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL is not defined");
-}
 
 function createNeonDatabase(connectionString: string) {
   const neonClient = neon(connectionString);
@@ -23,9 +20,9 @@ function createLocalDatabase(connectionString: string) {
 }
 
 const db = (
-  process.env.NODE_ENV === "development"
-    ? createLocalDatabase(process.env.DATABASE_URL)
-    : createNeonDatabase(process.env.DATABASE_URL)
+  env.NODE_ENV === "development"
+    ? createLocalDatabase(env.DATABASE_URL)
+    : createNeonDatabase(env.DATABASE_URL)
 ) as NeonHttpDatabase<typeof schema>;
 
 export { db };

@@ -21,9 +21,9 @@ import { z } from "zod";
 
 export type BrewMethodValue = (typeof brewMethodEnum.enumValues)[number];
 
-// Get today's brew count for the authenticated user
 export async function fetchTodayBrewCount(date = new Date()): Promise<number> {
   const session = await requireAuth();
+
   const todayStart = startOfDay(date);
   const todayEnd = endOfDay(date);
 
@@ -42,9 +42,9 @@ export async function fetchTodayBrewCount(date = new Date()): Promise<number> {
   return result[0]?.count || 0;
 }
 
-// Calculate weekly average rating for the authenticated user
 export async function fetchWeeklyAverageRating(): Promise<number> {
   const session = await requireAuth();
+
   const weekAgo = subDays(new Date(), 7);
 
   const result = await db
@@ -78,7 +78,6 @@ export async function fetchFavoriteBrewingMethod(limit: number = 5) {
     .limit(limit);
 }
 
-// Get total bean count for the authenticated user's inventory
 export async function fetchBeanCount(): Promise<number> {
   const session = await requireAuth();
 
@@ -114,9 +113,7 @@ export async function fetchTopBeans(limit: number = 5) {
     .limit(limit);
 }
 
-// Fetch all coffee beans for the authenticated user (for form selects)
 export async function fetchCoffeeBeans() {
-  await new Promise((r) => setTimeout(r, 2000));
   const session = await requireAuth();
 
   return await db
@@ -132,14 +129,12 @@ export async function fetchCoffeeBeans() {
     .orderBy(coffeeBeans.name);
 }
 
-// Fetch recent brews for the authenticated user
 export async function fetchRecentBrews(
   limit: number = 10,
   searchQuery?: string,
   filterMethod?: BrewMethodValue | "all",
 ) {
   const session = await requireAuth();
-  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   const conditions = [
     eq(coffeeLogs.userId, session.user.id),
@@ -181,7 +176,6 @@ export async function fetchRecentBrews(
     .limit(limit);
 }
 
-// Fetch single brew by ID for the authenticated user
 export async function fetchBrewById(id: string) {
   const session = await requireAuth();
 
@@ -210,7 +204,6 @@ export async function fetchBrewById(id: string) {
   return result[0] || null;
 }
 
-// Fetch public brew by ID (no authentication required)
 export async function fetchPublicBrewById(id: string) {
   const brewIdSchema = z.uuid();
   const validatedId = brewIdSchema.safeParse(id);
@@ -243,27 +236,9 @@ export async function fetchPublicBrewById(id: string) {
   return result[0] || null;
 }
 
-// Pure function to calculate streak from sorted date strings
-const calculateStreak = (dates: string[]): number => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const expectedDates = Array.from({ length: dates.length }, (_, i) => {
-    const date = new Date(today);
-    date.setDate(date.getDate() - i);
-    return date.toISOString().split("T")[0];
-  });
-
-  const firstMismatch = dates
-    .map((date, index) => date === expectedDates[index])
-    .findIndex((match) => !match);
-
-  return firstMismatch === -1 ? dates.length : firstMismatch;
-};
-
-// Calculate current brewing streak
 export async function fetchCurrentStreak(): Promise<number> {
   const session = await requireAuth();
+
   const ninetyDaysAgo = subDays(new Date(), 90);
 
   const brewDates = await db
@@ -281,13 +256,28 @@ export async function fetchCurrentStreak(): Promise<number> {
     .then((rows) => rows.map((row) => row.date));
 
   return brewDates.length === 0 ? 0 : calculateStreak(brewDates);
+
+  function calculateStreak(dates: string[]) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const expectedDates = Array.from({ length: dates.length }, (_, i) => {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      return date.toISOString().split("T")[0];
+    });
+
+    const firstMismatch = dates
+      .map((date, index) => date === expectedDates[index])
+      .findIndex((match) => !match);
+
+    return firstMismatch === -1 ? dates.length : firstMismatch;
+  }
 }
 
-// Fetch single bean by ID for the authenticated user
 export async function fetchBeanById(id: string) {
   const session = await requireAuth();
 
-  // Validate UUID format
   const beanIdSchema = z.uuid();
   const validatedId = beanIdSchema.safeParse(id);
 
@@ -309,11 +299,9 @@ export async function fetchBeanById(id: string) {
   return result[0] || null;
 }
 
-// Fetch brews made with a specific bean
 export async function fetchBrewsByBeanId(beanId: string, limit: number = 20) {
   const session = await requireAuth();
 
-  // Validate UUID format
   const beanIdSchema = z.uuid();
   const validatedId = beanIdSchema.safeParse(beanId);
 
