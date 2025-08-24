@@ -1,6 +1,12 @@
 import { requireAuth } from "@/lib/auth-utils";
 import { db } from "@/lib/db";
-import { brewMethodEnum, coffeeBeans, coffeeLogs, user } from "@/lib/db/schema";
+import {
+  brewMethodEnum,
+  coffeeBeans,
+  coffeeLogs,
+  grinders,
+  user,
+} from "@/lib/db/schema";
 import { endOfDay, startOfDay, subDays } from "date-fns";
 import {
   and,
@@ -127,6 +133,62 @@ export async function fetchCoffeeBeans() {
     .from(coffeeBeans)
     .where(eq(coffeeBeans.userId, session.user.id))
     .orderBy(coffeeBeans.name);
+}
+
+export async function fetchGrinders() {
+  const session = await requireAuth();
+
+  // Fetch both built-in grinders and user's custom grinders
+  return await db
+    .select({
+      id: grinders.id,
+      displayName: grinders.displayName,
+      brand: grinders.brand,
+      model: grinders.model,
+      isBuiltIn: grinders.isBuiltIn,
+      notes: grinders.notes,
+    })
+    .from(grinders)
+    .where(
+      or(
+        eq(grinders.isBuiltIn, true),
+        and(eq(grinders.userId, session.user.id), eq(grinders.isActive, true)),
+      ),
+    )
+    .orderBy(grinders.isBuiltIn, grinders.displayName);
+}
+
+export async function fetchBuiltInGrinders() {
+  // No auth required for built-in grinders
+  return await db
+    .select({
+      id: grinders.id,
+      displayName: grinders.displayName,
+      brand: grinders.brand,
+      model: grinders.model,
+    })
+    .from(grinders)
+    .where(eq(grinders.isBuiltIn, true))
+    .orderBy(grinders.displayName);
+}
+
+export async function fetchUserGrinders() {
+  const session = await requireAuth();
+
+  return await db
+    .select({
+      id: grinders.id,
+      displayName: grinders.displayName,
+      brand: grinders.brand,
+      model: grinders.model,
+      notes: grinders.notes,
+      createdAt: grinders.createdAt,
+    })
+    .from(grinders)
+    .where(
+      and(eq(grinders.userId, session.user.id), eq(grinders.isActive, true)),
+    )
+    .orderBy(desc(grinders.createdAt));
 }
 
 export async function fetchRecentBrews(

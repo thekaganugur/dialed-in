@@ -129,6 +129,28 @@ export const coffeeBeans = pgTable(
   }),
 );
 
+/* --- Grinders --- */
+export const grinders = pgTable(
+  "grinders",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: text("user_id").references(() => user.id, { onDelete: "cascade" }), // null for built-in grinders
+    displayName: varchar("display_name", { length: 100 }).notNull(),
+    brand: varchar("brand", { length: 50 }),
+    model: varchar("model", { length: 50 }),
+    notes: text("notes"),
+    isActive: boolean("is_active").default(true).notNull(),
+    isBuiltIn: boolean("is_built_in").default(false).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (t) => ({
+    userGrinders: index("grinders_user_active_idx")
+      .on(t.userId, t.isActive)
+      .where(sql`${t.isActive} = true`),
+    displayName: index("grinders_display_name_idx").on(t.displayName),
+  }),
+);
+
 /* --- Brew Methods --- */
 export const brewMethods = pgTable(
   "brew_methods",
@@ -171,6 +193,7 @@ export const coffeeLogs = pgTable(
     yieldGrams: numeric("yield_grams", { precision: 5, scale: 2 }),
     brewTimeSeconds: integer("brew_time_seconds"),
     waterTempCelsius: integer("water_temp_celsius"),
+    grinderId: uuid("grinder_id").references(() => grinders.id, { onDelete: "set null" }),
     grindSetting: varchar("grind_setting", { length: 50 }),
 
     rating: integer("rating"),
@@ -221,11 +244,20 @@ export const coffeeBeansRelations = relations(coffeeBeans, ({ many }) => ({
   logs: many(coffeeLogs),
 }));
 
+export const grindersRelations = relations(grinders, ({ many, one }) => ({
+  logs: many(coffeeLogs),
+  user: one(user, {
+    fields: [grinders.userId],
+    references: [user.id],
+  }),
+}));
+
 // Note: brewMethods table is not directly referenced by coffeeLogs
 // coffeeLogs.method uses the brewMethodEnum, not a foreign key
 
 export const userRelations = relations(user, ({ many }) => ({
   logs: many(coffeeLogs),
+  grinders: many(grinders),
   sessions: many(session),
   accounts: many(account),
 }));
@@ -249,6 +281,10 @@ export const coffeeLogsRelations = relations(coffeeLogs, ({ one }) => ({
     fields: [coffeeLogs.beanId],
     references: [coffeeBeans.id],
   }),
+  grinder: one(grinders, {
+    fields: [coffeeLogs.grinderId],
+    references: [grinders.id],
+  }),
   user: one(user, {
     fields: [coffeeLogs.userId],
     references: [user.id],
@@ -260,6 +296,8 @@ export type CoffeeBean = typeof coffeeBeans.$inferSelect;
 export type NewCoffeeBean = typeof coffeeBeans.$inferInsert;
 export type CoffeeLog = typeof coffeeLogs.$inferSelect;
 export type NewCoffeeLog = typeof coffeeLogs.$inferInsert;
+export type Grinder = typeof grinders.$inferSelect;
+export type NewGrinder = typeof grinders.$inferInsert;
 export type BrewMethod = typeof brewMethods.$inferSelect;
 export type User = typeof user.$inferSelect;
 export type NewUser = typeof user.$inferInsert;
