@@ -18,9 +18,13 @@ export function BrewMetrics({ brewLog }: BrewMetricsProps) {
   const brewRatio = calculateBrewRatio(brewLog.doseGrams, brewLog.yieldGrams);
 
   const hasPrimaryMetrics =
-    brewLog.doseGrams || brewLog.yieldGrams || brewRatio;
+    Boolean(brewLog.doseGrams) ||
+    Boolean(brewLog.yieldGrams) ||
+    Boolean(brewRatio);
   const hasSecondaryMetrics =
-    brewLog.brewTimeSeconds || brewLog.waterTempCelsius || brewLog.grindSetting;
+    Boolean(brewLog.brewTimeSeconds) ||
+    Boolean(brewLog.waterTempCelsius) ||
+    Boolean(brewLog.grindSetting);
 
   if (!hasPrimaryMetrics && !hasSecondaryMetrics) {
     return null;
@@ -40,8 +44,8 @@ export function BrewMetrics({ brewLog }: BrewMetricsProps) {
             Key Brewing Metrics
           </h3>
 
-          {hasPrimaryMetrics && (
-            <div className="space-y-6 sm:space-y-8">
+          <div className="space-y-6 sm:space-y-8">
+            {hasPrimaryMetrics && (
               <div
                 className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4"
                 role="group"
@@ -87,58 +91,58 @@ export function BrewMetrics({ brewLog }: BrewMetricsProps) {
                   </div>
                 )}
               </div>
-
+            )}
+            {hasPrimaryMetrics && hasSecondaryMetrics && (
               <div className="border-border/40 border-t" />
-
-              {hasSecondaryMetrics && (
-                <div
-                  className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4"
-                  role="group"
-                  aria-label="Brewing parameters"
-                >
-                  {brewLog.brewTimeSeconds && (
-                    <div className="text-center">
-                      <div className="text-foreground text-lg font-medium">
-                        {formatBrewDuration(brewLog.brewTimeSeconds)}
-                      </div>
-                      <div
-                        className="text-muted-foreground tracking-wide uppercase"
-                        style={{ fontSize: "max(0.75rem, 14px)" }}
-                      >
-                        Time
-                      </div>
+            )}
+            {hasSecondaryMetrics && (
+              <div
+                className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4"
+                role="group"
+                aria-label="Brewing parameters"
+              >
+                {brewLog.brewTimeSeconds && (
+                  <div className="text-center">
+                    <div className="text-foreground text-lg font-medium">
+                      {formatBrewDuration(brewLog.brewTimeSeconds)}
                     </div>
-                  )}
-                  {brewLog.waterTempCelsius && (
-                    <div className="text-center">
-                      <div className="text-foreground text-lg font-medium">
-                        {brewLog.waterTempCelsius}°C
-                      </div>
-                      <div
-                        className="text-muted-foreground tracking-wide uppercase"
-                        style={{ fontSize: "max(0.75rem, 14px)" }}
-                      >
-                        Temp
-                      </div>
+                    <div
+                      className="text-muted-foreground tracking-wide uppercase"
+                      style={{ fontSize: "max(0.75rem, 14px)" }}
+                    >
+                      Time
                     </div>
-                  )}
-                  {brewLog.grindSetting && (
-                    <div className="col-span-2 text-center sm:col-span-1">
-                      <div className="text-foreground text-lg font-medium">
-                        {brewLog.grindSetting}
-                      </div>
-                      <div
-                        className="text-muted-foreground tracking-wide uppercase"
-                        style={{ fontSize: "max(0.75rem, 14px)" }}
-                      >
-                        Grind
-                      </div>
+                  </div>
+                )}
+                {brewLog.waterTempCelsius && (
+                  <div className="text-center">
+                    <div className="text-foreground text-lg font-medium">
+                      {brewLog.waterTempCelsius}°C
                     </div>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
+                    <div
+                      className="text-muted-foreground tracking-wide uppercase"
+                      style={{ fontSize: "max(0.75rem, 14px)" }}
+                    >
+                      Temp
+                    </div>
+                  </div>
+                )}
+                {brewLog.grindSetting && (
+                  <div className="col-span-2 text-center sm:col-span-1">
+                    <div className="text-foreground text-lg font-medium">
+                      {brewLog.grindSetting}
+                    </div>
+                    <div
+                      className="text-muted-foreground tracking-wide uppercase"
+                      style={{ fontSize: "max(0.75rem, 14px)" }}
+                    >
+                      Grind
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </section>
       </CardContent>
     </Card>
