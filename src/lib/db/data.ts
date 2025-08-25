@@ -138,43 +138,6 @@ export async function fetchCoffeeBeans() {
 export async function fetchGrinders() {
   const session = await requireAuth();
 
-  // Fetch both built-in grinders and user's custom grinders
-  return await db
-    .select({
-      id: grinders.id,
-      displayName: grinders.displayName,
-      brand: grinders.brand,
-      model: grinders.model,
-      isBuiltIn: grinders.isBuiltIn,
-      notes: grinders.notes,
-    })
-    .from(grinders)
-    .where(
-      or(
-        eq(grinders.isBuiltIn, true),
-        and(eq(grinders.userId, session.user.id), eq(grinders.isActive, true)),
-      ),
-    )
-    .orderBy(grinders.isBuiltIn, grinders.displayName);
-}
-
-export async function fetchBuiltInGrinders() {
-  // No auth required for built-in grinders
-  return await db
-    .select({
-      id: grinders.id,
-      displayName: grinders.displayName,
-      brand: grinders.brand,
-      model: grinders.model,
-    })
-    .from(grinders)
-    .where(eq(grinders.isBuiltIn, true))
-    .orderBy(grinders.displayName);
-}
-
-export async function fetchUserGrinders() {
-  const session = await requireAuth();
-
   return await db
     .select({
       id: grinders.id,
@@ -182,14 +145,15 @@ export async function fetchUserGrinders() {
       brand: grinders.brand,
       model: grinders.model,
       notes: grinders.notes,
-      createdAt: grinders.createdAt,
     })
     .from(grinders)
     .where(
       and(eq(grinders.userId, session.user.id), eq(grinders.isActive, true)),
     )
-    .orderBy(desc(grinders.createdAt));
+    .orderBy(grinders.displayName);
 }
+
+
 
 export async function fetchRecentBrews(
   limit: number = 10,
@@ -433,4 +397,67 @@ export async function fetchBeanStats(beanId: string) {
     lastBrewedAt: stats?.lastBrewedAt || null,
     firstBrewedAt: stats?.firstBrewedAt || null,
   };
+}
+
+// Grinder data operations
+export async function createGrinderData(userId: string, data: {
+  displayName: string;
+  brand?: string;
+  model?: string;
+  notes?: string;
+}) {
+  const [newGrinder] = await db
+    .insert(grinders)
+    .values({
+      userId,
+      displayName: data.displayName,
+      brand: data.brand,
+      model: data.model,
+      notes: data.notes,
+      isActive: true,
+    })
+    .returning();
+
+  return newGrinder;
+}
+
+export async function findGrinderByUserAndName(userId: string, displayName: string) {
+  return await db.query.grinders.findFirst({
+    where: (grinders, { and, eq }) =>
+      and(
+        eq(grinders.userId, userId),
+        eq(grinders.displayName, displayName),
+        eq(grinders.isActive, true),
+      ),
+  });
+}
+
+export async function updateGrinderData(grinderId: string, data: {
+  displayName: string;
+  brand?: string;
+  model?: string;
+  notes?: string;
+}) {
+  await db
+    .update(grinders)
+    .set(data)
+    .where(eq(grinders.id, grinderId));
+}
+
+export async function findGrinderByUserAndId(userId: string, grinderId: string) {
+  return await db.query.grinders.findFirst({
+    where: (grinders, { and, eq }) =>
+      and(
+        eq(grinders.id, grinderId),
+        eq(grinders.userId, userId),
+        eq(grinders.isActive, true),
+      ),
+  });
+}
+
+export async function softDeleteGrinder(grinderId: string) {
+  await db
+    .update(grinders)
+    .set({ isActive: false })
+    .where(eq(grinders.id, grinderId));
 }

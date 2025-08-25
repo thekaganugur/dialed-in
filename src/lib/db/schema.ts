@@ -134,13 +134,12 @@ export const grinders = pgTable(
   "grinders",
   {
     id: uuid("id").defaultRandom().primaryKey(),
-    userId: text("user_id").references(() => user.id, { onDelete: "cascade" }), // null for built-in grinders
+    userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
     displayName: varchar("display_name", { length: 100 }).notNull(),
     brand: varchar("brand", { length: 50 }),
     model: varchar("model", { length: 50 }),
     notes: text("notes"),
     isActive: boolean("is_active").default(true).notNull(),
-    isBuiltIn: boolean("is_built_in").default(false).notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (t) => ({
@@ -193,7 +192,9 @@ export const coffeeLogs = pgTable(
     yieldGrams: numeric("yield_grams", { precision: 5, scale: 2 }),
     brewTimeSeconds: integer("brew_time_seconds"),
     waterTempCelsius: integer("water_temp_celsius"),
-    grinderId: uuid("grinder_id").references(() => grinders.id, { onDelete: "set null" }),
+    grinderId: uuid("grinder_id").references(() => grinders.id, {
+      onDelete: "set null",
+    }),
     grindSetting: varchar("grind_setting", { length: 50 }),
 
     rating: integer("rating"),
